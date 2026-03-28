@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReachSystem.Models;
+using ReachSystem.Enums;
 
 
 namespace ReachSystem.Data
@@ -23,6 +24,14 @@ namespace ReachSystem.Data
                 .HasOne(a => a.FichaSaude)
                 .WithOne(f => f.Animal)
                 .HasForeignKey<FichaSaude>(f => f.AnimalId);
+
+            modelBuilder.Entity<Animal>()
+                .Property(a => a.SexoAnimal)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<Animal>()
+                .Property(a => a.StatusAnimal)
+                .HasConversion<int>();
         }
     }
 }

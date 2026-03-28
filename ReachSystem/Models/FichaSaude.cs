@@ -12,5 +12,7 @@ namespace ReachSystem.Models
         public string Alergias { get; set; } = string.Empty;
         public string DoencasPreExistentes { get; set; } = string.Empty;
         public string Medicamentos { get; set; } = string.Empty;
+
+        public FichaSaude() { }
     }
 }

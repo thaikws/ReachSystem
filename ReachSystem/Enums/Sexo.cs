@@ -1,11 +1,8 @@
 ﻿namespace ReachSystem.Enums
 {
-    public class Sexo
-    {
-        public enum SexoAnimal
+        public enum Sexo
         {
             Macho,
             Femea
         }
-    }
 }

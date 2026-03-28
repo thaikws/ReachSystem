@@ -1,5 +1,6 @@
 ﻿using ReachSystem.Enums;
 using System.ComponentModel.DataAnnotations;
+
 namespace ReachSystem.Models
 {
     public class Animal
@@ -15,6 +16,7 @@ namespace ReachSystem.Models
         public DateTime DataDeEntrada { get; set; }
         public FichaSaude? FichaSaude { get; set; }
 
+        public Animal() { }
         public Animal(string nome, string especie, int idade, string raca, string porte, Sexo sexo, Status status, DateTime dataDeEntrada, FichaSaude fichaSaude)
         {
             Nome = nome;

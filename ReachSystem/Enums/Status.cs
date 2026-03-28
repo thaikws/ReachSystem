@@ -1,12 +1,9 @@
 ﻿namespace ReachSystem.Enums
 {
-    public class Status
-    {
-        public enum StatusAnimal
+        public enum Status
         {
             Disponivel,
             Adotado,
             Pendente
         }
-    }
 }
