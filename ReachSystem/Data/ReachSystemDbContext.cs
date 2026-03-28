@@ -6,9 +6,9 @@ using ReachSystem.Enums;
 
 namespace ReachSystem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ReachSystemDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ReachSystemDbContext(DbContextOptions<ReachSystemDbContext> options)
             : base(options)
         {
         }

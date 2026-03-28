@@ -11,7 +11,7 @@ using ReachSystem.Data;
 
 namespace ReachSystem.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ReachSystemDbContext))]
     [Migration("20260328052543_AddAnimalEFichaSaude")]
     partial class AddAnimalEFichaSaude
     {
