@@ -11,7 +11,7 @@ using ReachSystem.Data;
 
 namespace ReachSystem.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ReachSystemDbContext))]
     [Migration("20260314203240_InitialIdentity")]
     partial class InitialIdentity
     {
