@@ -1,8 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReachSystem.Data;
+using ReachSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<AnimalService>();
+
+builder.Services.AddDbContext<ReachSystemDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
