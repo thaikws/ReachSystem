@@ -17,17 +17,5 @@ namespace ReachSystem.Models
         public FichaSaude? FichaSaude { get; set; }
 
         public Animal() { }
-        public Animal(string nome, string especie, int idade, string raca, string porte, Sexo sexo, Status status, DateTime dataDeEntrada, FichaSaude fichaSaude)
-        {
-            Nome = nome;
-            Especie = especie;
-            Idade = idade;
-            Raca = raca;
-            Porte = porte;
-            SexoAnimal = sexo;
-            StatusAnimal = status;
-            DataDeEntrada = dataDeEntrada;
-            FichaSaude = fichaSaude;
-        }
     }
 }

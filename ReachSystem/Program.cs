@@ -5,6 +5,7 @@ using ReachSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 
 builder.Services.AddDbContext<ReachSystemDbContext>(options =>
