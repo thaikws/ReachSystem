@@ -15,6 +15,7 @@ namespace ReachSystem.Models
         public Status StatusAnimal { get; set; }
         public DateTime DataDeEntrada { get; set; }
         public FichaSaude? FichaSaude { get; set; }
+        public List<Consulta> Consultas { get; set; } = new();
 
         public Animal() { }
     }
