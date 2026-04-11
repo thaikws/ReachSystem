@@ -18,7 +18,8 @@
             <th>Sexo</th>
             <th>Status</th>
             <th>Data de Entrada</th>
-            <th></th>
+            <th>Ficha de Saúde</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
@@ -34,11 +35,33 @@
                 <td>@item.Porte</td>
                 <td>@item.SexoAnimal</td>
                 <td>@item.StatusAnimal</td>
+                <td>@item.DataDeEntrada</td>
+
+                <td>
+                    @if (item.FichaSaude != null)
+                    {
+                        <a asp-controller="FichaSaude"
+                           asp-action="Details"
+                           asp-route-id="@item.FichaSaude.FichaSaudeId"
+                           class="btn btn-info btn-sm">
+                            Ver Ficha
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="FichaSaude"
+                           asp-action="Create"
+                           asp-route-animalId="@item.AnimalId"
+                           class="btn btn-success btn-sm">
+                            Criar Ficha
+                        </a>
+                    }
+                </td>
 
                 <td>
                     <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-warning btn-sm">Editar</a>
-
                     <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-danger btn-sm">Excluir</a>
+                    <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-info btn-sm">Ver</a>
                 </td>
             </tr>
         }

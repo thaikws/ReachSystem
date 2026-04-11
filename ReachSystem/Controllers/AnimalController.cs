@@ -94,5 +94,17 @@ namespace ReachSystem.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Animal/Details/id
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var animal = await _animalService.GetAnimalByIdAsync(id);
+            if (animal == null)
+            {
+                return NotFound();
+            }
+            return View(animal);
+        }
     }
 }

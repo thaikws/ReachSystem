@@ -99,5 +99,16 @@ namespace ReachSystem.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: FichaSaude/Details/id
+        public async Task<IActionResult> Details(int id)
+        {
+            var ficha = await _fichaSaudeService.GetFichaSaudeByIdAsync(id);
+
+            if (ficha == null)
+                return NotFound();
+
+            return View(ficha);
+        }
     }
 }
