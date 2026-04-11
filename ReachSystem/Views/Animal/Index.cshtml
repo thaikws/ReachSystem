@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ReachSystem.Models.Animal>
+
+<h2>Animais</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Novo Animal</a>
+</p>
+
+<form method="get">
+    <input type="text" name="searchString" placeholder="Buscar animal..." />
+    <button type="submit">Pesquisar</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Espécie</th>
+            <th>Idade</th>
+            <th>Raça</th>
+            <th>Porte</th>
+            <th>Sexo</th>
+            <th>Status</th>
+            <th>Data de Entrada</th>
+            <th>Ficha de Saúde</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AnimalId</td>
+                <td>@item.Nome</td>
+                <td>@item.Especie</td>
+                <td>@item.Idade</td>
+                <td>@item.Raca</td>
+                <td>@item.Porte</td>
+                <td>@item.SexoAnimal</td>
+                <td>@item.StatusAnimal</td>
+                <td>@item.DataDeEntrada</td>
+
+                <td>
+                    @if (item.FichaSaude != null)
+                    {
+                        <a asp-controller="FichaSaude"
+                           asp-action="Details"
+                           asp-route-id="@item.FichaSaude.FichaSaudeId"
+                           class="btn btn-info btn-sm">
+                            Ver Ficha
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="FichaSaude"
+                           asp-action="Create"
+                           asp-route-animalId="@item.AnimalId"
+                           class="btn btn-success btn-sm">
+                            Criar Ficha
+                        </a>
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-danger btn-sm">Excluir</a>
+                    <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-info btn-sm">Ver</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

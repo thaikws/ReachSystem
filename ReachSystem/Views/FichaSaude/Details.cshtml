@@ -1,0 +1,22 @@
+﻿@model ReachSystem.Models.FichaSaude
+
+<h2>Ficha de Saúde</h2>
+
+<hr />
+
+<p><strong>ID:</strong> @Model.FichaSaudeId</p>
+<p><strong>Animal ID:</strong> @Model.AnimalId</p>
+<p><strong>Descrição:</strong> @Model.Descricao</p>
+<p><strong>Vacinas:</strong> @Model.Vacinas</p>
+<p><strong>Alergias:</strong> @Model.Alergias</p>
+<p><strong>Doenças:</strong> @Model.DoencasPreExistentes</p>
+<p><strong>Medicamentos:</strong> @Model.Medicamentos</p>
+
+<br />
+
+<a asp-controller="Animal"
+   asp-action="Details"
+   asp-route-id="@Model.AnimalId"
+   class="btn btn-secondary">
+    Voltar para o Animal
+</a>

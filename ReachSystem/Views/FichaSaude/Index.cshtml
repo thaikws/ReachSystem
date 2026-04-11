@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
+
+<h2>Fichas de Saúde</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Ficha de Saúde</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>AnimalID</th>
+            <th>Descrição</th>
+            <th>Vacinas</th>
+            <th>Alergias</th>
+            <th>Doenças Pré-existentes</th>
+            <th>Medicamentos</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FichaSaudeId</td>
+                <td>@item.AnimalId</td>
+                <td>@item.Descricao</td>
+                <td>@item.Vacinas</td>
+                <td>@item.Alergias</td>
+                <td>@item.DoencasPreExistentes</td>
+                <td>@item.Medicamentos</td>
+
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-warning btn-sm">Editar</a>
+
+                    <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
