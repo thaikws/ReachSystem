@@ -5,9 +5,11 @@ using ReachSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Registrar os services
 builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 
+//Adicionar o contexto do banco de dados
 builder.Services.AddDbContext<ReachSystemDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
