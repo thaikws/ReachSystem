@@ -4,7 +4,7 @@ using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
-    public class ConsultaController : ControllerBase
+    public class ConsultaController : Controller
     {
         private readonly ConsultaService _service;
 
@@ -13,66 +13,99 @@ namespace ReachSystem.Controllers
             _service = service;
         }
 
-        // GET
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        // LISTAR
+        public async Task<IActionResult> Index()
         {
             var consultas = await _service.GetAllConsultasAsync();
-            return Ok(consultas);
+            return View(consultas);
         }
 
-        // GET por ID
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // DETAILS
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
         {
             var consulta = await _service.GetConsultaByIdAsync(id);
 
             if (consulta == null)
                 return NotFound();
 
-            return Ok(consulta);
+            return View(consulta);
         }
 
-        // POST
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Consulta consulta)
+        // GET: Create
+        [HttpGet]
+        public IActionResult Create()
         {
-            try
-            {
-                var novaConsulta = await _service.AddConsultaAsync(consulta);
-                return CreatedAtAction(nameof(GetById), new { id = novaConsulta.ConsultaID }, novaConsulta);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return View();
         }
 
-        // PUT
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Consulta consulta)
+        // POST: Create
+        [HttpPost]
+        public async Task<IActionResult> Create(Consulta consulta)
+        {
+            if (ModelState.IsValid)
+            {
+                await _service.AddConsultaAsync(consulta);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(consulta);
+        }
+
+        // GET: Update
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var consulta = await _service.GetConsultaByIdAsync(id);
+
+            if (consulta == null)
+                return NotFound();
+
+            return View(consulta);
+        }
+
+        // POST: Update
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, Consulta consulta)
         {
             if (id != consulta.ConsultaID)
-                return BadRequest("ID inconsistente");
-
-            var atualizado = await _service.UpdateConsultaAsync(consulta);
-
-            if (!atualizado)
                 return NotFound();
 
-            return NoContent();
+            if (ModelState.IsValid)
+            {
+                var sucesso = await _service.UpdateConsultaAsync(consulta);
+
+                if (!sucesso)
+                    return NotFound();
+
+                TempData["Sucesso"] = "Consulta atualizada com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(consulta);
         }
 
-        // DELETE
-        [HttpDelete("{id}")]
+        // GET: Delete
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var deletado = await _service.DeleteConsultaAsync(id);
+            var consulta = await _service.GetConsultaByIdAsync(id);
 
-            if (!deletado)
+            if (consulta == null)
                 return NotFound();
 
-            return NoContent();
+            return View(consulta);
+        }
+
+        // POST: Delete
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var sucesso = await _service.DeleteConsultaAsync(id);
+
+            if (!sucesso)
+                return NotFound();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

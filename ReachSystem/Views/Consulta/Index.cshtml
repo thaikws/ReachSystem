@@ -1,0 +1,36 @@
+﻿﻿@Model IEnumerable<ReachSystem.Models.Consulta>
+
+<h2>Consulta</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Consulta</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Consulta</th>
+            <th>ID Animal</th>
+            <th>Data</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                    <td>@item.ConsultaID</td>
+                    <td>@item.AnimalId</td>
+                    <td>@item.Data</td>
+                    <td>@item.Descricao</td>
+
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.ConsultaID" class="btn btn-warning btn-sm">Editar</a>
+
+                    <a asp-action="Delete" asp-route-id="@item.ConsultaID" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
