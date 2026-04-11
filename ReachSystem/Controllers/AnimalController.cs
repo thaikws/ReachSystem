@@ -13,9 +13,16 @@ namespace ReachSystem.Controllers
             _animalService = animalService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string pesquisarString)
         {
             var animais = await _animalService.GetAllAnimalsAsync();
+            if (!string.IsNullOrEmpty(pesquisarString))
+            {
+                animais = animais.Where(a =>
+                    a.Nome.Contains(pesquisarString, StringComparison.OrdinalIgnoreCase) ||
+                    a.Especie.Contains(pesquisarString, StringComparison.OrdinalIgnoreCase) ||
+                    a.Raca.Contains(pesquisarString, StringComparison.OrdinalIgnoreCase));
+            }
             return View(animais);
         }
 

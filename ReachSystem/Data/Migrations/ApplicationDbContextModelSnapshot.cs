@@ -17,7 +17,7 @@ namespace ReachSystem.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.23")
+                .HasAnnotation("ProductVersion", "8.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -224,86 +224,6 @@ namespace ReachSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ReachSystem.Models.Animal", b =>
-                {
-                    b.Property<int>("AnimalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnimalId"));
-
-                    b.Property<DateTime>("DataDeEntrada")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Especie")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Idade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Porte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Raca")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SexoAnimal")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusAnimal")
-                        .HasColumnType("int");
-
-                    b.HasKey("AnimalId");
-
-                    b.ToTable("Animais");
-                });
-
-            modelBuilder.Entity("ReachSystem.Models.FichaSaude", b =>
-                {
-                    b.Property<int>("FichaSaudeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FichaSaudeId"));
-
-                    b.Property<string>("Alergias")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AnimalId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DoencasPreExistentes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Medicamentos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Vacinas")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("FichaSaudeId");
-
-                    b.HasIndex("AnimalId")
-                        .IsUnique();
-
-                    b.ToTable("FichasSaude");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -353,22 +273,6 @@ namespace ReachSystem.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ReachSystem.Models.FichaSaude", b =>
-                {
-                    b.HasOne("ReachSystem.Models.Animal", "Animal")
-                        .WithOne("FichaSaude")
-                        .HasForeignKey("ReachSystem.Models.FichaSaude", "AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Animal");
-                });
-
-            modelBuilder.Entity("ReachSystem.Models.Animal", b =>
-                {
-                    b.Navigation("FichaSaude");
                 });
 #pragma warning restore 612, 618
         }
