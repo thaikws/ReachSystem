@@ -1,1 +1,10 @@
-﻿<h1>Form Delete Ficha Saude</h1>
+﻿@model SeuProjeto.Models.FichaSaude
+
+<h2>Deseja excluir?</h2>
+
+<p>@Model.NomePaciente</p>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit">Confirmar</button>
+</form>

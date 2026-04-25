@@ -1,1 +1,34 @@
-﻿<h1>Form Update Ficha Saude</h1>
+﻿@model SeuProjeto.Models.FichaSaude
+
+<h2>Editar Ficha</h2>
+
+<form asp-action="Update">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Nome do Paciente</label>
+        <input asp-for="NomePaciente" />
+    </div>
+
+    <div>
+        <label>Idade</label>
+        <input asp-for="Idade" type="number" />
+    </div>
+
+    <div>
+        <label>Peso</label>
+        <input asp-for="Peso" />
+    </div>
+
+    <div>
+        <label>Altura</label>
+        <input asp-for="Altura" />
+    </div>
+
+    <div>
+        <label>Observações</label>
+        <textarea asp-for="Observacoes"></textarea>
+    </div>
+
+    <button type="submit">Atualizar</button>
+</form>

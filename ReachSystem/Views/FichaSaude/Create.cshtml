@@ -1,1 +1,32 @@
-﻿<h1>Form Create Ficha saude</h1>
+﻿@model SeuProjeto.Models.FichaSaude
+
+<h2>Criar Ficha de Saúde</h2>
+
+<form asp-action="Create">
+    <div>
+        <label>Nome do Paciente</label>
+        <input asp-for="NomePaciente" />
+    </div>
+
+    <div>
+        <label>Idade</label>
+        <input asp-for="Idade" type="number" />
+    </div>
+
+    <div>
+        <label>Peso</label>
+        <input asp-for="Peso" />
+    </div>
+
+    <div>
+        <label>Altura</label>
+        <input asp-for="Altura" />
+    </div>
+
+    <div>
+        <label>Observações</label>
+        <textarea asp-for="Observacoes"></textarea>
+    </div>
+
+    <button type="submit">Salvar</button>
+</form>
