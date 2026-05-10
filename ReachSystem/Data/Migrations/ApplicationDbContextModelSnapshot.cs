@@ -262,7 +262,7 @@ namespace ReachSystem.Data.Migrations
 
                     b.HasKey("AnimalId");
 
-                    b.ToTable("Animais", (string)null);
+                    b.ToTable("Animais");
                 });
 
             modelBuilder.Entity("ReachSystem.Models.Consulta", b =>
@@ -288,7 +288,35 @@ namespace ReachSystem.Data.Migrations
 
                     b.HasIndex("AnimalId");
 
-                    b.ToTable("Consultas", (string)null);
+                    b.ToTable("Consultas");
+                });
+
+            modelBuilder.Entity("ReachSystem.Models.Evento", b =>
+                {
+                    b.Property<int>("EventoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventoId"));
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Local")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventoId");
+
+                    b.ToTable("Eventos");
                 });
 
             modelBuilder.Entity("ReachSystem.Models.FichaSaude", b =>
@@ -327,7 +355,7 @@ namespace ReachSystem.Data.Migrations
                     b.HasIndex("AnimalId")
                         .IsUnique();
 
-                    b.ToTable("FichasSaude", (string)null);
+                    b.ToTable("FichasSaude");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -407,7 +435,8 @@ namespace ReachSystem.Data.Migrations
                 {
                     b.Navigation("Consultas");
 
-                    b.Navigation("FichaSaude");
+                    b.Navigation("FichaSaude")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

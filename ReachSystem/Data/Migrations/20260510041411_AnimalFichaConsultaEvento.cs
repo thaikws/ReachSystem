@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ReachSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AnimalFichaConsulta : Migration
+    public partial class AnimalFichaConsultaEvento : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,22 @@ namespace ReachSystem.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Animais", x => x.AnimalId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Eventos",
+                columns: table => new
+                {
+                    EventoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Local = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Eventos", x => x.EventoId);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,6 +109,9 @@ namespace ReachSystem.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Consultas");
+
+            migrationBuilder.DropTable(
+                name: "Eventos");
 
             migrationBuilder.DropTable(
                 name: "FichasSaude");

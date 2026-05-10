@@ -12,8 +12,8 @@ using ReachSystem.Data;
 namespace ReachSystem.Data.Migrations
 {
     [DbContext(typeof(ReachSystemDbContext))]
-    [Migration("20260411220841_AnimalFichaConsulta")]
-    partial class AnimalFichaConsulta
+    [Migration("20260510041411_AnimalFichaConsultaEvento")]
+    partial class AnimalFichaConsultaEvento
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -294,6 +294,34 @@ namespace ReachSystem.Data.Migrations
                     b.ToTable("Consultas");
                 });
 
+            modelBuilder.Entity("ReachSystem.Models.Evento", b =>
+                {
+                    b.Property<int>("EventoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventoId"));
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Local")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventoId");
+
+                    b.ToTable("Eventos");
+                });
+
             modelBuilder.Entity("ReachSystem.Models.FichaSaude", b =>
                 {
                     b.Property<int>("FichaSaudeId")
@@ -410,7 +438,8 @@ namespace ReachSystem.Data.Migrations
                 {
                     b.Navigation("Consultas");
 
-                    b.Navigation("FichaSaude");
+                    b.Navigation("FichaSaude")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
