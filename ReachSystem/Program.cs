@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ConsultaService>();
 builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
+builder.Services.AddScoped<EventoService>();
 
 //Adicionar o contexto do banco de dados
 builder.Services.AddDbContext<ReachSystemDbContext>(options =>

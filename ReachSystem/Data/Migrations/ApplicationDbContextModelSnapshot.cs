@@ -262,7 +262,7 @@ namespace ReachSystem.Data.Migrations
 
                     b.HasKey("AnimalId");
 
-                    b.ToTable("Animais");
+                    b.ToTable("Animais", (string)null);
                 });
 
             modelBuilder.Entity("ReachSystem.Models.Consulta", b =>
@@ -288,7 +288,7 @@ namespace ReachSystem.Data.Migrations
 
                     b.HasIndex("AnimalId");
 
-                    b.ToTable("Consultas");
+                    b.ToTable("Consultas", (string)null);
                 });
 
             modelBuilder.Entity("ReachSystem.Models.FichaSaude", b =>
@@ -327,7 +327,7 @@ namespace ReachSystem.Data.Migrations
                     b.HasIndex("AnimalId")
                         .IsUnique();
 
-                    b.ToTable("FichasSaude");
+                    b.ToTable("FichasSaude", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
