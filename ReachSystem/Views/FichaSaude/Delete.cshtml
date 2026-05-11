@@ -1,10 +1,49 @@
-﻿@model SeuProjeto.Models.FichaSaude
+﻿@model ReachSystem.Models.FichaSaude
 
-<h2>Deseja excluir?</h2>
+<h2>Excluir Ficha de Saúde</h2>
 
-<p>@Model.NomePaciente</p>
+<div class="alert alert-danger">
+    Tem certeza que deseja excluir esta ficha?
+</div>
 
-<form asp-action="Delete">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit">Confirmar</button>
+<div class="mb-3">
+    <strong>ID:</strong> @Model.FichaSaudeId
+</div>
+
+<div class="mb-3">
+    <strong>Animal ID:</strong> @Model.AnimalId
+</div>
+
+<div class="mb-3">
+    <strong>Descrição:</strong> @Model.Descricao
+</div>
+
+<div class="mb-3">
+    <strong>Vacinas:</strong> @Model.Vacinas
+</div>
+
+<div class="mb-3">
+    <strong>Alergias:</strong> @Model.Alergias
+</div>
+
+<div class="mb-3">
+    <strong>Doenças Pré-existentes:</strong> @Model.DoencasPreExistentes
+</div>
+
+<div class="mb-3">
+    <strong>Medicamentos:</strong> @Model.Medicamentos
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="FichaSaudeId" />
+
+    <button type="submit" class="btn btn-danger">
+        Confirmar Exclusão
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+
 </form>
