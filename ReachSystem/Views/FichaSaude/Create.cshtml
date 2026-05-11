@@ -11,7 +11,7 @@
 
     <div class="mb-3">
         <label asp-for="Descricao" class="form-label"></label>
-        <input asp-for="Descricao" class="form-control" />
+        <textarea asp-for="Descricao" class="form-control"></textarea>
     </div>
 
     <div class="mb-3">
@@ -31,10 +31,15 @@
 
     <div class="mb-3">
         <label asp-for="Medicamentos" class="form-label"></label>
-        <input asp-for="Medicamentos" class="form-control" />
+        <textarea asp-for="Medicamentos" class="form-control"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    <button type="submit" class="btn btn-success">
+        Salvar
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Voltar
+    </a>
 
 </form>
