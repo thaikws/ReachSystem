@@ -52,14 +52,14 @@
 
                     <button class="btn btn-sm btn-outline-secondary"
                             onclick="mudarMes(-1)">
-                        ◀
+                        <
                     </button>
 
                     <strong id="mesAtual"></strong>
 
                     <button class="btn btn-sm btn-outline-secondary"
                             onclick="mudarMes(1)">
-                        ▶
+                        >
                     </button>
 
                 </div>
@@ -94,6 +94,11 @@
                 <a asp-action="Create"
                    class="btn btn-success">
                     Adicionar
+                </a>
+
+                <a asp-action="Delete"
+                   class="btn btn-danger">
+                    Excluir
                 </a>
 
             </div>

@@ -1,1 +1,73 @@
-﻿﻿<h1>Form Create Consulta</h1>
+﻿@model ReachSystem.Models.Consulta
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Criar Consulta";
+
+    // formata string Data para o input datetime-local se possível
+    var dataValor = "";
+    if (!string.IsNullOrEmpty(Model?.Data))
+    {
+        if (DateTime.TryParse(Model.Data, out var dt))
+        {
+            dataValor = dt.ToString("yyyy-MM-ddTHH:mm");
+        }
+        else
+        {
+            dataValor = Model.Data;
+        }
+    }
+}
+
+<div class="container-fluid mt-4">
+    <!-- Form Create -->
+    <div class="row justify-content-center align-items-center" style="min-height: calc(80vh - 180px);">
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-center">
+                    <strong>Criar nova consulta</strong>
+                </div>
+
+                <div class="card-body">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <form asp-action="Create" method="post" class="row g-3">
+                        @Html.AntiForgeryToken()
+
+                        <div class="col-12">
+                            <label asp-for="AnimalId" class="form-label">Animal</label>
+                            <select asp-for="AnimalId" class="form-select"
+                                    asp-items="ViewBag.Animais as IEnumerable<SelectListItem>">
+                                <option value="">-- Selecionar --</option>
+                            </select>
+                            <span asp-validation-for="AnimalId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Data" class="form-label">Data e hora</label>
+                            <input asp-for="Data" type="datetime-local" class="form-control" value="@dataValor" />
+                            <span asp-validation-for="Data" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Descricao" class="form-label">Descrição (inclui sintomas, diagnóstico, tratamento)</label>
+                            <textarea asp-for="Descricao" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
