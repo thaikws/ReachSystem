@@ -1,107 +1,381 @@
-﻿@{
+﻿@model IEnumerable<ReachSystem.Models.Consulta>
+
+@{
     var consultas = Model;
 }
 
-<div class="card shadow-sm">
+<div class="container-fluid mt-4">
 
-    <!-- HEADER COM NAVEGAÇÃO -->
-    <div class="card-header d-flex justify-content-between">
-        <button class="btn btn-sm btn-outline-secondary" onclick="mudarMes(-1)">◀</button>
+    <div class="row">
 
-        <strong id="mesAtual"></strong>
+        <!-- ================================= -->
+        <!-- LISTA DE CONSULTAS -->
+        <!-- ================================= -->
+        <div class="col-md-4">
 
-        <button class="btn btn-sm btn-outline-secondary" onclick="mudarMes(1)">▶</button>
-    </div>
+            <div class="card shadow-sm">
 
-    <div class="card-body">
-        <div id="calendario" class="row text-center"></div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0">
+                        Consultas
+                    </h5>
+
+                    <button class="btn btn-sm btn-outline-primary"
+                            onclick="mostrarTodasConsultas()">
+                        Mostrar Todas
+                    </button>
+
+                </div>
+
+                <!-- SCROLL -->
+                <div class="card-body"
+                     style="height:700px; overflow-y:auto;">
+
+                    <div id="consultasDoDia"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================================= -->
+        <!-- CALENDÁRIO -->
+        <!-- ================================= -->
+        <div class="col-md-8">
+
+            <div class="card shadow-sm">
+
+                <!-- HEADER -->
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <button class="btn btn-sm btn-outline-secondary"
+                            onclick="mudarMes(-1)">
+                        ◀
+                    </button>
+
+                    <strong id="mesAtual"></strong>
+
+                    <button class="btn btn-sm btn-outline-secondary"
+                            onclick="mudarMes(1)">
+                        ▶
+                    </button>
+
+                </div>
+
+                <!-- DIAS DA SEMANA -->
+                <div class="row text-center fw-bold border-bottom m-0">
+
+                    <div class="col p-2">Dom</div>
+                    <div class="col p-2">Seg</div>
+                    <div class="col p-2">Ter</div>
+                    <div class="col p-2">Qua</div>
+                    <div class="col p-2">Qui</div>
+                    <div class="col p-2">Sex</div>
+                    <div class="col p-2">Sáb</div>
+
+                </div>
+
+                <!-- CALENDÁRIO -->
+                <div class="card-body">
+
+                    <div id="calendario"
+                         class="d-flex flex-wrap text-center">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+
+                <a asp-action="Create"
+                   class="btn btn-success">
+                    Adicionar
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
 
-<!-- LISTA -->
-<div id="consultasDoDia" class="mt-3"></div>
-
 <script>
-    const consultas = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    const consultas = @Html.Raw(
+        System.Text.Json.JsonSerializer.Serialize(Model)
+    );
 
     let dataAtual = new Date();
 
+    // =========================================
+    // CALENDÁRIO
+    // =========================================
     function renderizarCalendario() {
 
         const mes = dataAtual.getMonth();
         const ano = dataAtual.getFullYear();
 
         document.getElementById("mesAtual").innerText =
-            dataAtual.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+            dataAtual.toLocaleString(
+                'pt-BR',
+                {
+                    month: 'long',
+                    year: 'numeric'
+                }
+            );
 
-        let primeiroDia = new Date(ano, mes, 1).getDay();
-        let diasNoMes = new Date(ano, mes + 1, 0).getDate();
+        let primeiroDia =
+            new Date(ano, mes, 1).getDay();
+
+        let diasNoMes =
+            new Date(ano, mes + 1, 0).getDate();
 
         let html = "";
 
-        // espaços vazios
+        // ESPAÇOS VAZIOS
         for (let i = 0; i < primeiroDia; i++) {
-            html += `<div class="col-1 p-2"></div>`;
+
+            html += `
+                <div
+                    style="
+                        width:14.28%;
+                        height:90px;
+                    ">
+                </div>
+            `;
         }
 
+        // DIAS
         for (let dia = 1; dia <= diasNoMes; dia++) {
 
             let temConsulta = consultas.some(c => {
+
                 let d = new Date(c.data);
+
                 return d.getDate() === dia &&
                        d.getMonth() === mes &&
                        d.getFullYear() === ano;
             });
 
             html += `
-                <div class="col-1 border p-2"
-                     style="cursor:pointer; background:${temConsulta ? '#b6e3b6' : '#f8f9fa'}"
-                     onclick="mostrarConsultas(${dia})">
+                <div
+                    class="border p-2 dia-calendario"
+
+                    style="
+                        width:14.28%;
+                        height:90px;
+                        cursor:pointer;
+                        background:${temConsulta ? '#b6e3b6' : '#f8f9fa'};
+                    "
+
+                    onclick="mostrarConsultas(${dia})">
 
                     <strong>${dia}</strong>
+
                 </div>
             `;
         }
 
-        document.getElementById("calendario").innerHTML = html;
+        document.getElementById(
+            "calendario"
+        ).innerHTML = html;
     }
 
+    // =========================================
+    // TROCAR MÊS
+    // =========================================
     function mudarMes(valor) {
-        dataAtual.setMonth(dataAtual.getMonth() + valor);
+
+        dataAtual.setMonth(
+            dataAtual.getMonth() + valor
+        );
+
         renderizarCalendario();
+
+        // atualiza lista do mês
+        mostrarTodasConsultas();
     }
 
-    function mostrarConsultas(dia) {
+    // =========================================
+    // MOSTRAR TODAS CONSULTAS DO MÊS
+    // =========================================
+    function mostrarTodasConsultas() {
 
         const mes = dataAtual.getMonth();
         const ano = dataAtual.getFullYear();
 
-        let html = `<h5>Consultas do dia ${dia}</h5>`;
+        let consultasMes = consultas.filter(c => {
 
-        let filtradas = consultas.filter(c => {
             let d = new Date(c.data);
-            return d.getDate() === dia &&
-                   d.getMonth() === mes &&
+
+            return d.getMonth() === mes &&
                    d.getFullYear() === ano;
         });
 
-        if (filtradas.length === 0) {
-            html += "<p>Nenhuma consulta</p>";
-        } else {
-            filtradas.forEach(c => {
+        let html = `
+            <h5 class="mb-3">
+                Consultas do mês
+            </h5>
+        `;
+
+        if (consultasMes.length === 0) {
+
+            html += `
+                <div class="alert alert-secondary">
+                    Nenhuma consulta encontrada.
+                </div>
+            `;
+        }
+        else {
+
+            consultasMes.forEach(c => {
+
                 html += `
-                    <div class="card mb-2 p-2">
-                        <strong>${c.data}</strong><br/>
-                        ID: ${c.consultaID}<br/>
-                        ${c.descricao}
+                    <div class="card mb-3 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h6>
+                                Consulta #${c.consultaID}
+                            </h6>
+
+                            <p class="mb-1">
+                                <strong>Data:</strong>
+                                ${c.data}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Descrição:</strong>
+                                ${c.descricao}
+                            </p>
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="/Consulta/Update/${c.consultaID}"
+                                    class="btn btn-sm btn-warning">
+
+                                    Editar
+
+                                </a>
+
+                                <a
+                                    href="/Consulta/Delete/${c.consultaID}"
+                                    class="btn btn-sm btn-danger">
+
+                                    Excluir
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
                     </div>
                 `;
             });
         }
 
-        document.getElementById("consultasDoDia").innerHTML = html;
+        document.getElementById(
+            "consultasDoDia"
+        ).innerHTML = html;
     }
 
+    // =========================================
+    // MOSTRAR CONSULTAS DO DIA
+    // =========================================
+    function mostrarConsultas(dia) {
+
+        const mes = dataAtual.getMonth();
+        const ano = dataAtual.getFullYear();
+
+        let filtradas = consultas.filter(c => {
+
+            let d = new Date(c.data);
+
+            return d.getDate() === dia &&
+                   d.getMonth() === mes &&
+                   d.getFullYear() === ano;
+        });
+
+        let html = `
+            <h5 class="mb-3">
+                Consultas do dia ${dia}
+            </h5>
+        `;
+
+        if (filtradas.length === 0) {
+
+            html += `
+                <div class="alert alert-secondary">
+                    Nenhuma consulta encontrada.
+                </div>
+            `;
+        }
+        else {
+
+            filtradas.forEach(c => {
+
+                html += `
+                    <div class="card mb-3 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h6>
+                                Consulta #${c.consultaID}
+                            </h6>
+
+                            <p class="mb-1">
+                                <strong>Data:</strong>
+                                ${c.data}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Descrição:</strong>
+                                ${c.descricao}
+                            </p>
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="/Consulta/Update/${c.consultaID}"
+                                    class="btn btn-sm btn-warning">
+
+                                    Editar
+
+                                </a>
+
+                                <a
+                                    href="/Consulta/Delete/${c.consultaID}"
+                                    class="btn btn-sm btn-danger">
+
+                                    Excluir
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById(
+            "consultasDoDia"
+        ).innerHTML = html;
+    }
+
+    // =========================================
+    // INICIALIZAÇÃO
+    // =========================================
     renderizarCalendario();
+    mostrarTodasConsultas();
+
 </script>
