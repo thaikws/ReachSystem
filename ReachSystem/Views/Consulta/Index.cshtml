@@ -1,73 +1,89 @@
 ﻿@{
-    var consultasPorDia = new Dictionary<int, List<ReachSystem.Models.Consulta>>();
-
-    if (Model != null)
-    {
-        foreach (var c in Model)
-        {
-            DateTime dataConvertida;
-
-            // tenta converter string para data
-            if (DateTime.TryParse(c.Data, out dataConvertida))
-            {
-                int dia = dataConvertida.Day;
-
-                if (!consultasPorDia.ContainsKey(dia))
-                    consultasPorDia[dia] = new List<ReachSystem.Models.Consulta>();
-
-                consultasPorDia[dia].Add(c);
-            }
-        }
-    }
+    var consultas = Model;
 }
 
 <div class="card shadow-sm">
-    <div class="card-header text-center">
-        <strong>@DateTime.Now.ToString("MMMM yyyy")</strong>
+
+    <!-- HEADER COM NAVEGAÇÃO -->
+    <div class="card-header d-flex justify-content-between">
+        <button class="btn btn-sm btn-outline-secondary" onclick="mudarMes(-1)">◀</button>
+
+        <strong id="mesAtual"></strong>
+
+        <button class="btn btn-sm btn-outline-secondary" onclick="mudarMes(1)">▶</button>
     </div>
 
     <div class="card-body">
-
-        <div class="row text-center">
-
-            @for (int i = 1; i <= 31; i++)
-            {
-                var temConsulta = consultasPorDia.ContainsKey(i);
-
-                    <div class="col-2 border p-2"
-                         style="cursor:pointer;
-                            background-color:@(temConsulta ? "#b6e3b6" : "#f8f9fa");"
-                         onclick="mostrarConsultas(@i)">
-
-                        <strong>@i</strong>
-
-                    @if (temConsulta)
-                    {
-                                <div>
-                                    <small>@consultasPorDia[i].Count consulta(s)</small>
-                                </div>
-                    }
-                    </div>
-            }
-
-        </div>
-
+        <div id="calendario" class="row text-center"></div>
     </div>
+
 </div>
 
-<!-- LISTA DINÂMICA -->
+<!-- LISTA -->
 <div id="consultasDoDia" class="mt-3"></div>
 
 <script>
     const consultas = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
 
+    let dataAtual = new Date();
+
+    function renderizarCalendario() {
+
+        const mes = dataAtual.getMonth();
+        const ano = dataAtual.getFullYear();
+
+        document.getElementById("mesAtual").innerText =
+            dataAtual.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+
+        let primeiroDia = new Date(ano, mes, 1).getDay();
+        let diasNoMes = new Date(ano, mes + 1, 0).getDate();
+
+        let html = "";
+
+        // espaços vazios
+        for (let i = 0; i < primeiroDia; i++) {
+            html += `<div class="col-1 p-2"></div>`;
+        }
+
+        for (let dia = 1; dia <= diasNoMes; dia++) {
+
+            let temConsulta = consultas.some(c => {
+                let d = new Date(c.data);
+                return d.getDate() === dia &&
+                       d.getMonth() === mes &&
+                       d.getFullYear() === ano;
+            });
+
+            html += `
+                <div class="col-1 border p-2"
+                     style="cursor:pointer; background:${temConsulta ? '#b6e3b6' : '#f8f9fa'}"
+                     onclick="mostrarConsultas(${dia})">
+
+                    <strong>${dia}</strong>
+                </div>
+            `;
+        }
+
+        document.getElementById("calendario").innerHTML = html;
+    }
+
+    function mudarMes(valor) {
+        dataAtual.setMonth(dataAtual.getMonth() + valor);
+        renderizarCalendario();
+    }
+
     function mostrarConsultas(dia) {
+
+        const mes = dataAtual.getMonth();
+        const ano = dataAtual.getFullYear();
 
         let html = `<h5>Consultas do dia ${dia}</h5>`;
 
         let filtradas = consultas.filter(c => {
-            let data = new Date(c.data);
-            return data.getDate() === dia;
+            let d = new Date(c.data);
+            return d.getDate() === dia &&
+                   d.getMonth() === mes &&
+                   d.getFullYear() === ano;
         });
 
         if (filtradas.length === 0) {
@@ -76,8 +92,9 @@
             filtradas.forEach(c => {
                 html += `
                     <div class="card mb-2 p-2">
-                        <strong>ID:</strong> ${c.consultaID}<br/>
-                        <strong>Descrição:</strong> ${c.descricao}
+                        <strong>${c.data}</strong><br/>
+                        ID: ${c.consultaID}<br/>
+                        ${c.descricao}
                     </div>
                 `;
             });
@@ -85,4 +102,6 @@
 
         document.getElementById("consultasDoDia").innerHTML = html;
     }
+
+    renderizarCalendario();
 </script>
