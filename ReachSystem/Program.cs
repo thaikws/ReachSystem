@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReachSystem.Data;
 using ReachSystem.Services;
+using ReachSystem.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,18 +12,18 @@ builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<EventoService>();
 
-//Adicionar o contexto do banco de dados
-builder.Services.AddDbContext<ReachSystemDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ReachSystemDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ReachSystemDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ReachSystemDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -44,6 +45,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
