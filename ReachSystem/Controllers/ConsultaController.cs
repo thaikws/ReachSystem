@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Models;
 using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class ConsultaController : Controller
     {
         private readonly ConsultaService _service;
@@ -86,6 +88,7 @@ namespace ReachSystem.Controllers
 
         // GET: Delete
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var consulta = await _service.GetConsultaByIdAsync(id);
@@ -98,6 +101,7 @@ namespace ReachSystem.Controllers
 
         // POST: Delete
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _service.DeleteConsultaAsync(id);

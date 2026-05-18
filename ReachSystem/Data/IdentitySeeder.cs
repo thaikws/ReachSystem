@@ -40,6 +40,48 @@ namespace ReachSystem.Data
                     await userManager.AddToRoleAsync(user, "Admin");
                 }
             }
+            //funcionario
+            var funcionarioEmail = "funcionario@reach.com";
+
+            var funcionario = await userManager.FindByEmailAsync(funcionarioEmail);
+
+            if (funcionario == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = funcionarioEmail,
+                    Email = funcionarioEmail,
+                    Nome = "Funcionario Teste"
+                };
+
+                var result = await userManager.CreateAsync(user, "Funcionario123@");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Funcionario");
+                }
+            }
+            //voluntario
+            var voluntarioEmail = "voluntario@reach.com";
+
+            var voluntario = await userManager.FindByEmailAsync(voluntarioEmail);
+
+            if (voluntario == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = voluntarioEmail,
+                    Email = voluntarioEmail,
+                    Nome = "Voluntario Teste"
+                };
+
+                var result = await userManager.CreateAsync(user, "Voluntario123@");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Voluntario");
+                }
+            }
         }
     }
 }
