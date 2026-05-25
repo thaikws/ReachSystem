@@ -1,1 +1,94 @@
-﻿<h1>Form Update Animal</h1>
+﻿@model ReachSystem.Models.Animal
+
+<div class="box">
+    <h1>Editar Animal</h1>
+
+    <form asp-action="Edit">
+
+        <input type="hidden" asp-for="AnimalId" />
+
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+
+        <label asp-for="Especie"></label>
+        <input asp-for="Especie" />
+
+        <label asp-for="Raca"></label>
+        <input asp-for="Raca" />
+
+        <label asp-for="Idade"></label>
+        <input asp-for="Idade" />
+
+        <label asp-for="Porte"></label>
+        <input asp-for="Porte" />
+
+        <label asp-for="SexoAnimal"></label>
+        <input asp-for="SexoAnimal" />
+
+        <label asp-for="StatusAnimal"></label>
+        <input asp-for="StatusAnimal" />
+
+        <label asp-for="DataDeEntrada"></label>
+        <input asp-for="DataDeEntrada" />
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <a asp-action="Index">Voltar</a>
+</div>
+
+<style>
+    body {
+        font-family: Arial;
+        background-color: #f4f6f9;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        margin: 40px auto;
+        width: 350px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: green;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background: darkgreen;
+        }
+
+    a {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
