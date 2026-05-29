@@ -1,16 +1,17 @@
-﻿@model ReachSystem.Models.Consulta
+﻿```cshtml
+@model ReachSystem.Models.Consulta
 
 @{
     ViewData["Title"] = "Excluir Consulta";
 }
 
-<div class="container-fluid mt-4">
+<div class="container mt-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-7">
+        <div class="col-md-8">
 
-            <div class="card shadow-sm border-danger">
+            <div class="card shadow border-danger">
 
                 <!-- HEADER -->
                 <div class="card-header bg-danger text-white text-center">
@@ -31,10 +32,10 @@
 
                     </div>
 
-                    <!-- INFORMAÇÕES -->
+                    <!-- DADOS -->
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             ID da Consulta
                         </label>
 
@@ -46,7 +47,7 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Animal ID
                         </label>
 
@@ -58,7 +59,7 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Data
                         </label>
 
@@ -70,7 +71,7 @@
 
                     <div class="mb-4">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Descrição
                         </label>
 
@@ -81,19 +82,14 @@
                     </div>
 
                     <!-- FORM -->
-                    <form asp-action="Delete"
+                    <form action="/Consulta/Delete/@Model.ConsultaID"
                           method="post">
 
                         @Html.AntiForgeryToken()
 
-                        <!-- ID -->
-                        <input type="hidden"
-                               name="id"
-                               value="@Model.ConsultaID" />
-
-                        <!-- BOTÕES -->
                         <div class="d-flex justify-content-end">
 
+                            <!-- CANCELAR -->
                             <a asp-action="Index"
                                class="btn btn-secondary">
 
@@ -101,6 +97,7 @@
 
                             </a>
 
+                            <!-- EXCLUIR -->
                             <button type="submit"
                                     class="btn btn-danger ms-2">
 
@@ -121,3 +118,4 @@
     </div>
 
 </div>
+```
