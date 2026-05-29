@@ -1,48 +1,123 @@
 ﻿@model ReachSystem.Models.Consulta
 
 @{
-    ViewBag.Title = "Excluir Consulta";
+    ViewData["Title"] = "Excluir Consulta";
 }
 
 <div class="container-fluid mt-4">
-    <div class="row justify-content-center align-items-center" style="min-height: calc(80vh - 180px);">
+
+    <div class="row justify-content-center">
+
         <div class="col-md-7">
 
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-danger">
 
-                <div class="card-header text-center bg-danger text-white">
-                    <strong>Excluir consulta</strong>
+                <!-- HEADER -->
+                <div class="card-header bg-danger text-white text-center">
+
+                    <h4 class="mb-0">
+                        Excluir Consulta
+                    </h4>
+
                 </div>
 
+                <!-- BODY -->
                 <div class="card-body">
 
-                    <h5 class="mb-3 text-center">Tem certeza que deseja excluir esta consulta?</h5>
+                    <!-- ALERTA -->
+                    <div class="alert alert-danger">
 
-                    <dl class="row">
-                        <dt class="col-sm-4">Animal</dt>
-                        <dd class="col-sm-8">@Model.Animal?.Nome</dd>
+                        Tem certeza que deseja excluir esta consulta?
 
-                        <dt class="col-sm-4">Data e hora</dt>
-                        <dd class="col-sm-8">@Model.Data</dd>
+                    </div>
 
-                        <dt class="col-sm-4">Descrição</dt>
-                        <dd class="col-sm-8">@Model.Descricao</dd>
-                    </dl>
+                    <!-- INFORMAÇÕES -->
+                    <div class="mb-3">
 
-                    @using (Html.BeginForm("Delete", "Consulta", FormMethod.Post))
-                    {
+                        <label class="form-label fw-bold">
+                            ID da Consulta
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.ConsultaID"
+                               readonly />
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Animal ID
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.AnimalId"
+                               readonly />
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Data
+                        </label>
+
+                        <input class="form-control"
+                               value="@Model.Data"
+                               readonly />
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-bold">
+                            Descrição
+                        </label>
+
+                        <textarea class="form-control"
+                                  rows="5"
+                                  readonly>@Model.Descricao</textarea>
+
+                    </div>
+
+                    <!-- FORM -->
+                    <form asp-action="Delete"
+                          method="post">
+
                         @Html.AntiForgeryToken()
-                        @Html.HiddenFor(model => model.ConsultaID)
-                        <div class="d-flex justify-content-end mt-4">
-                            <button type="submit" class="btn btn-danger">Excluir</button>
-                            <a href="@Url.Action("Index", "Consulta")" class="btn btn-secondary ms-2">Cancelar</a>
+
+                        <!-- ID -->
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.ConsultaID" />
+
+                        <!-- BOTÕES -->
+                        <div class="d-flex justify-content-end">
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-danger ms-2">
+
+                                Excluir Consulta
+
+                            </button>
+
                         </div>
-                    }
+
+                    </form>
 
                 </div>
 
             </div>
 
         </div>
+
     </div>
+
 </div>
