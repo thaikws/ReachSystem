@@ -11,6 +11,7 @@ builder.Services.AddScoped<ConsultaService>();
 builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<EventoService>();
+builder.Services.AddScoped < UsuarioService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
