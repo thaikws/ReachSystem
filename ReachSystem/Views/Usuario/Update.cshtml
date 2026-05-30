@@ -1,0 +1,20 @@
+﻿@model ReachSystem.Models.ApplicationUser
+
+<h1>Atualizar Usuário</h1>
+
+<form asp-action="Update">
+
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <div>
+        <label>Nome</label>
+        <input type="text" name="nome" value="@Model.Nome" />
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input type="email" name="email" value="@Model.Email" />
+    </div>
+
+    <button type="submit">Salvar</button>
+</form>

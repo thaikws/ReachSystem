@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ReachSystem.Models.ApplicationUser>
+
+<h1>Usuários</h1>
+
+<p>
+    <a asp-action="Create">Criar Usuário</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.Email</td>
+
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
