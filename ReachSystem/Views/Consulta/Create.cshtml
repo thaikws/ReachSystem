@@ -1,607 +1,153 @@
-﻿O problema do seu código é que você está com MUITO código duplicado e alguns blocos quebrados no JavaScript.
-Você tem:
-
-* `renderizarCalendario()` repetido
-* `const consultas` repetido
-* template strings sem crase
-* HTML quebrado dentro do JS
-* `<script>
-       ` duplicado
-       * funções repetidas
-
-       Isso está causando os erros.
-
-       Substitua TODO o conteúdo da view por este código completo funcionando:
-
-       ```cshtml
-@model IEnumerable<ReachSystem.Models.Consulta>
+﻿@model ReachSystem.Models.Consulta
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    var consultas = Model;
+    ViewData["Title"] = "Criar Consulta";
 }
 
-       <div class="container-fluid mt-4">
+<div class="container-fluid mt-4">
 
-           <div class="row">
+    <div class="row justify-content-center align-items-center"
+         style="min-height: calc(80vh - 180px);">
 
-               <!-- LISTA -->
-               <div class="col-md-4">
+        <div class="col-md-7">
 
-                   <div class="card shadow-sm">
+            <div class="card shadow-sm">
 
-                       <div class="card-header d-flex justify-content-between align-items-center">
+                <!-- HEADER -->
+                <div class="card-header text-center">
 
-                           <h5 class="mb-0">
-                               Consultas
-                           </h5>
+                    <strong>
+                        Criar nova consulta
+                    </strong>
 
-                           <button class="btn btn-sm btn-outline-primary"
-                                   onclick="mostrarTodasConsultas()">
+                </div>
 
-                               Mostrar Todas
+                <!-- BODY -->
+                <div class="card-body">
+                
+                    <form asp-action="Create"
+                          method="post"
+                          class="row g-3">
 
-                           </button>
+                        @Html.AntiForgeryToken()
 
-                       </div>
+                        <!-- ANIMAL -->
+                        <div class="col-12">
 
-                       <div class="card-body"
-                            style="height:700px; overflow-y:auto;">
+                            <label asp-for="AnimalId"
+                                   class="form-label">
 
-                           <div id="consultasDoDia"></div>
+                                Animal
 
-                       </div>
+                            </label>
 
-                   </div>
+                            <select asp-for="AnimalId"
+                                    class="form-select"
+                                    asp-items="ViewBag.Animais">
 
-               </div>
+                                <option value="">
+                                    -- Selecionar --
+                                </option>
 
-               <!-- CALENDÁRIO -->
-               <div class="col-md-8">
+                            </select>
 
-                   <div class="card shadow-sm">
+                            @if (ViewData.ModelState["AnimalId"]?.Errors.Count > 0)
+                            {
+                                <small class="text-danger">
+                                    Selecione um animal.
+                                </small>
+                            }
 
-                       <!-- HEADER -->
-                       <div class="card-header">
+                        </div>
 
-                           <div class="d-flex justify-content-between align-items-center">
+                        <!-- DATA -->
+                        <div class="col-md-6">
 
-                               <!-- BOTÃO ESQUERDA -->
-                               <button class="btn btn-outline-secondary"
-                                       onclick="mudarMes(-1)">
+                            <label asp-for="Data"
+                                   class="form-label">
 
-                                   ◀
+                                Data e hora
 
-                               </button>
+                            </label>
 
-                               <!-- CENTRO -->
-                               <div class="d-flex align-items-center gap-2">
+                            <input asp-for="Data"
+                                   type="datetime-local"
+                                   class="form-control" />
 
-                                   <h5 class="mb-0 text-capitalize">
-                                       <span id="mesAtual"></span>
-                                   </h5>
+                            @if (ViewData.ModelState["Data"]?.Errors.Count > 0)
+                            {
+                                <small class="text-danger">
+                                    Informe uma data válida.
+                                </small>
+                            }
 
-                                   <!-- BOTÃO CALENDÁRIO -->
-                                   <button class="btn btn-outline-primary btn-sm"
-                                           onclick="toggleSeletores()">
+                        </div>
 
-                                       📅
+                        <!-- DESCRIÇÃO -->
+                        <div class="col-12">
 
-                                   </button>
+                            <label asp-for="Descricao"
+                                   class="form-label">
 
-                               </div>
+                                Descrição
+                            </label>
 
-                               <!-- BOTÃO DIREITA -->
-                               <button class="btn btn-outline-secondary"
-                                       onclick="mudarMes(1)">
+                            <textarea asp-for="Descricao"
+                                      class="form-control"
+                                      rows="5">
+                            </textarea>
 
-                                   ▶
+                            @if (ViewData.ModelState["Descricao"]?.Errors.Count > 0)
+                            {
+                                <small class="text-danger">
+                                    Informe uma descrição.
+                                </small>
+                            }
 
-                               </button>
+                        </div>
 
-                           </div>
+                        <!-- BOTÕES -->
+                        <div class="col-12 d-flex justify-content-end mt-3">
 
-                           <!-- SELECTS -->
-                           <div id="areaSeletores"
-                                class="d-none mt-3">
+                            <button type="submit"
+                                    class="btn btn-primary">
 
-                               <div class="d-flex justify-content-center gap-2">
+                                Salvar
 
-                                   <!-- MÊS -->
-                                   <select id="selectMes"
-                                           class="form-select"
-                                           style="max-width:200px;"
-                                           onchange="alterarData()">
+                            </button>
 
-                                       <option value="0">Janeiro</option>
-                                       <option value="1">Fevereiro</option>
-                                       <option value="2">Março</option>
-                                       <option value="3">Abril</option>
-                                       <option value="4">Maio</option>
-                                       <option value="5">Junho</option>
-                                       <option value="6">Julho</option>
-                                       <option value="7">Agosto</option>
-                                       <option value="8">Setembro</option>
-                                       <option value="9">Outubro</option>
-                                       <option value="10">Novembro</option>
-                                       <option value="11">Dezembro</option>
+                            <a asp-action="Index"
+                               class="btn btn-secondary ms-2">
 
-                                   </select>
+                                Cancelar
 
-                                   <!-- ANO -->
-                                   <select id="selectAno"
-                                           class="form-select"
-                                           style="max-width:120px;"
-                                           onchange="alterarData()">
-                                   </select>
+                            </a>
 
-                               </div>
+                        </div>
 
-                           </div>
+                        <style>
 
-                       </div>
+                            .input-validation-error {
+                                border: 2px solid #dc3545 !important;
+                            }
 
-                       <!-- DIAS DA SEMANA -->
-                       <div class="row text-center fw-bold border-bottom m-0">
+                            small.text-danger {
+                                display: block;
+                                margin-top: 4px;
+                                font-size: .875rem;
+                            }
 
-                           <div class="col p-2">Dom</div>
-                           <div class="col p-2">Seg</div>
-                           <div class="col p-2">Ter</div>
-                           <div class="col p-2">Qua</div>
-                           <div class="col p-2">Qui</div>
-                           <div class="col p-2">Sex</div>
-                           <div class="col p-2">Sáb</div>
+                        </style>
 
-                       </div>
+                    </form>
 
-                       <!-- CALENDÁRIO -->
-                       <div class="card-body p-0">
+                </div>
 
-                           <div id="calendario"
-                                class="d-flex flex-wrap text-center">
-                           </div>
+            </div>
 
-                       </div>
+        </div>
 
-                   </div>
+    </div>
 
-                   <!-- BOTÕES -->
-                   <div class="d-flex justify-content-end gap-2 mt-3">
-
-                       <a asp-action="Create"
-                          class="btn btn-success">
-
-                           Adicionar
-
-                       </a>
-
-                       <a href="#"
-                          onclick="ativarModoDelete(); return false;"
-                          class="btn btn-danger">
-
-                           Excluir
-
-                       </a>
-
-                       <a href="#"
-                          onclick="desativarModoDelete(); return false;"
-                          class="btn btn-secondary">
-
-                           Cancelar
-
-                       </a>
-
-                   </div>
-
-               </div>
-
-           </div>
-
-       </div>
-
-       <script>
-
-           const consultas = @Html.Raw(
-               System.Text.Json.JsonSerializer.Serialize(Model)
-           );
-
-           let dataAtual = new Date();
-
-           let modoDelete = false;
-
-           // =========================================
-           // CARREGAR ANOS
-           // =========================================
-           function carregarAnos() {
-
-               const selectAno =
-                   document.getElementById("selectAno");
-
-               selectAno.innerHTML = "";
-
-               for (let ano = 2020; ano <= 2035; ano++) {
-
-                   selectAno.innerHTML += `
-                       <option value="${ano}">
-                           ${ano}
-                       </option>
-                   `;
-               }
-           }
-
-           // =========================================
-           // MOSTRAR / ESCONDER SELECTS
-           // =========================================
-           function toggleSeletores() {
-
-               document.getElementById("areaSeletores")
-                   .classList.toggle("d-none");
-           }
-
-           // =========================================
-           // ALTERAR DATA
-           // =========================================
-           function alterarData() {
-
-               const mes =
-                   parseInt(
-                       document.getElementById("selectMes").value
-                   );
-
-               const ano =
-                   parseInt(
-                       document.getElementById("selectAno").value
-                   );
-
-               dataAtual.setMonth(mes);
-
-               dataAtual.setFullYear(ano);
-
-               renderizarCalendario();
-
-               mostrarTodasConsultas();
-           }
-
-           // =========================================
-           // RENDERIZAR CALENDÁRIO
-           // =========================================
-           function renderizarCalendario() {
-
-               const mes = dataAtual.getMonth();
-               const ano = dataAtual.getFullYear();
-
-               document.getElementById("selectMes").value = mes;
-               document.getElementById("selectAno").value = ano;
-
-               document.getElementById("mesAtual").innerText =
-                   dataAtual.toLocaleString(
-                       'pt-BR',
-                       {
-                           month: 'long',
-                           year: 'numeric'
-                       }
-                   );
-
-               const primeiroDia =
-                   new Date(ano, mes, 1).getDay();
-
-               const diasNoMes =
-                   new Date(ano, mes + 1, 0).getDate();
-
-               const diasMesAnterior =
-                   new Date(ano, mes, 0).getDate();
-
-               let html = "";
-
-               // =====================================
-               // DIAS MÊS ANTERIOR
-               // =====================================
-               for (let i = primeiroDia - 1; i >= 0; i--) {
-
-                   const diaAnterior =
-                       diasMesAnterior - i;
-
-                   html += `
-                       <div
-                           class="border text-muted"
-
-                           style="
-                               width:14.28%;
-                               height:100px;
-                               background:#f5f5f5;
-                               opacity:0.5;
-                               padding:10px;
-                           ">
-
-                           <strong>${diaAnterior}</strong>
-
-                       </div>
-                   `;
-               }
-
-               // =====================================
-               // DIAS MÊS ATUAL
-               // =====================================
-               for (let dia = 1; dia <= diasNoMes; dia++) {
-
-                   let temConsulta = consultas.some(c => {
-
-                       let d = new Date(c.data);
-
-                       return d.getDate() === dia &&
-                              d.getMonth() === mes &&
-                              d.getFullYear() === ano;
-                   });
-
-                   html += `
-                       <div
-                           class="border"
-
-                           style="
-                               width:14.28%;
-                               height:100px;
-                               cursor:pointer;
-                               background:${temConsulta ? '#b6e3b6' : '#ffffff'};
-                               padding:10px;
-                           "
-
-                           onclick="mostrarConsultas(${dia})">
-
-                           <strong>${dia}</strong>
-
-                       </div>
-                   `;
-               }
-
-               // =====================================
-               // DIAS PRÓXIMO MÊS
-               // =====================================
-               const total =
-                   primeiroDia + diasNoMes;
-
-               const resto = total % 7;
-
-               if (resto !== 0) {
-
-                   const faltando = 7 - resto;
-
-                   for (let i = 1; i <= faltando; i++) {
-
-                       html += `
-                           <div
-                               class="border text-muted"
-
-                               style="
-                                   width:14.28%;
-                                   height:100px;
-                                   background:#f5f5f5;
-                                   opacity:0.5;
-                                   padding:10px;
-                               ">
-
-                               <strong>${i}</strong>
-
-                           </div>
-                       `;
-                   }
-               }
-
-               document.getElementById(
-                   "calendario"
-               ).innerHTML = html;
-           }
-
-           // =========================================
-           // TROCAR MÊS
-           // =========================================
-           function mudarMes(valor) {
-
-               dataAtual.setMonth(
-                   dataAtual.getMonth() + valor
-               );
-
-               renderizarCalendario();
-
-               mostrarTodasConsultas();
-           }
-
-           // =========================================
-           // DELETE
-           // =========================================
-           function ativarModoDelete() {
-
-               modoDelete = true;
-
-               mostrarTodasConsultas();
-           }
-
-           function desativarModoDelete() {
-
-               modoDelete = false;
-
-               mostrarTodasConsultas();
-           }
-
-           // =========================================
-           // MOSTRAR TODAS CONSULTAS
-           // =========================================
-           function mostrarTodasConsultas() {
-
-               const mes = dataAtual.getMonth();
-               const ano = dataAtual.getFullYear();
-
-               let consultasMes = consultas.filter(c => {
-
-                   let d = new Date(c.data);
-
-                   return d.getMonth() === mes &&
-                          d.getFullYear() === ano;
-               });
-
-               let html = `
-                   <h5 class="mb-3">
-                       Consultas do mês
-                   </h5>
-               `;
-
-               if (consultasMes.length === 0) {
-
-                   html += `
-                       <div class="alert alert-secondary">
-                           Nenhuma consulta encontrada.
-                       </div>
-                   `;
-               }
-               else {
-
-                   consultasMes.forEach(c => {
-
-                       html += `
-                           <div class="card mb-3 shadow-sm">
-
-                               <div class="card-body">
-
-                                   <div class="d-flex justify-content-between">
-
-                                       <div>
-
-                                           <h6>
-                                               Consulta #${c.consultaID}
-                                           </h6>
-
-                                           <p class="mb-1">
-                                               <strong>Data:</strong>
-                                               ${new Date(c.data).toLocaleString('pt-BR')}
-                                           </p>
-
-                                           <p class="mb-2">
-                                               <strong>Descrição:</strong>
-                                               ${c.descricao}
-                                           </p>
-
-                                       </div>
-
-                                       ${modoDelete
-                                           ? `
-                                               <a
-                                                   href="/Consulta/Delete/${c.consultaID}"
-                                                   class="btn btn-danger btn-sm">
-
-                                                   🗑
-
-                                               </a>
-                                           `
-                                           : ''
-                                       }
-
-                                   </div>
-
-                               </div>
-
-                           </div>
-                       `;
-                   });
-               }
-
-               document.getElementById(
-                   "consultasDoDia"
-               ).innerHTML = html;
-           }
-
-           // =========================================
-           // MOSTRAR CONSULTAS DO DIA
-           // =========================================
-           function mostrarConsultas(dia) {
-
-               const mes = dataAtual.getMonth();
-               const ano = dataAtual.getFullYear();
-
-               let filtradas = consultas.filter(c => {
-
-                   let d = new Date(c.data);
-
-                   return d.getDate() === dia &&
-                          d.getMonth() === mes &&
-                          d.getFullYear() === ano;
-               });
-
-               let html = `
-                   <h5 class="mb-3">
-                       Consultas do dia ${dia}
-                   </h5>
-               `;
-
-               if (filtradas.length === 0) {
-
-                   html += `
-                       <div class="alert alert-secondary">
-                           Nenhuma consulta encontrada.
-                       </div>
-                   `;
-               }
-               else {
-
-                   filtradas.forEach(c => {
-
-                       html += `
-                           <div class="card mb-3 shadow-sm">
-
-                               <div class="card-body">
-
-                                   <div class="d-flex justify-content-between">
-
-                                       <div>
-
-                                           <h6>
-                                               Consulta #${c.consultaID}
-                                           </h6>
-
-                                           <p class="mb-1">
-                                               <strong>Data:</strong>
-                                               ${new Date(c.data).toLocaleString('pt-BR')}
-                                           </p>
-
-                                           <p class="mb-2">
-                                               <strong>Descrição:</strong>
-                                               ${c.descricao}
-                                           </p>
-
-                                       </div>
-
-                                       ${modoDelete
-                                           ? `
-                                               <a
-                                                   href="/Consulta/Delete/${c.consultaID}"
-                                                   class="btn btn-danger btn-sm">
-
-                                                   🗑
-
-                                               </a>
-                                           `
-                                           : ''
-                                       }
-
-                                   </div>
-
-                               </div>
-
-                           </div>
-                       `;
-                   });
-               }
-
-               document.getElementById(
-                   "consultasDoDia"
-               ).innerHTML = html;
-           }
-
-           // =========================================
-           // INICIALIZAÇÃO
-           // =========================================
-           carregarAnos();
-
-           renderizarCalendario();
-
-           mostrarTodasConsultas();
-
-</script>
-```
+</div>

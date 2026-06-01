@@ -1,5 +1,4 @@
-﻿```cshtml
-@model ReachSystem.Models.Consulta
+﻿@model ReachSystem.Models.Consulta
 
 @{
     ViewData["Title"] = "Excluir Consulta";
@@ -26,10 +25,9 @@
                 <div class="card-body">
 
                     <!-- ALERTA -->
-                    <div class="alert alert-danger">
-
-                        Tem certeza que deseja excluir esta consulta?
-
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Tem certeza que deseja excluir essa consulta?
                     </div>
 
                     <!-- DADOS -->
@@ -40,8 +38,7 @@
                         </label>
 
                         <input class="form-control"
-                               value="@Model.ConsultaID"
-                               readonly />
+                        value="@Model.Animal.Nome" readonly />
 
                     </div>
 
@@ -51,9 +48,7 @@
                             Animal ID
                         </label>
 
-                        <input class="form-control"
-                               value="@Model.AnimalId"
-                               readonly />
+                        <input class="form-control" value="@Model.AnimalId" readonly />
 
                     </div>
 
@@ -64,10 +59,10 @@
                         </label>
 
                         <input class="form-control"
-                               value="@Model.Data"
-                               readonly />
+                        value="@Model.Data.ToString("dd/MM/yyyy HH:mm")"
+                        readonly />
 
-                    </div>
+                    </div>  
 
                     <div class="mb-4">
 
@@ -75,33 +70,29 @@
                             Descrição
                         </label>
 
-                        <textarea class="form-control"
-                                  rows="5"
-                                  readonly>@Model.Descricao</textarea>
+                        <textarea class="form-control" rows="5" readonly>@Model.Descricao</textarea>
 
                     </div>
 
                     <!-- FORM -->
-                    <form action="/Consulta/Delete/@Model.ConsultaID"
-                          method="post">
+                    <form asp-action="Delete" asp-route-id="@Model.ConsultaID" method="post">
 
                         @Html.AntiForgeryToken()
 
                         <div class="d-flex justify-content-end">
 
                             <!-- CANCELAR -->
-                            <a asp-action="Index"
-                               class="btn btn-secondary">
+                            <a asp-action="Index" class="btn btn-secondary">
 
                                 Cancelar
 
                             </a>
 
                             <!-- EXCLUIR -->
-                            <button type="submit"
-                                    class="btn btn-danger ms-2">
+                            <button type="submit" class="btn btn-danger ms-2">
 
-                                Excluir Consulta
+                                <i class="bi bi-trash"></i>
+                                Excluir
 
                             </button>
 
@@ -118,4 +109,3 @@
     </div>
 
 </div>
-```

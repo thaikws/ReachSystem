@@ -141,24 +141,20 @@
             <!-- BOTÕES -->
             <div class="d-flex justify-content-end gap-2 mt-3">
 
-                <a asp-action="Create"
-                   class="btn btn-success">
+                <a asp-action="Create" class="btn btn-success">
 
                     Adicionar
 
                 </a>
 
-                <a href="#"
-                   onclick="ativarModoDelete(); return false;"
-                   class="btn btn-danger">
+                <a href="#" onclick="ativarModoDelete(); return false;"class="btn btn-danger" id="btnExcluir">
 
                     Excluir
 
                 </a>
 
                 <a href="#"
-                   onclick="desativarModoDelete(); return false;"
-                   class="btn btn-secondary">
+                   onclick="desativarModoDelete(); return false;" class="btn btn-secondary d-none" id="btnCancelar">
 
                     Cancelar
 
@@ -398,9 +394,15 @@
     // =========================================
     // DELETE
     // =========================================
-    function ativarModoDelete() {
+        function ativarModoDelete() {
 
         modoDelete = true;
+
+        document.getElementById("btnCancelar")
+            .classList.remove("d-none");
+
+        document.getElementById("btnExcluir")
+            .classList.add("d-none");
 
         mostrarTodasConsultas();
     }
@@ -408,6 +410,12 @@
     function desativarModoDelete() {
 
         modoDelete = false;
+
+        document.getElementById("btnCancelar")
+            .classList.add("d-none");
+
+        document.getElementById("btnExcluir")
+            .classList.remove("d-none");
 
         mostrarTodasConsultas();
     }
