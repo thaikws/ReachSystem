@@ -8,9 +8,7 @@
 
     <div class="row">
 
-        <!-- ================================= -->
-        <!-- LISTA DE CONSULTAS -->
-        <!-- ================================= -->
+        <!-- LISTA -->
         <div class="col-md-4">
 
             <div class="card shadow-sm">
@@ -23,12 +21,13 @@
 
                     <button class="btn btn-sm btn-outline-primary"
                             onclick="mostrarTodasConsultas()">
+
                         Mostrar Todas
+
                     </button>
 
                 </div>
 
-                <!-- SCROLL -->
                 <div class="card-body"
                      style="height:700px; overflow-y:auto;">
 
@@ -40,27 +39,78 @@
 
         </div>
 
-        <!-- ================================= -->
         <!-- CALENDÁRIO -->
-        <!-- ================================= -->
         <div class="col-md-8">
 
             <div class="card shadow-sm">
 
                 <!-- HEADER -->
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
 
-                    <button class="btn btn-sm btn-outline-secondary"
-                            onclick="mudarMes(-1)">
-                        <
-                    </button>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                    <strong id="mesAtual"></strong>
+                        <!-- BOTÃO ESQUERDA -->
+                        <button class="btn btn-outline-secondary"
+                                onclick="mudarMes(-1)">
 
-                    <button class="btn btn-sm btn-outline-secondary"
-                            onclick="mudarMes(1)">
-                        >
-                    </button>
+                            <i class="bi bi-caret-left"></i>
+
+                        </button>
+
+                        <!-- CENTRO -->
+                        <div class="d-flex align-items-center gap-2">
+
+                            <!-- BOTÃO HOJE -->
+                            <button class="btn btn-outline-dark btn-sm"
+                                    onclick="irParaHoje()"
+                                    title="Voltar para o mês atual">
+
+                                <i class="bi bi-calendar-event"></i>
+                                Hoje
+
+                            </button>
+
+                            <h5 class="mb-0 text-capitalize">
+                                <span id="mesAtual"></span>
+                            </h5>
+
+                            <select id="selectMes"
+                                    class="form-select form-select-sm"
+                                    style="width:160px;"
+                                    onchange="alterarData()">
+
+                                <option value="0">Janeiro</option>
+                                <option value="1">Fevereiro</option>
+                                <option value="2">Março</option>
+                                <option value="3">Abril</option>
+                                <option value="4">Maio</option>
+                                <option value="5">Junho</option>
+                                <option value="6">Julho</option>
+                                <option value="7">Agosto</option>
+                                <option value="8">Setembro</option>
+                                <option value="9">Outubro</option>
+                                <option value="10">Novembro</option>
+                                <option value="11">Dezembro</option>
+
+                            </select>
+
+                            <select id="selectAno"
+                                    class="form-select form-select-sm"
+                                    style="width:100px;"
+                                    onchange="alterarData()">
+                            </select>
+
+                        </div>
+
+                        <!-- BOTÃO DIREITA -->
+                        <button class="btn btn-outline-secondary"
+                                onclick="mudarMes(1)">
+
+                            <i class="bi bi-caret-right"></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -78,7 +128,7 @@
                 </div>
 
                 <!-- CALENDÁRIO -->
-                <div class="card-body">
+                <div class="card-body p-0">
 
                     <div id="calendario"
                          class="d-flex flex-wrap text-center">
@@ -93,12 +143,25 @@
 
                 <a asp-action="Create"
                    class="btn btn-success">
+
                     Adicionar
+
                 </a>
 
-                <a asp-action="Delete"
+                <a href="#"
+                   onclick="ativarModoDelete(); return false;"
                    class="btn btn-danger">
+
                     Excluir
+
+                </a>
+
+                <a href="#"
+                   onclick="desativarModoDelete(); return false;"
+                   class="btn btn-secondary">
+
+                    Cancelar
+
                 </a>
 
             </div>
@@ -112,18 +175,67 @@
 <script>
 
     const consultas = @Html.Raw(
-        System.Text.Json.JsonSerializer.Serialize(Model)
+            System.Text.Json.JsonSerializer.Serialize(Model)
     );
 
     let dataAtual = new Date();
 
+    let modoDelete = false;
+
     // =========================================
-    // CALENDÁRIO
+    // CARREGAR ANOS
+    // =========================================
+    function carregarAnos() {
+
+        const selectAno =
+            document.getElementById("selectAno");
+
+        selectAno.innerHTML = "";
+
+        for (let ano = 2020; ano <= 2035; ano++) {
+
+            selectAno.innerHTML += `
+                <option value="${ano}">
+                    ${ano}
+                </option>
+            `;
+        }
+    }
+
+    // =========================================
+    // ALTERAR DATA
+    // =========================================
+    function alterarData() {
+
+        const mes =
+            parseInt(
+                document.getElementById("selectMes").value
+            );
+
+        const ano =
+            parseInt(
+                document.getElementById("selectAno").value
+            );
+
+        dataAtual.setMonth(mes);
+
+        dataAtual.setFullYear(ano);
+
+        renderizarCalendario();
+
+        mostrarTodasConsultas();
+    }
+
+    // =========================================
+    // RENDERIZAR CALENDÁRIO
     // =========================================
     function renderizarCalendario() {
 
         const mes = dataAtual.getMonth();
         const ano = dataAtual.getFullYear();
+
+        document.getElementById("selectMes").value = mes;
+        document.getElementById("selectAno").value = ano;
 
         document.getElementById("mesAtual").innerText =
             dataAtual.toLocaleString(
@@ -134,28 +246,46 @@
                 }
             );
 
-        let primeiroDia =
+        const primeiroDia =
             new Date(ano, mes, 1).getDay();
 
-        let diasNoMes =
+        const diasNoMes =
             new Date(ano, mes + 1, 0).getDate();
+
+        const diasMesAnterior =
+            new Date(ano, mes, 0).getDate();
 
         let html = "";
 
-        // ESPAÇOS VAZIOS
-        for (let i = 0; i < primeiroDia; i++) {
+        // =====================================
+        // DIAS MÊS ANTERIOR
+        // =====================================
+        for (let i = primeiroDia - 1; i >= 0; i--) {
+
+            const diaAnterior =
+                diasMesAnterior - i;
 
             html += `
                 <div
+                    class="border text-muted"
+
                     style="
                         width:14.28%;
-                        height:90px;
+                        height:100px;
+                        background:#f5f5f5;
+                        opacity:0.5;
+                        padding:10px;
                     ">
+
+                    <strong>${diaAnterior}</strong>
+
                 </div>
             `;
         }
 
-        // DIAS
+        // =====================================
+        // DIAS MÊS ATUAL
+        // =====================================
         for (let dia = 1; dia <= diasNoMes; dia++) {
 
             let temConsulta = consultas.some(c => {
@@ -167,16 +297,43 @@
                        d.getFullYear() === ano;
             });
 
+            const hoje = new Date();
+
+            const ehHoje =
+                dia === hoje.getDate() &&
+                mes === hoje.getMonth() &&
+                ano === hoje.getFullYear();
+
+                let corFundo = "#ffffff";
+                let estiloExtra = "";
+
+                if (ehHoje) {
+
+                    corFundo = "rgba(189, 209, 222, 0.7)";
+                    estiloExtra = `
+                        border:2px solid #4dabf7;
+                        font-weight:bold;
+                    `;
+
+                }
+                else if (temConsulta) {
+
+                    corFundo = "#b6e3b6";
+
+                }
+
             html += `
                 <div
-                    class="border p-2 dia-calendario"
+                    class="border"
 
-                    style="
-                        width:14.28%;
-                        height:90px;
-                        cursor:pointer;
-                        background:${temConsulta ? '#b6e3b6' : '#f8f9fa'};
-                    "
+                        style="
+                            width:14.28%;
+                            height:100px;
+                            cursor:pointer;
+                            background:${corFundo};
+                            padding:10px;
+                            ${estiloExtra}
+                        "
 
                     onclick="mostrarConsultas(${dia})">
 
@@ -184,6 +341,39 @@
 
                 </div>
             `;
+        }
+
+        // =====================================
+        // DIAS PRÓXIMO MÊS
+        // =====================================
+        const total =
+            primeiroDia + diasNoMes;
+
+        const resto = total % 7;
+
+        if (resto !== 0) {
+
+            const faltando = 7 - resto;
+
+            for (let i = 1; i <= faltando; i++) {
+
+                html += `
+                    <div
+                        class="border text-muted"
+
+                        style="
+                            width:14.28%;
+                            height:100px;
+                            background:#f5f5f5;
+                            opacity:0.5;
+                            padding:10px;
+                        ">
+
+                        <strong>${i}</strong>
+
+                    </div>
+                `;
+            }
         }
 
         document.getElementById(
@@ -202,12 +392,28 @@
 
         renderizarCalendario();
 
-        // atualiza lista do mês
         mostrarTodasConsultas();
     }
 
     // =========================================
-    // MOSTRAR TODAS CONSULTAS DO MÊS
+    // DELETE
+    // =========================================
+    function ativarModoDelete() {
+
+        modoDelete = true;
+
+        mostrarTodasConsultas();
+    }
+
+    function desativarModoDelete() {
+
+        modoDelete = false;
+
+        mostrarTodasConsultas();
+    }
+
+    // =========================================
+    // MOSTRAR TODAS CONSULTAS
     // =========================================
     function mostrarTodasConsultas() {
 
@@ -245,37 +451,38 @@
 
                         <div class="card-body">
 
-                            <h6>
-                                Consulta #${c.consultaID}
-                            </h6>
+                            <div class="d-flex justify-content-between">
 
-                            <p class="mb-1">
-                                <strong>Data:</strong>
-                                ${c.data}
-                            </p>
+                                <div>
 
-                            <p class="mb-2">
-                                <strong>Descrição:</strong>
-                                ${c.descricao}
-                            </p>
+                                    <h6>
+                                        Consulta #${c.consultaID}
+                                    </h6>
 
-                            <div class="d-flex gap-2">
+                                    <p class="mb-1">
+                                        <strong>Data:</strong>
+                                        ${new Date(c.data).toLocaleString('pt-BR')}
+                                    </p>
 
-                                <a
-                                    href="/Consulta/Update/${c.consultaID}"
-                                    class="btn btn-sm btn-warning">
+                                    <p class="mb-2">
+                                        <strong>Descrição:</strong>
+                                        ${c.descricao}
+                                    </p>
 
-                                    Editar
+                                </div>
 
-                                </a>
+                                ${modoDelete
+                                    ? `
+                                        <a
+                                            href="/Consulta/Delete/${c.consultaID}"
+                                            class="btn btn-danger btn-sm">
 
-                                <a
-                                    href="/Consulta/Delete/${c.consultaID}"
-                                    class="btn btn-sm btn-danger">
+                                            🗑
 
-                                    Excluir
-
-                                </a>
+                                        </a>
+                                    `
+                                    : ''
+                                }
 
                             </div>
 
@@ -331,37 +538,38 @@
 
                         <div class="card-body">
 
-                            <h6>
-                                Consulta #${c.consultaID}
-                            </h6>
+                            <div class="d-flex justify-content-between">
 
-                            <p class="mb-1">
-                                <strong>Data:</strong>
-                                ${c.data}
-                            </p>
+                                <div>
 
-                            <p class="mb-2">
-                                <strong>Descrição:</strong>
-                                ${c.descricao}
-                            </p>
+                                    <h6>
+                                        Consulta #${c.consultaID}
+                                    </h6>
 
-                            <div class="d-flex gap-2">
+                                    <p class="mb-1">
+                                        <strong>Data:</strong>
+                                        ${new Date(c.data).toLocaleString('pt-BR')}
+                                    </p>
 
-                                <a
-                                    href="/Consulta/Update/${c.consultaID}"
-                                    class="btn btn-sm btn-warning">
+                                    <p class="mb-2">
+                                        <strong>Descrição:</strong>
+                                        ${c.descricao}
+                                    </p>
 
-                                    Editar
+                                </div>
 
-                                </a>
+                                ${modoDelete
+                                    ? `
+                                        <a
+                                            href="/Consulta/Delete/${c.consultaID}"
+                                            class="btn btn-danger btn-sm">
 
-                                <a
-                                    href="/Consulta/Delete/${c.consultaID}"
-                                    class="btn btn-sm btn-danger">
+                                            🗑
 
-                                    Excluir
-
-                                </a>
+                                        </a>
+                                    `
+                                    : ''
+                                }
 
                             </div>
 
@@ -378,9 +586,24 @@
     }
 
     // =========================================
+    // VOLTAR PARA MÊS ATUAL
+    // =========================================
+    function irParaHoje() {
+
+        dataAtual = new Date();
+
+        renderizarCalendario();
+
+        mostrarTodasConsultas();
+    }
+
+    // =========================================
     // INICIALIZAÇÃO
     // =========================================
+    carregarAnos();
+
     renderizarCalendario();
+
     mostrarTodasConsultas();
 
 </script>
