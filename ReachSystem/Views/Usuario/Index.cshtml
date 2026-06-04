@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ReachSystem.Models.ApplicationUser>
+﻿@model IEnumerable<ReachSystem.Models.ViewModels.UsuarioViewModel>
 
 <h1>Usuários</h1>
 
@@ -11,6 +11,7 @@
         <tr>
             <th>Nome</th>
             <th>Email</th>
+            <th>Cargo</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -21,6 +22,7 @@
             <tr>
                 <td>@item.Nome</td>
                 <td>@item.Email</td>
+                <td>@item.Role</td>
 
                 <td>
                     <a asp-action="Update" asp-route-id="@item.Id">Editar</a> |
