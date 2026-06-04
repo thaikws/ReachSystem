@@ -2,6 +2,7 @@
 using ReachSystem.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ReachSystem.Models.ViewModels;
 
 namespace ReachSystem.Services
 {
@@ -16,9 +17,26 @@ namespace ReachSystem.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
+        public async Task<List<UsuarioViewModel>> GetAllUsers()
         {
-            return await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+
+            var usuarios = new List<UsuarioViewModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                usuarios.Add(new UsuarioViewModel
+                {
+                    Id = user.Id,
+                    Nome = user.Nome,
+                    Email = user.Email!,
+                    Role = roles.FirstOrDefault() ?? "Sem Role"
+                });
+            }
+
+            return usuarios;
         }
 
         public async Task<ApplicationUser?> GetUserByIdAsync(string id)
