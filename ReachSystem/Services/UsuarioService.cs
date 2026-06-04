@@ -39,6 +39,21 @@ namespace ReachSystem.Services
             return usuarios;
         }
 
+        public async Task<string> GetUserRoleAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return roles.FirstOrDefault() ?? "";
+        }
+
+
         public async Task<ApplicationUser?> GetUserByIdAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
