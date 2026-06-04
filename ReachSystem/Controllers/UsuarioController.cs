@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ReachSystem.Services;
-using ReachSystem.Models.ViewModels;
+using System.Security.Claims;
 
 namespace ReachSystem.Controllers
 {
@@ -105,6 +105,14 @@ namespace ReachSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            var loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (loggedUserId == id)
+            {
+                TempData["Erro"] = "Você não pode excluir sua própria conta.";
+                return RedirectToAction(nameof(Index));
+            }
+
             await _usuarioService.DeleteUserAsync(id);
 
             return RedirectToAction(nameof(Index));
