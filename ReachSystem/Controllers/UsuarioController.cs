@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ReachSystem.Services;
-using Microsoft.EntityFrameworkCore.Update.Internal;
+using ReachSystem.Models.ViewModels;
 
 namespace ReachSystem.Controllers
 {
@@ -9,7 +9,7 @@ namespace ReachSystem.Controllers
     public class UsuarioController : Controller
     {
         private readonly UsuarioService _usuarioService;
-
+            
         public UsuarioController(UsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
@@ -60,18 +60,20 @@ namespace ReachSystem.Controllers
                 return NotFound();
             }
 
+            ViewBag.Role = await _usuarioService.GetUserRoleAsync(id);
             return View(usuario);
         }
 
         //post update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(string id, string nome, string email)
+        public async Task<IActionResult> Update(string id, string nome, string email, string role)
         {
             var result = await _usuarioService.UpdateUserAsync(id, nome, email);
 
             if (result.Succeeded)
             {
+                await _usuarioService.ChangeRoleAsync(id, role);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -80,7 +82,8 @@ namespace ReachSystem.Controllers
                 ModelState.AddModelError("", error.Description);
             }
 
-            return View();
+            var usuario = await _usuarioService.GetUserByIdAsync(id);
+            return View(usuario);
         }
 
         //get delete
