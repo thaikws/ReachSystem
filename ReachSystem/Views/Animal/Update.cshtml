@@ -1,4 +1,5 @@
-﻿@model ReachSystem.Models.Animal
+﻿@using ReachSystem.Enums
+@model ReachSystem.Models.Animal
 
 <div class="box">
     <h1>Editar Animal</h1>
@@ -23,10 +24,14 @@
         <input asp-for="Porte" />
 
         <label asp-for="SexoAnimal"></label>
-        <input asp-for="SexoAnimal" />
+        <select asp-for="SexoAnimal"
+                asp-items="Html.GetEnumSelectList<Sexo>()">
+        </select>
 
         <label asp-for="StatusAnimal"></label>
-        <input asp-for="StatusAnimal" />
+        <select asp-for="StatusAnimal"
+                asp-items="Html.GetEnumSelectList<Status>()">
+        </select>
 
         <label asp-for="DataDeEntrada"></label>
         <input asp-for="DataDeEntrada" />
@@ -62,7 +67,7 @@
         margin-top: 10px;
     }
 
-    input {
+    input, select {
         width: 100%;
         padding: 8px;
         margin-top: 5px;

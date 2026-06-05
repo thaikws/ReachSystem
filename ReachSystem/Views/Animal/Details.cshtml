@@ -1,18 +1,48 @@
 ﻿@model ReachSystem.Models.Animal
 
-<h2>Detalhes do Animal</h2>
+<h2>@Model.Nome</h2>
 
 <hr />
 
-<p><strong>ID:</strong> @Model.AnimalId</p>
-<p><strong>Nome:</strong> @Model.Nome</p>
-<p><strong>Espécie:</strong> @Model.Especie</p>
-<p><strong>Idade:</strong> @Model.Idade</p>
-<p><strong>Raça:</strong> @Model.Raca</p>
-<p><strong>Porte:</strong> @Model.Porte</p>
-<p><strong>Sexo:</strong> @Model.SexoAnimal</p>
-<p><strong>Status:</strong> @Model.StatusAnimal</p>
-<p><strong>Data de Entrada:</strong> @Model.DataDeEntrada.ToShortDateString()</p>
+<p>
+    <strong>ID:</strong>
+    @Model.AnimalId
+</p>
+
+<p>
+    <strong>Espécie:</strong>
+    @Model.Especie
+</p>
+
+<p>
+    <strong>Raça:</strong>
+    @Model.Raca
+</p>
+
+<p>
+    <strong>Idade:</strong>
+    @Model.Idade anos
+</p>
+
+<p>
+    <strong>Porte:</strong>
+    @Model.Porte
+</p>
+
+<p>
+    <strong>Sexo:</strong>
+    @Model.SexoAnimal
+</p>
+
+<p>
+    <strong>Status:</strong>
+    @Model.StatusAnimal
+</p>
+
+<p>
+    <strong>Data de Entrada:</strong>
+    @Model.DataDeEntrada.ToString("dd/MM/yyyy")
+</p>
 
 <hr />
 
@@ -20,7 +50,10 @@
 
 @if (Model.FichaSaude != null)
 {
-    <p><strong>Descrição:</strong> @Model.FichaSaude.Descricao</p>
+    <p>
+        <strong>Descrição:</strong>
+        @Model.FichaSaude.Descricao
+    </p>
 
     <a asp-controller="FichaSaude"
        asp-action="Details"
@@ -31,7 +64,7 @@
 }
 else
 {
-    <p>Este animal não possui ficha de saúde.</p>
+    <p>Este animal não possui ficha de saúde cadastrada.</p>
 
     <a asp-controller="FichaSaude"
        asp-action="Create"
@@ -41,7 +74,15 @@ else
     </a>
 }
 
-<br />
-<br />
+<hr />
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a asp-action="Update"
+   asp-route-id="@Model.AnimalId"
+   class="btn btn-warning">
+    Editar Animal
+</a>
+
+<a asp-action="Index"
+   class="btn btn-secondary">
+    Voltar para Lista
+</a>

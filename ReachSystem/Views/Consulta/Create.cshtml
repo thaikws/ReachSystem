@@ -1,5 +1,4 @@
-﻿@model ReachSystem.Models.Consulta
-@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@model ReachSystem.DTOs.ConsultaDto
 
 @{
     ViewData["Title"] = "Criar Consulta";
@@ -14,131 +13,63 @@
 
             <div class="card shadow-sm">
 
-                <!-- HEADER -->
                 <div class="card-header text-center">
-
-                    <strong>
-                        Criar nova consulta
-                    </strong>
-
+                    <strong>Criar nova consulta</strong>
                 </div>
 
-                <!-- BODY -->
                 <div class="card-body">
-                
-                    <form asp-action="Create"
-                          method="post"
-                          class="row g-3">
+
+                    <form asp-action="Create" method="post" class="row g-3">
 
                         @Html.AntiForgeryToken()
 
-                        <!-- ANIMAL -->
                         <div class="col-12">
 
-                            <label asp-for="AnimalId"
-                                   class="form-label">
+                            <label class="form-label">Animal</label>
 
-                                Animal
-
-                            </label>
-
-                            <select asp-for="AnimalId"
+                            <select name="AnimalId"
                                     class="form-select"
                                     asp-items="ViewBag.Animais">
 
-                                <option value="">
-                                    -- Selecionar --
-                                </option>
+                                <option value="">-- Selecionar --</option>
 
                             </select>
 
-                            @if (ViewData.ModelState["AnimalId"]?.Errors.Count > 0)
-                            {
-                                <small class="text-danger">
-                                    Selecione um animal.
-                                </small>
-                            }
-
                         </div>
 
-                        <!-- DATA -->
                         <div class="col-md-6">
 
-                            <label asp-for="Data"
-                                   class="form-label">
+                            <label class="form-label">Data e hora</label>
 
-                                Data e hora
-
-                            </label>
-
-                            <input asp-for="Data"
+                            <input name="Data"
                                    type="datetime-local"
                                    class="form-control" />
 
-                            @if (ViewData.ModelState["Data"]?.Errors.Count > 0)
-                            {
-                                <small class="text-danger">
-                                    Informe uma data válida.
-                                </small>
-                            }
-
                         </div>
 
-                        <!-- DESCRIÇÃO -->
                         <div class="col-12">
 
-                            <label asp-for="Descricao"
-                                   class="form-label">
+                            <label class="form-label">Descrição</label>
 
-                                Descrição
-                            </label>
-
-                            <textarea asp-for="Descricao"
+                            <textarea name="Descricao"
                                       class="form-control"
-                                      rows="5">
-                            </textarea>
-
-                            @if (ViewData.ModelState["Descricao"]?.Errors.Count > 0)
-                            {
-                                <small class="text-danger">
-                                    Informe uma descrição.
-                                </small>
-                            }
+                                      rows="5"></textarea>
 
                         </div>
 
-                        <!-- BOTÕES -->
                         <div class="col-12 d-flex justify-content-end mt-3">
 
                             <button type="submit"
                                     class="btn btn-primary">
-
                                 Salvar
-
                             </button>
 
                             <a asp-action="Index"
                                class="btn btn-secondary ms-2">
-
                                 Cancelar
-
                             </a>
 
                         </div>
-
-                        <style>
-
-                            .input-validation-error {
-                                border: 2px solid #dc3545 !important;
-                            }
-
-                            small.text-danger {
-                                display: block;
-                                margin-top: 4px;
-                                font-size: .875rem;
-                            }
-
-                        </style>
 
                     </form>
 

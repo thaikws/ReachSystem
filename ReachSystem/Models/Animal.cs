@@ -1,11 +1,11 @@
 ﻿using ReachSystem.Enums;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ReachSystem.Models
 {
     public class Animal
     {
-        [Required]
         public int AnimalId { get; set; }
         [Required]
         public string Nome { get; set; } = string.Empty;
@@ -23,8 +23,8 @@ namespace ReachSystem.Models
         public Status StatusAnimal { get; set; }
         [Required]
         public DateTime DataDeEntrada { get; set; }
-        [Required]
         public FichaSaude? FichaSaude { get; set; }
+        [ValidateNever]
         public List<Consulta> Consultas { get; set; } = new();
 
         public Animal() { }

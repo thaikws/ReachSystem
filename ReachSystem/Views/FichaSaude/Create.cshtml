@@ -4,9 +4,11 @@
 
 <form asp-action="Create" method="post">
 
+    <input type="hidden" asp-for="AnimalId" />
+
     <div class="mb-3">
-        <label asp-for="AnimalId" class="form-label"></label>
-        <input asp-for="AnimalId" class="form-control" />
+        <label class="form-label">Animal ID</label>
+        <input value="@Model.AnimalId" class="form-control" readonly />
     </div>
 
     <div class="mb-3">

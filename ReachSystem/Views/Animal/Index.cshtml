@@ -25,7 +25,16 @@
     {
         <div class="card-animal item" data-nome="@item.Nome.ToLower()">
             <h3>@item.Nome</h3>
-            <p>Idade: @item.Idade anos</p>
+
+            <p><strong>ID:</strong> @item.AnimalId</p>
+            <p><strong>Espécie:</strong> @item.Especie</p>
+            <p><strong>Idade:</strong> @item.Idade anos</p>
+
+            <a asp-action="Details"
+               asp-route-id="@item.AnimalId"
+               class="btn-detalhes">
+                Ver detalhes
+            </a>
         </div>
     }
 </div>
@@ -158,6 +167,21 @@
             margin: 0;
             font-size: 14px;
         }
+
+    .btn-detalhes {
+        display: inline-block;
+        margin-top: 10px;
+        background: #2c5d7c;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-detalhes:hover {
+            opacity: 0.9;
+        }
 </style>
 
 <script>
@@ -165,30 +189,25 @@
     const items = document.querySelectorAll(".item");
     const emptyState = document.getElementById("emptyState");
 
-    input.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
+    input.addEventListener("input", function () {
 
-            const filtro = input.value.toLowerCase();
-            let encontrou = false;
+        const filtro = input.value.toLowerCase().trim();
+        let encontrou = false;
 
-            if (filtro === "") {
-                items.forEach(item => item.style.display = "block");
-                emptyState.style.display = "none";
-                return;
+        items.forEach(item => {
+
+            const nome = item.getAttribute("data-nome") || "";
+
+            if (nome.includes(filtro)) {
+                item.style.display = "";
+                encontrou = true;
+            } else {
+                item.style.display = "none";
             }
 
-            items.forEach(item => {
-                const nome = item.getAttribute("data-nome");
+        });
 
-                if (nome.includes(filtro)) {
-                    item.style.display = "block";
-                    encontrou = true;
-                } else {
-                    item.style.display = "none";
-                }
-            });
-
+        if (emptyState) {
             emptyState.style.display = encontrou ? "none" : "block";
         }
     });
