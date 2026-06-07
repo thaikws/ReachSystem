@@ -15,6 +15,7 @@ namespace ReachSystem.Data
         public DbSet<Consulta> Consultas { get; set; }
         public DbSet<Animal> Animais { get; set; }
         public DbSet<FichaSaude> FichasSaude { get; set; }
+        public DbSet<Evento> Eventos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
