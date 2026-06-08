@@ -1,386 +1,307 @@
-﻿@model IEnumerable<ReachSystem.Models.Consulta>
+﻿@model IEnumerable<ReachSystem.DTOs.ConsultaDto>
 
 @{
-    var consultas = Model;
+    ViewData["Title"] = "Consultas";
+
+    var consultasJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.Select(c => new
+        {
+            c.ConsultaID,
+            c.AnimalNome,
+            c.Descricao,
+            Data = c.Data.ToString("yyyy-MM-ddTHH:mm:ss")
+        })
+    );
 }
 
-<div class="container-fluid mt-4">
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
+    }
 
-    <div class="row">
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+    }
 
-        <!-- ================================= -->
-        <!-- LISTA DE CONSULTAS -->
-        <!-- ================================= -->
-        <div class="col-md-4">
+    .titulo {
+        font-size: 24px;
+        color: #2c5d7c;
+        font-weight: bold;
+    }
 
-            <div class="card shadow-sm">
+    .btn-add {
+        background: #2c5d7c;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
 
-                <div class="card-header d-flex justify-content-between align-items-center">
+        .btn-add:hover {
+            opacity: 0.9;
+        }
 
-                    <h5 class="mb-0">
-                        Consultas
-                    </h5>
+    .container-grid {
+        display: flex;
+        gap: 20px;
+        padding: 0 30px 30px 30px;
+    }
 
-                    <button class="btn btn-sm btn-outline-primary"
-                            onclick="mostrarTodasConsultas()">
-                        Mostrar Todas
-                    </button>
+    .lista {
+        width: 340px;
+    }
 
-                </div>
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        padding: 15px;
+    }
 
-                <!-- SCROLL -->
-                <div class="card-body"
-                     style="height:700px; overflow-y:auto;">
+    .calendario-box {
+        flex: 1;
+    }
 
-                    <div id="consultasDoDia"></div>
+    .header-cal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #2c5d7c;
+        font-weight: bold;
+    }
 
-                </div>
+    .dias-semana {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-weight: bold;
+        padding: 10px 0;
+        color: #666;
+    }
 
+    .grid-calendario {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+    }
+
+    .dia {
+        height: 95px;
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e6edf5;
+        padding: 8px;
+        cursor: pointer;
+        position: relative;
+        transition: 0.2s;
+    }
+
+        .dia:hover {
+            background: #f0f6ff;
+            transform: scale(1.02);
+        }
+
+        .dia.hoje {
+            border: 2px solid #2c5d7c;
+            background: #eaf3fb;
+            font-weight: bold;
+        }
+
+        .dia.tem-consulta::after {
+            content: "•";
+            color: #2c5d7c;
+            font-size: 30px;
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+        }
+
+    .consulta-item {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .animal {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
+
+    .desc {
+        font-size: 13px;
+        color: #666;
+    }
+
+    /* BOTÕES */
+    .btn {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        text-decoration: none;
+        margin-top: 8px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: #2c5d7c;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            opacity: 0.85;
+        }
+
+    .btn-delete {
+        background: #d9534f;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            opacity: 0.85;
+        }
+</style>
+
+<div class="topbar">
+    <div class="titulo">Consultas</div>
+    <a asp-action="Create" class="btn-add">+ Nova Consulta</a>
+</div>
+
+<div class="container-grid">
+
+    <!-- LISTA -->
+    <div class="lista">
+        <div class="card">
+            <h4 id="diaSelecionado">Selecione um dia</h4>
+            <div id="listaConsultas">
+                <p style="color:#777">Clique em um dia no calendário</p>
             </div>
-
         </div>
-
-        <!-- ================================= -->
-        <!-- CALENDÁRIO -->
-        <!-- ================================= -->
-        <div class="col-md-8">
-
-            <div class="card shadow-sm">
-
-                <!-- HEADER -->
-                <div class="card-header d-flex justify-content-between align-items-center">
-
-                    <button class="btn btn-sm btn-outline-secondary"
-                            onclick="mudarMes(-1)">
-                        <
-                    </button>
-
-                    <strong id="mesAtual"></strong>
-
-                    <button class="btn btn-sm btn-outline-secondary"
-                            onclick="mudarMes(1)">
-                        >
-                    </button>
-
-                </div>
-
-                <!-- DIAS DA SEMANA -->
-                <div class="row text-center fw-bold border-bottom m-0">
-
-                    <div class="col p-2">Dom</div>
-                    <div class="col p-2">Seg</div>
-                    <div class="col p-2">Ter</div>
-                    <div class="col p-2">Qua</div>
-                    <div class="col p-2">Qui</div>
-                    <div class="col p-2">Sex</div>
-                    <div class="col p-2">Sáb</div>
-
-                </div>
-
-                <!-- CALENDÁRIO -->
-                <div class="card-body">
-
-                    <div id="calendario"
-                         class="d-flex flex-wrap text-center">
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- BOTÕES -->
-            <div class="d-flex justify-content-end gap-2 mt-3">
-
-                <a asp-action="Create"
-                   class="btn btn-success">
-                    Adicionar
-                </a>
-
-                <a asp-action="Delete"
-                   class="btn btn-danger">
-                    Excluir
-                </a>
-
-            </div>
-
-        </div>
-
     </div>
 
+    <!-- CALENDÁRIO -->
+    <div class="calendario-box">
+        <div class="card">
+
+            <div class="header-cal">
+                <button onclick="mudarMes(-1)">◀</button>
+                <div id="mesAtual"></div>
+                <button onclick="mudarMes(1)">▶</button>
+            </div>
+
+            <div class="dias-semana">
+                <div>Dom</div><div>Seg</div><div>Ter</div>
+                <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+            </div>
+
+            <div id="calendario" class="grid-calendario"></div>
+        </div>
+    </div>
 </div>
 
 <script>
-
-    const consultas = @Html.Raw(
-        System.Text.Json.JsonSerializer.Serialize(Model)
-    );
-
+    const consultas = @Html.Raw(consultasJson);
     let dataAtual = new Date();
 
-    // =========================================
-    // CALENDÁRIO
-    // =========================================
-    function renderizarCalendario() {
+    function render() {
+        const cal = document.getElementById("calendario");
+        cal.innerHTML = "";
 
         const mes = dataAtual.getMonth();
         const ano = dataAtual.getFullYear();
 
         document.getElementById("mesAtual").innerText =
-            dataAtual.toLocaleString(
-                'pt-BR',
-                {
-                    month: 'long',
-                    year: 'numeric'
-                }
-            );
+            dataAtual.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
-        let primeiroDia =
-            new Date(ano, mes, 1).getDay();
+        const primeiroDia = new Date(ano, mes, 1).getDay();
+        const diasMes = new Date(ano, mes + 1, 0).getDate();
 
-        let diasNoMes =
-            new Date(ano, mes + 1, 0).getDate();
-
-        let html = "";
-
-        // ESPAÇOS VAZIOS
         for (let i = 0; i < primeiroDia; i++) {
-
-            html += `
-                <div
-                    style="
-                        width:14.28%;
-                        height:90px;
-                    ">
-                </div>
-            `;
+            cal.innerHTML += `<div></div>`;
         }
 
-        // DIAS
-        for (let dia = 1; dia <= diasNoMes; dia++) {
+        for (let dia = 1; dia <= diasMes; dia++) {
 
-            let temConsulta = consultas.some(c => {
+            const hoje = new Date();
 
-                let d = new Date(c.data);
+            let classe = "dia";
 
-                return d.getDate() === dia &&
+            const temConsulta = consultas.some(c => {
+                const d = new Date(c.Data);
+                return d.getFullYear() === ano &&
                        d.getMonth() === mes &&
-                       d.getFullYear() === ano;
+                       d.getDate() === dia;
             });
 
-            html += `
-                <div
-                    class="border p-2 dia-calendario"
+            if (temConsulta) classe += " tem-consulta";
 
-                    style="
-                        width:14.28%;
-                        height:90px;
-                        cursor:pointer;
-                        background:${temConsulta ? '#b6e3b6' : '#f8f9fa'};
-                    "
+            if (
+                dia === hoje.getDate() &&
+                mes === hoje.getMonth() &&
+                ano === hoje.getFullYear()
+            ) classe += " hoje";
 
-                    onclick="mostrarConsultas(${dia})">
-
-                    <strong>${dia}</strong>
-
+            cal.innerHTML += `
+                <div class="${classe}" onclick="selecionarDia(${dia})">
+                    ${dia}
                 </div>
             `;
         }
-
-        document.getElementById(
-            "calendario"
-        ).innerHTML = html;
     }
 
-    // =========================================
-    // TROCAR MÊS
-    // =========================================
-    function mudarMes(valor) {
-
-        dataAtual.setMonth(
-            dataAtual.getMonth() + valor
-        );
-
-        renderizarCalendario();
-
-        // atualiza lista do mês
-        mostrarTodasConsultas();
-    }
-
-    // =========================================
-    // MOSTRAR TODAS CONSULTAS DO MÊS
-    // =========================================
-    function mostrarTodasConsultas() {
-
+    function selecionarDia(dia) {
         const mes = dataAtual.getMonth();
         const ano = dataAtual.getFullYear();
 
-        let consultasMes = consultas.filter(c => {
+        document.getElementById("diaSelecionado").innerText =
+            `Dia ${dia}`;
 
-            let d = new Date(c.data);
-
-            return d.getMonth() === mes &&
-                   d.getFullYear() === ano;
-        });
-
-        let html = `
-            <h5 class="mb-3">
-                Consultas do mês
-            </h5>
-        `;
-
-        if (consultasMes.length === 0) {
-
-            html += `
-                <div class="alert alert-secondary">
-                    Nenhuma consulta encontrada.
-                </div>
-            `;
-        }
-        else {
-
-            consultasMes.forEach(c => {
-
-                html += `
-                    <div class="card mb-3 shadow-sm">
-
-                        <div class="card-body">
-
-                            <h6>
-                                Consulta #${c.consultaID}
-                            </h6>
-
-                            <p class="mb-1">
-                                <strong>Data:</strong>
-                                ${c.data}
-                            </p>
-
-                            <p class="mb-2">
-                                <strong>Descrição:</strong>
-                                ${c.descricao}
-                            </p>
-
-                            <div class="d-flex gap-2">
-
-                                <a
-                                    href="/Consulta/Update/${c.consultaID}"
-                                    class="btn btn-sm btn-warning">
-
-                                    Editar
-
-                                </a>
-
-                                <a
-                                    href="/Consulta/Delete/${c.consultaID}"
-                                    class="btn btn-sm btn-danger">
-
-                                    Excluir
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                `;
-            });
-        }
-
-        document.getElementById(
-            "consultasDoDia"
-        ).innerHTML = html;
-    }
-
-    // =========================================
-    // MOSTRAR CONSULTAS DO DIA
-    // =========================================
-    function mostrarConsultas(dia) {
-
-        const mes = dataAtual.getMonth();
-        const ano = dataAtual.getFullYear();
-
-        let filtradas = consultas.filter(c => {
-
-            let d = new Date(c.data);
-
+        const lista = consultas.filter(c => {
+            const d = new Date(c.Data);
             return d.getDate() === dia &&
                    d.getMonth() === mes &&
                    d.getFullYear() === ano;
         });
 
-        let html = `
-            <h5 class="mb-3">
-                Consultas do dia ${dia}
-            </h5>
-        `;
+        let html = "";
 
-        if (filtradas.length === 0) {
-
-            html += `
-                <div class="alert alert-secondary">
-                    Nenhuma consulta encontrada.
-                </div>
-            `;
-        }
-        else {
-
-            filtradas.forEach(c => {
-
+        if (lista.length === 0) {
+            html = "<p style='color:#777'>Nenhuma consulta</p>";
+        } else {
+            lista.forEach(c => {
                 html += `
-                    <div class="card mb-3 shadow-sm">
+                    <div class="consulta-item">
+                        <div class="animal">${c.AnimalNome}</div>
+                        <div class="desc">${c.Descricao}</div>
 
-                        <div class="card-body">
+                        <div>
+                            <a class="btn btn-edit"
+                               href="/Consulta/Update/${c.ConsultaID}">
+                               Editar
+                            </a>
 
-                            <h6>
-                                Consulta #${c.consultaID}
-                            </h6>
-
-                            <p class="mb-1">
-                                <strong>Data:</strong>
-                                ${c.data}
-                            </p>
-
-                            <p class="mb-2">
-                                <strong>Descrição:</strong>
-                                ${c.descricao}
-                            </p>
-
-                            <div class="d-flex gap-2">
-
-                                <a
-                                    href="/Consulta/Update/${c.consultaID}"
-                                    class="btn btn-sm btn-warning">
-
-                                    Editar
-
-                                </a>
-
-                                <a
-                                    href="/Consulta/Delete/${c.consultaID}"
-                                    class="btn btn-sm btn-danger">
-
-                                    Excluir
-
-                                </a>
-
-                            </div>
-
+                            <a class="btn btn-delete"
+                               href="/Consulta/Delete/${c.ConsultaID}">
+                               Excluir
+                            </a>
                         </div>
-
                     </div>
                 `;
             });
         }
 
-        document.getElementById(
-            "consultasDoDia"
-        ).innerHTML = html;
+        document.getElementById("listaConsultas").innerHTML = html;
     }
 
-    // =========================================
-    // INICIALIZAÇÃO
-    // =========================================
-    renderizarCalendario();
-    mostrarTodasConsultas();
+    function mudarMes(v) {
+        dataAtual.setMonth(dataAtual.getMonth() + v);
+        render();
+    }
 
+    render();
 </script>
