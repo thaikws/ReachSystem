@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ReachSystem.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Models;
+using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class EventoController : Controller
     {
         private readonly EventoService _eventoService;
@@ -75,6 +77,7 @@ namespace ReachSystem.Controllers
 
         //Get Evento/Delete/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var eventos = await _eventoService.GetEventoByIdAsync(id);
@@ -87,6 +90,7 @@ namespace ReachSystem.Controllers
 
         //Post Evento/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _eventoService.DeleteEventoAsync(id);

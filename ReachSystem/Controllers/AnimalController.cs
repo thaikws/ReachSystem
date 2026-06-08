@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ReachSystem.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Models;
+using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class AnimalController : Controller
     {
         private readonly AnimalService _animalService;
@@ -80,6 +82,7 @@ namespace ReachSystem.Controllers
 
         // GET: Animal/Delete/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var animal = await _animalService.GetAnimalByIdAsync(id);
@@ -92,6 +95,7 @@ namespace ReachSystem.Controllers
 
         // POST: Animal/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _animalService.DeleteAnimalAsync(id);

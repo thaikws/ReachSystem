@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Models;
 using ReachSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class FichaSaudeController : Controller
     {
 
@@ -22,6 +24,7 @@ namespace ReachSystem.Controllers
 
         // GET: FichaSaude/Create
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public IActionResult Create(int animalId)
         {
             var ficha = new FichaSaude { AnimalId = animalId };
@@ -30,6 +33,7 @@ namespace ReachSystem.Controllers
 
         // POST: FichaSaude/Create
         [HttpPost]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Create(FichaSaude fichaSaude)
         {
             if (ModelState.IsValid)
@@ -46,6 +50,7 @@ namespace ReachSystem.Controllers
 
         // GET: FichaSaude/Update/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Update(int id)
         {
             var fichaSaude = await _fichaSaudeService.GetFichaSaudeByIdAsync(id);
@@ -58,6 +63,7 @@ namespace ReachSystem.Controllers
 
         // POST: FichaSaude/Update/id
         [HttpPost]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Update(int id, FichaSaude fichaSaude)
         {
             if (id != fichaSaude.FichaSaudeId)
@@ -78,6 +84,7 @@ namespace ReachSystem.Controllers
 
         // GET: FichaSaude/Delete/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var fichaSaude = await _fichaSaudeService.GetFichaSaudeByIdAsync(id);
@@ -90,6 +97,7 @@ namespace ReachSystem.Controllers
 
         // POST: FichaSaude/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _fichaSaudeService.DeleteFichaSaudeAsync(id);

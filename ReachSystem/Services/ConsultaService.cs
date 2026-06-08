@@ -1,6 +1,7 @@
-﻿using ReachSystem.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using ReachSystem.Data;
-using Microsoft.EntityFrameworkCore;
+using ReachSystem.DTOs;
+using ReachSystem.Models;
 
 namespace ReachSystem.Services
 {
@@ -14,28 +15,49 @@ namespace ReachSystem.Services
         }
 
         // Método Get para retornar as consultas com o Animal incluído
-        public async Task<IEnumerable<Consulta>> GetAllConsultasAsync()
+        public async Task<List<ConsultaDto>> GetAllConsultasAsync()
         {
             return await _context.Consultas
                 .Include(c => c.Animal)
+                .Select(c => new ConsultaDto
+                {
+                    ConsultaID = c.ConsultaID,
+                    AnimalId = c.AnimalId,
+                    AnimalNome = c.Animal.Nome,
+                    Data = c.Data,
+                    Descricao = c.Descricao
+                })
                 .ToListAsync();
         }
 
         // Método Get por Id
-        public async Task<Consulta?> GetConsultaByIdAsync(int id)
+        public async Task<ConsultaDto?> GetConsultaByIdAsync(int id)
         {
             return await _context.Consultas
                 .Include(c => c.Animal)
-                .FirstOrDefaultAsync(c => c.ConsultaID == id);
+                .Where(c => c.ConsultaID == id)
+                .Select(c => new ConsultaDto
+                {
+                    ConsultaID = c.ConsultaID,
+                    AnimalId = c.AnimalId,
+                    AnimalNome = c.Animal.Nome,
+                    Data = c.Data,
+                    Descricao = c.Descricao
+                })
+                .FirstOrDefaultAsync();
         }
 
         // Add
         public async Task<Consulta> AddConsultaAsync(Consulta consulta)
         {
-            if (consulta.AnimalId <= 0 || string.IsNullOrWhiteSpace(consulta.Descricao))
-            {
-                throw new ArgumentException("Dados inválidos");
-            }
+            var exists = await _context.Consultas
+                .AnyAsync(c =>
+                    c.AnimalId == consulta.AnimalId &&
+                    c.Data == consulta.Data &&
+                    c.Descricao == consulta.Descricao);
+
+            if (exists)
+                return consulta;
 
             _context.Consultas.Add(consulta);
             await _context.SaveChangesAsync();

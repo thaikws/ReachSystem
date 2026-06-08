@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ReachSystem.Models;
 using ReachSystem.Services;
+using ReachSystem.DTOs;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class ConsultaController : Controller
     {
         private readonly ConsultaService _service;
+        private readonly AnimalService _animalService;
 
-        public ConsultaController(ConsultaService service)
+        public ConsultaController(ConsultaService service, AnimalService animalService)
         {
             _service = service;
+            _animalService = animalService;
         }
 
         // LISTAR
@@ -34,21 +40,46 @@ namespace ReachSystem.Controllers
 
         // GET: Create
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var animais = await _animalService.GetAllAnimalsAsync();
+
+            ViewBag.Animais = animais.Select(a => new SelectListItem
+            {
+                Value = a.AnimalId.ToString(),
+                Text = a.Nome
+            }).ToList();
+
             return View();
         }
 
-        // POST: Create
+        //POST: Create
         [HttpPost]
-        public async Task<IActionResult> Create(Consulta consulta)
+        public async Task<IActionResult> Create(ConsultaDto consulta)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _service.AddConsultaAsync(consulta);
-                return RedirectToAction(nameof(Index));
+                var animais = await _animalService.GetAllAnimalsAsync();
+
+                ViewBag.Animais = animais.Select(a => new SelectListItem
+                {
+                    Value = a.AnimalId.ToString(),
+                    Text = a.Nome
+                }).ToList();
+
+                return View(consulta);
             }
-            return View(consulta);
+
+            var entity = new Consulta
+            {
+                AnimalId = consulta.AnimalId,
+                Data = DateTime.SpecifyKind(consulta.Data, DateTimeKind.Local),
+                Descricao = consulta.Descricao
+            };
+
+            await _service.AddConsultaAsync(entity);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Update
@@ -86,6 +117,7 @@ namespace ReachSystem.Controllers
 
         // GET: Delete
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var consulta = await _service.GetConsultaByIdAsync(id);
@@ -98,6 +130,7 @@ namespace ReachSystem.Controllers
 
         // POST: Delete
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _service.DeleteConsultaAsync(id);

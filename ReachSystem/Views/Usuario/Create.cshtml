@@ -1,0 +1,30 @@
+﻿<h1>Criar Usuário</h1>
+
+<form asp-action="Create">
+
+    <div>
+        <label>Nome</label>
+        <input type="text" name="nome" />
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input type="email" name="email" />
+    </div>
+
+    <div>
+        <label>Senha</label>
+        <input type="password" name="senha" />
+    </div>
+
+    <div>
+        <label>Role</label>
+
+        <select name="role">
+            <option value="Funcionario">Funcionário</option>
+            <option value="Voluntario">Voluntário</option>
+        </select>
+    </div>
+
+    <button type="submit">Criar</button>
+</form>

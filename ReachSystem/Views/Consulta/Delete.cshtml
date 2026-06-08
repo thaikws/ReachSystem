@@ -1,4 +1,4 @@
-﻿@model ReachSystem.Models.Consulta
+﻿@model ReachSystem.DTOs.ConsultaDto
 
 @{
     ViewData["Title"] = "Excluir Consulta";
@@ -38,7 +38,8 @@
                         </label>
 
                         <input class="form-control"
-                        value="@Model.Animal.Nome" readonly />
+                               value="@Model.ConsultaID"
+                               readonly />
 
                     </div>
 
@@ -48,7 +49,9 @@
                             Animal ID
                         </label>
 
-                        <input class="form-control" value="@Model.AnimalId" readonly />
+                        <input class="form-control"
+                               value="@Model.AnimalId"
+                               readonly />
 
                     </div>
 
@@ -59,10 +62,10 @@
                         </label>
 
                         <input class="form-control"
-                        value="@Model.Data.ToString("dd/MM/yyyy HH:mm")"
-                        readonly />
+                               value="@Model.Data.ToString("dd/MM/yyyy HH:mm")"
+                               readonly />
 
-                    </div>  
+                    </div>
 
                     <div class="mb-4">
 
@@ -70,26 +73,32 @@
                             Descrição
                         </label>
 
-                        <textarea class="form-control" rows="5" readonly>@Model.Descricao</textarea>
+                        <textarea class="form-control"
+                                  rows="5"
+                                  readonly>@Model.Descricao</textarea>
 
                     </div>
 
                     <!-- FORM -->
-                    <form asp-action="Delete" asp-route-id="@Model.ConsultaID" method="post">
+                    <form asp-action="Delete"
+                          asp-route-id="@Model.ConsultaID"
+                          method="post">
 
                         @Html.AntiForgeryToken()
 
                         <div class="d-flex justify-content-end">
 
                             <!-- CANCELAR -->
-                            <a asp-action="Index" class="btn btn-secondary">
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
 
                                 Cancelar
 
                             </a>
 
                             <!-- EXCLUIR -->
-                            <button type="submit" class="btn btn-danger ms-2">
+                            <button type="submit"
+                                    class="btn btn-danger ms-2">
 
                                 <i class="bi bi-trash"></i>
                                 Excluir
