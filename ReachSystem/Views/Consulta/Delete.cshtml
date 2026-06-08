@@ -4,13 +4,13 @@
     ViewData["Title"] = "Excluir Consulta";
 }
 
-<div class="container-fluid mt-4">
+<div class="container mt-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-7">
+        <div class="col-md-8">
 
-            <div class="card shadow-sm border-danger">
+            <div class="card shadow border-danger">
 
                 <!-- HEADER -->
                 <div class="card-header bg-danger text-white text-center">
@@ -25,86 +25,74 @@
                 <div class="card-body">
 
                     <!-- ALERTA -->
-                    <div class="alert alert-danger">
-
-                        Tem certeza que deseja excluir esta consulta?
-
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Tem certeza que deseja excluir essa consulta?
                     </div>
 
-                    <!-- INFORMAÇÕES -->
+                    <!-- DADOS -->
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             ID da Consulta
                         </label>
 
                         <input class="form-control"
-                               value="@Model.ConsultaID"
-                               readonly />
+                        value="@Model.Animal.Nome" readonly />
 
                     </div>
 
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Animal ID
                         </label>
 
-                        <input class="form-control"
-                               value="@Model.AnimalId"
-                               readonly />
+                        <input class="form-control" value="@Model.AnimalId" readonly />
 
                     </div>
 
                     <div class="mb-3">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Data
                         </label>
 
                         <input class="form-control"
-                               value="@Model.Data"
-                               readonly />
+                        value="@Model.Data.ToString("dd/MM/yyyy HH:mm")"
+                        readonly />
 
-                    </div>
+                    </div>  
 
                     <div class="mb-4">
 
-                        <label class="form-label fw-bold">
+                        <label class="fw-bold">
                             Descrição
                         </label>
 
-                        <textarea class="form-control"
-                                  rows="5"
-                                  readonly>@Model.Descricao</textarea>
+                        <textarea class="form-control" rows="5" readonly>@Model.Descricao</textarea>
 
                     </div>
 
                     <!-- FORM -->
-                    <form asp-action="Delete"
-                          method="post">
+                    <form asp-action="Delete" asp-route-id="@Model.ConsultaID" method="post">
 
                         @Html.AntiForgeryToken()
 
-                        <!-- ID -->
-                        <input type="hidden"
-                               name="id"
-                               value="@Model.ConsultaID" />
-
-                        <!-- BOTÕES -->
                         <div class="d-flex justify-content-end">
 
-                            <a asp-action="Index"
-                               class="btn btn-secondary">
+                            <!-- CANCELAR -->
+                            <a asp-action="Index" class="btn btn-secondary">
 
                                 Cancelar
 
                             </a>
 
-                            <button type="submit"
-                                    class="btn btn-danger ms-2">
+                            <!-- EXCLUIR -->
+                            <button type="submit" class="btn btn-danger ms-2">
 
-                                Excluir Consulta
+                                <i class="bi bi-trash"></i>
+                                Excluir
 
                             </button>
 
