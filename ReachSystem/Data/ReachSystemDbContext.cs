@@ -16,6 +16,7 @@ namespace ReachSystem.Data
         public DbSet<Animal> Animais { get; set; }
         public DbSet<FichaSaude> FichasSaude { get; set; }
         public DbSet<Evento> Eventos { get; set; }
+        public DbSet<Participacao> Participacoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,17 @@ namespace ReachSystem.Data
                 .HasOne(a => a.FichaSaude)
                 .WithOne(f => f.Animal)
                 .HasForeignKey<FichaSaude>(f => f.AnimalId);
+
+            // Relacionamento: Evento N - N Usuarios
+            modelBuilder.Entity<Participacao>()
+                .HasOne(p => p.Usuario)
+                .WithMany(u => u.Participacoes)
+                .HasForeignKey(p => p.UsuarioId);
+
+            modelBuilder.Entity<Participacao>()
+                .HasOne(p => p.Evento)
+                .WithMany(e => e.Participacoes)
+                .HasForeignKey(p => p.EventoId);
 
             // Enum -> int
             modelBuilder.Entity<Animal>()
