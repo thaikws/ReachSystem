@@ -1,13 +1,26 @@
 ﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
 
-<h2>Fichas de Saúde</h2>
+    <div class="container mt-5">
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-header text-white rounded-4 d-flex justify-content-between align-content-center"
+             style="background-color:#8DB6D9;">
+
+<h2 class="mb-0 fw-bold">
+    Fichas de Saúde
+    </h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Nova Ficha de Saúde</a>
+    <a asp-action="Create" class="btn btn-light rounded-3 fw-semibold">
+        Nova Ficha de Saúde
+        </a>
+        </div>
+        <div class="card-body">
+<div class="table-responsive">
+
 </p>
 
-<table class="table table-striped">
-    <thead>
+<table class="table table-hover align-middle">
+    <thead class="table-light">
         <tr>
             <th>ID</th>
             <th>AnimalID</th>
@@ -25,7 +38,12 @@
         {
             <tr>
                 <td>@item.FichaSaudeId</td>
-                <td>@item.AnimalId</td>
+                <td>
+                    <span class="badge rounded-pill text bg-primary">
+                        @item-AnimalId
+                        </span>
+                        </td>
+
                 <td>@item.Descricao</td>
                 <td>@item.Vacinas</td>
                 <td>@item.Alergias</td>
@@ -33,6 +51,8 @@
                 <td>@item.Medicamentos</td>
 
                 <td>
+                    <td class="text-center">
+                                
                     <a asp-action="Update" asp-route-id="@item.FichaSaudeId" class="btn btn-warning btn-sm">Editar</a>
 
                     <a asp-action="Delete" asp-route-id="@item.FichaSaudeId" class="btn btn-danger btn-sm">Excluir</a>
@@ -41,3 +61,6 @@
         }
     </tbody>
 </table>
+				</div>
+			</div>
+		</div>
