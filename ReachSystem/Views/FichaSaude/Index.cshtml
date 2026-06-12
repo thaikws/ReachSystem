@@ -1,45 +1,79 @@
 ﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
 
-<h2>Fichas de Saúde</h2>
+<div class="container mt-5">
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Nova Ficha de Saúde</a>
-</p>
+    <div class="card shadow border-0 rounded-4">
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>AnimalID</th>
-            <th>Descrição</th>
-            <th>Vacinas</th>
-            <th>Alergias</th>
-            <th>Doenças Pré-existentes</th>
-            <th>Medicamentos</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+        <div class="card-header text-white rounded-4 d-flex justify-content-between align-items-center"
+             style="background-color:#8DB6D9;">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FichaSaudeId</td>
-                <td>@item.AnimalId</td>
-                <td>@item.Descricao</td>
-                <td>@item.Vacinas</td>
-                <td>@item.Alergias</td>
-                <td>@item.DoencasPreExistentes</td>
-                <td>@item.Medicamentos</td>
+            <h2 class="mb-0">Fichas de Saúde</h2>
 
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.FichaSaudeId" class="btn btn-info btn-sm">Detalhes</a>
+            <a asp-action="Create"
+               class="btn btn-light rounded-3">
+                Nova Ficha
+            </a>
 
-                    <a asp-action="Update" asp-route-id="@item.FichaSaudeId" class="btn btn-warning btn-sm">Editar</a>
+        </div>
 
-                    <a asp-action="Delete" asp-route-id="@item.FichaSaudeId" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Animal ID</th>
+                            <th>Descrição</th>
+                            <th>Vacinas</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FichaSaudeId</td>
+                                <td>@item.AnimalId</td>
+                                <td>@item.Descricao</td>
+                                <td>@item.Vacinas</td>
+
+                                <td>
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-light border btn-sm rounded-3">
+                                        Detalhes
+                                    </a>
+
+                                    <a asp-action="Update"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-sm text-white rounded-3"
+                                       style="background-color:#8DB6D9;">
+                                        Editar
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-danger btn-sm rounded-3">
+                                        Excluir
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
