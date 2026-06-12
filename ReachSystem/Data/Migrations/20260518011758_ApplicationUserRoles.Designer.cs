@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReachSystem.Data;
 
@@ -11,9 +12,11 @@ using ReachSystem.Data;
 namespace ReachSystem.Data.Migrations
 {
     [DbContext(typeof(ReachSystemDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260518011758_ApplicationUserRoles")]
+    partial class ApplicationUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,8 +283,9 @@ namespace ReachSystem.Data.Migrations
                     b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -438,7 +442,8 @@ namespace ReachSystem.Data.Migrations
                 {
                     b.Navigation("Consultas");
 
-                    b.Navigation("FichaSaude");
+                    b.Navigation("FichaSaude")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,66 +1,79 @@
 ﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
 
-    <div class="container mt-5">
-        <div class="card shadow border-0 rounded-4">
-            <div class="card-header text-white rounded-4 d-flex justify-content-between align-content-center"
+<div class="container mt-5">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header text-white rounded-4 d-flex justify-content-between align-items-center"
              style="background-color:#8DB6D9;">
 
-<h2 class="mb-0 fw-bold">
-    Fichas de Saúde
-    </h2>
+            <h2 class="mb-0">Fichas de Saúde</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-light rounded-3 fw-semibold">
-        Nova Ficha de Saúde
-        </a>
+            <a asp-action="Create"
+               class="btn btn-light rounded-3">
+                Nova Ficha
+            </a>
+
         </div>
+
         <div class="card-body">
-<div class="table-responsive">
 
-</p>
+            <div class="table-responsive">
 
-<table class="table table-hover align-middle">
-    <thead class="table-light">
-        <tr>
-            <th>ID</th>
-            <th>AnimalID</th>
-            <th>Descrição</th>
-            <th>Vacinas</th>
-            <th>Alergias</th>
-            <th>Doenças Pré-existentes</th>
-            <th>Medicamentos</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+                <table class="table table-hover align-middle">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FichaSaudeId</td>
-                <td>
-                    <span class="badge rounded-pill text bg-primary">
-                        @item-AnimalId
-                        </span>
-                        </td>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Animal ID</th>
+                            <th>Descrição</th>
+                            <th>Vacinas</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
 
-                <td>@item.Descricao</td>
-                <td>@item.Vacinas</td>
-                <td>@item.Alergias</td>
-                <td>@item.DoencasPreExistentes</td>
-                <td>@item.Medicamentos</td>
+                    <tbody>
 
-                <td>
-                    <td class="text-center">
-                                
-                    <a asp-action="Update" asp-route-id="@item.FichaSaudeId" class="btn btn-warning btn-sm">Editar</a>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FichaSaudeId</td>
+                                <td>@item.AnimalId</td>
+                                <td>@item.Descricao</td>
+                                <td>@item.Vacinas</td>
 
-                    <a asp-action="Delete" asp-route-id="@item.FichaSaudeId" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-				</div>
-			</div>
-		</div>
+                                <td>
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-light border btn-sm rounded-3">
+                                        Detalhes
+                                    </a>
+
+                                    <a asp-action="Update"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-sm text-white rounded-3"
+                                       style="background-color:#8DB6D9;">
+                                        Editar
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.FichaSaudeId"
+                                       class="btn btn-danger btn-sm rounded-3">
+                                        Excluir
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

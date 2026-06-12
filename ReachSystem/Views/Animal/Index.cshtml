@@ -1,74 +1,214 @@
 ﻿@model IEnumerable<ReachSystem.Models.Animal>
 
-<h2>Animais</h2>
+@{
+    ViewData["Title"] = "Animais";
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Novo Animal</a>
-</p>
+<!-- TOPO -->
+<div class="topo">
+    <h1 class="titulo">Animais Abrigados</h1>
 
-<form method="get">
-    <input type="text" name="searchString" placeholder="Buscar animal..." />
-    <button type="submit">Pesquisar</button>
-</form>
+    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar animais..." />
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Espécie</th>
-            <th>Idade</th>
-            <th>Raça</th>
-            <th>Porte</th>
-            <th>Sexo</th>
-            <th>Status</th>
-            <th>Data de Entrada</th>
-            <th>Ficha de Saúde</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+<!-- LINHA -->
+<div class="linha"></div>
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.AnimalId</td>
-                <td>@item.Nome</td>
-                <td>@item.Especie</td>
-                <td>@item.Idade</td>
-                <td>@item.Raca</td>
-                <td>@item.Porte</td>
-                <td>@item.SexoAnimal</td>
-                <td>@item.StatusAnimal</td>
-                <td>@item.DataDeEntrada</td>
+<!-- AÇÕES -->
+<div class="acoes">
+    <a asp-action="Create" class="btn-add">+ Adicionar</a>
+</div>
 
-                <td>
-                    @if (item.FichaSaude != null)
-                    {
-                        <a asp-controller="FichaSaude"
-                           asp-action="Details"
-                           asp-route-id="@item.FichaSaude.FichaSaudeId"
-                           class="btn btn-info btn-sm">
-                            Ver Ficha
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-controller="FichaSaude"
-                           asp-action="Create"
-                           asp-route-animalId="@item.AnimalId"
-                           class="btn btn-success btn-sm">
-                            Criar Ficha
-                        </a>
-                    }
-                </td>
+<!-- CARDS -->
+<div class="lista" id="listaAnimais">
+    @foreach (var item in Model)
+    {
+        <div class="card-animal item" data-nome="@item.Nome.ToLower()">
+            <h3>@item.Nome</h3>
 
-                <td>
-                    <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-warning btn-sm">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-danger btn-sm">Excluir</a>
-                    <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-info btn-sm">Ver</a>
-                </td>
-            </tr>
+            <p><strong>ID:</strong> @item.AnimalId</p>
+            <p><strong>Espécie:</strong> @item.Especie</p>
+            <p><strong>Idade:</strong> @item.Idade anos</p>
+
+            <a asp-action="Details"
+               asp-route-id="@item.AnimalId"
+               class="btn-detalhes">
+                Ver detalhes
+            </a>
+        </div>
+    }
+</div>
+
+<!-- EMPTY STATE -->
+<div id="emptyState" class="empty-state" style="display:none;">
+    <div class="icon">🔍</div>
+    <h2>Nenhum animal encontrado</h2>
+    <p>Tente pesquisar por outro nome.</p>
+</div>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f8f9fb;
+    }
+
+    /* TOPO */
+    .topo {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 30px 60px 20px 60px;
+    }
+
+    .titulo {
+        font-size: 32px;
+        color: #2c5d7c;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .search-box {
+        flex: 1;
+        max-width: 700px;
+        padding: 14px 25px;
+        border-radius: 30px;
+        border: 2px solid #2c5d7c;
+        font-size: 16px;
+        outline: none;
+    }
+
+    /* LINHA */
+    .linha {
+        width: 100%;
+        height: 2px;
+        background: #dcdcdc;
+    }
+
+    /* BOTÃO */
+    .acoes {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 60px;
+    }
+
+    .btn-add {
+        background: #2c5d7c;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+        .btn-add:hover {
+            opacity: 0.9;
         }
-    </tbody>
-</table>
+
+    /* GRID DE CARDS */
+    .lista {
+        padding: 0 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    /* CARD */
+    .card-animal {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        transition: 0.2s;
+    }
+
+        .card-animal:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-animal h3 {
+            margin: 0;
+            color: #2c5d7c;
+        }
+
+        .card-animal p {
+            margin-top: 10px;
+            color: #555;
+        }
+
+    /* IMPORTANTE: NÃO QUEBRAR CARD */
+    .item {
+        display: block;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #666;
+    }
+
+        .empty-state .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-state h2 {
+            margin: 10px 0 5px;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+    .btn-detalhes {
+        display: inline-block;
+        margin-top: 10px;
+        background: #2c5d7c;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-detalhes:hover {
+            opacity: 0.9;
+        }
+</style>
+
+<script>
+    const input = document.getElementById("searchInput");
+    const items = document.querySelectorAll(".item");
+    const emptyState = document.getElementById("emptyState");
+
+    input.addEventListener("input", function () {
+
+        const filtro = input.value.toLowerCase().trim();
+        let encontrou = false;
+
+        items.forEach(item => {
+
+            const nome = item.getAttribute("data-nome") || "";
+
+            if (nome.includes(filtro)) {
+                item.style.display = "";
+                encontrou = true;
+            } else {
+                item.style.display = "none";
+            }
+
+        });
+
+        if (emptyState) {
+            emptyState.style.display = encontrou ? "none" : "block";
+        }
+    });
+</script>

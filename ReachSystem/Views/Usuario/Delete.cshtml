@@ -1,0 +1,12 @@
+﻿@model ReachSystem.Models.ApplicationUser
+
+<h1>Excluir Usuário</h1>
+
+<p>Deseja realmente excluir @Model.Nome?</p>
+
+<form asp-action="Delete">
+
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <button type="submit">Excluir</button>
+</form>

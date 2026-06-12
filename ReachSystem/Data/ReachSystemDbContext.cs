@@ -5,7 +5,7 @@ using ReachSystem.Enums;
 
 namespace ReachSystem.Data
 {
-    public class ReachSystemDbContext : IdentityDbContext
+    public class ReachSystemDbContext : IdentityDbContext<ApplicationUser>
     {
         public ReachSystemDbContext(DbContextOptions<ReachSystemDbContext> options)
             : base(options)

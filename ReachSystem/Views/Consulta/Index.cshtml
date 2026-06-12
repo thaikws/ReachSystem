@@ -1,36 +1,307 @@
-﻿@model IEnumerable<ReachSystem.Models.Consulta>
+﻿@model IEnumerable<ReachSystem.DTOs.ConsultaDto>
 
-<h2>Consulta</h2>
+@{
+    ViewData["Title"] = "Consultas";
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Consulta</a>
-</p>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID Consulta</th>
-            <th>ID Animal</th>
-            <th>Data</th>
-            <th>Descrição</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model)
+    var consultasJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.Select(c => new
         {
-            <tr>
-                    <td>@item.ConsultaID</td>
-                    <td>@item.AnimalId</td>
-                    <td>@item.Data</td>
-                    <td>@item.Descricao</td>
+            c.ConsultaID,
+            c.AnimalNome,
+            c.Descricao,
+            Data = c.Data.ToString("yyyy-MM-ddTHH:mm:ss")
+        })
+    );
+}
 
-                <td>
-                    <a asp-action="Update" asp-route-id="@item.ConsultaID" class="btn btn-warning btn-sm">Editar</a>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
+    }
 
-                    <a asp-action="Delete" asp-route-id="@item.ConsultaID" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-            </tr>
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+    }
+
+    .titulo {
+        font-size: 24px;
+        color: #2c5d7c;
+        font-weight: bold;
+    }
+
+    .btn-add {
+        background: #2c5d7c;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+        .btn-add:hover {
+            opacity: 0.9;
         }
-    </tbody>
-</table>
+
+    .container-grid {
+        display: flex;
+        gap: 20px;
+        padding: 0 30px 30px 30px;
+    }
+
+    .lista {
+        width: 340px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        padding: 15px;
+    }
+
+    .calendario-box {
+        flex: 1;
+    }
+
+    .header-cal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #2c5d7c;
+        font-weight: bold;
+    }
+
+    .dias-semana {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-weight: bold;
+        padding: 10px 0;
+        color: #666;
+    }
+
+    .grid-calendario {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+    }
+
+    .dia {
+        height: 95px;
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e6edf5;
+        padding: 8px;
+        cursor: pointer;
+        position: relative;
+        transition: 0.2s;
+    }
+
+        .dia:hover {
+            background: #f0f6ff;
+            transform: scale(1.02);
+        }
+
+        .dia.hoje {
+            border: 2px solid #2c5d7c;
+            background: #eaf3fb;
+            font-weight: bold;
+        }
+
+        .dia.tem-consulta::after {
+            content: "•";
+            color: #2c5d7c;
+            font-size: 30px;
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+        }
+
+    .consulta-item {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .animal {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
+
+    .desc {
+        font-size: 13px;
+        color: #666;
+    }
+
+    /* BOTÕES */
+    .btn {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        text-decoration: none;
+        margin-top: 8px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: #2c5d7c;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            opacity: 0.85;
+        }
+
+    .btn-delete {
+        background: #d9534f;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            opacity: 0.85;
+        }
+</style>
+
+<div class="topbar">
+    <div class="titulo">Consultas</div>
+    <a asp-action="Create" class="btn-add">+ Nova Consulta</a>
+</div>
+
+<div class="container-grid">
+
+    <!-- LISTA -->
+    <div class="lista">
+        <div class="card">
+            <h4 id="diaSelecionado">Selecione um dia</h4>
+            <div id="listaConsultas">
+                <p style="color:#777">Clique em um dia no calendário</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALENDÁRIO -->
+    <div class="calendario-box">
+        <div class="card">
+
+            <div class="header-cal">
+                <button onclick="mudarMes(-1)">◀</button>
+                <div id="mesAtual"></div>
+                <button onclick="mudarMes(1)">▶</button>
+            </div>
+
+            <div class="dias-semana">
+                <div>Dom</div><div>Seg</div><div>Ter</div>
+                <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+            </div>
+
+            <div id="calendario" class="grid-calendario"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const consultas = @Html.Raw(consultasJson);
+    let dataAtual = new Date();
+
+    function render() {
+        const cal = document.getElementById("calendario");
+        cal.innerHTML = "";
+
+        const mes = dataAtual.getMonth();
+        const ano = dataAtual.getFullYear();
+
+        document.getElementById("mesAtual").innerText =
+            dataAtual.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+
+        const primeiroDia = new Date(ano, mes, 1).getDay();
+        const diasMes = new Date(ano, mes + 1, 0).getDate();
+
+        for (let i = 0; i < primeiroDia; i++) {
+            cal.innerHTML += `<div></div>`;
+        }
+
+        for (let dia = 1; dia <= diasMes; dia++) {
+
+            const hoje = new Date();
+
+            let classe = "dia";
+
+            const temConsulta = consultas.some(c => {
+                const d = new Date(c.Data);
+                return d.getFullYear() === ano &&
+                       d.getMonth() === mes &&
+                       d.getDate() === dia;
+            });
+
+            if (temConsulta) classe += " tem-consulta";
+
+            if (
+                dia === hoje.getDate() &&
+                mes === hoje.getMonth() &&
+                ano === hoje.getFullYear()
+            ) classe += " hoje";
+
+            cal.innerHTML += `
+                <div class="${classe}" onclick="selecionarDia(${dia})">
+                    ${dia}
+                </div>
+            `;
+        }
+    }
+
+    function selecionarDia(dia) {
+        const mes = dataAtual.getMonth();
+        const ano = dataAtual.getFullYear();
+
+        document.getElementById("diaSelecionado").innerText =
+            `Dia ${dia}`;
+
+        const lista = consultas.filter(c => {
+            const d = new Date(c.Data);
+            return d.getDate() === dia &&
+                   d.getMonth() === mes &&
+                   d.getFullYear() === ano;
+        });
+
+        let html = "";
+
+        if (lista.length === 0) {
+            html = "<p style='color:#777'>Nenhuma consulta</p>";
+        } else {
+            lista.forEach(c => {
+                html += `
+                    <div class="consulta-item">
+                        <div class="animal">${c.AnimalNome}</div>
+                        <div class="desc">${c.Descricao}</div>
+
+                        <div>
+                            <a class="btn btn-edit"
+                               href="/Consulta/Update/${c.ConsultaID}">
+                               Editar
+                            </a>
+
+                            <a class="btn btn-delete"
+                               href="/Consulta/Delete/${c.ConsultaID}">
+                               Excluir
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById("listaConsultas").innerHTML = html;
+    }
+
+    function mudarMes(v) {
+        dataAtual.setMonth(dataAtual.getMonth() + v);
+        render();
+    }
+
+    render();
+</script>
