@@ -23,6 +23,7 @@ namespace ReachSystem.Models
         public Status StatusAnimal { get; set; }
         [Required]
         public DateTime DataDeEntrada { get; set; }
+        public string? Foto { get; set; }
         public FichaSaude? FichaSaude { get; set; }
         [ValidateNever]
         public List<Consulta> Consultas { get; set; } = new();
