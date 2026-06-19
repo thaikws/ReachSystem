@@ -4,7 +4,10 @@
 <div class="box">
     <h1>Cadastrar Animal</h1>
 
-    <form asp-action="Create">
+    <form asp-action="Create" enctype="multipart/form-data">
+
+        <label>Foto do Animal</label>
+        <input type="file" name="fotoArquivo" accept="image/*" />
 
         <label asp-for="Nome"></label>
         <input asp-for="Nome" />

@@ -9,10 +9,12 @@ namespace ReachSystem.Controllers
     public class AnimalController : Controller
     {
         private readonly AnimalService _animalService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AnimalController(AnimalService animalService)
+        public AnimalController(AnimalService animalService, IWebHostEnvironment webHostEnvironment)
         {
             _animalService = animalService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index(string pesquisarString)
@@ -37,13 +39,41 @@ namespace ReachSystem.Controllers
 
         // POST: Animal/Create
         [HttpPost]
-        public async Task<IActionResult> Create(Animal animal)
+        public async Task<IActionResult> Create(Animal animal, IFormFile? fotoArquivo)
         {
             if (ModelState.IsValid)
             {
+                if (fotoArquivo != null)
+                {
+                    string nomeArquivo =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(fotoArquivo.FileName);
+
+                    string pasta = Path.Combine(
+                        _webHostEnvironment.WebRootPath,
+                        "images",
+                        "animais");
+
+                    Directory.CreateDirectory(pasta);
+
+                    string caminhoCompleto =
+                        Path.Combine(pasta, nomeArquivo);
+
+                    using (var stream = new FileStream(
+                        caminhoCompleto,
+                        FileMode.Create))
+                    {
+                        await fotoArquivo.CopyToAsync(stream);
+                    }
+
+                    animal.Foto = "/images/animais/" + nomeArquivo;
+                }
+
                 await _animalService.AddAnimalAsync(animal);
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(animal);
         }
 
