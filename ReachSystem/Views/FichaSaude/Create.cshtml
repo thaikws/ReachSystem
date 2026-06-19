@@ -17,14 +17,24 @@
 
             <form asp-action="Create" method="post">
 
-                <input type="hidden" asp-for="AnimalId" />
-
                 <div class="mb-3">
-                    <label class="form-label">Animal ID</label>
-                    <input value="@Model.AnimalId"
-                           class="form-control rounded-3"
-                           readonly />
-                </div>
+                    <label asp-for="AnimalId" class="form-label">
+                        Animal
+                    </label>
+
+            <select asp-for="AnimalId" class="form-select rounded-3">
+                <option value="">Selecione um animal</option>
+
+                    @foreach (var animal in ViewBag.Animais)
+                    {
+                        <option value="@animal.AnimalId">
+                            @animal.Nome
+                        </option>
+                    }
+            </select>
+
+            <span asp-validation-for="AnimalId" class="text-danger"></span>
+        </div>
 
                 <div class="mb-3">
                     <label asp-for="Descricao" class="form-label"></label>

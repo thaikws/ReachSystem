@@ -19,9 +19,13 @@
 
                 <input type="hidden" asp-for="FichaSaudeId" />
 
+                <input type="hidden" asp-for="AnimalId" />
+
                 <div class="mb-3">
-                    <label asp-for="AnimalId" class="form-label"></label>
-                    <input asp-for="AnimalId" class="form-control rounded-3" />
+                    <label class="form-label">Animal ID</label>
+                    <input value="@Model.AnimalId"
+                           class="form-control rounded-3"
+                           readonly />
                 </div>
 
                 <div class="mb-3">
