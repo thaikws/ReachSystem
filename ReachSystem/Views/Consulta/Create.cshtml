@@ -2,7 +2,32 @@
 
 @{
     ViewData["Title"] = "Criar Consulta";
-}
+}   
+
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .btn-salvar {
+        background: #2c5d7c;
+        color: white;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .btn-salvar:hover {
+        opacity: 0.9;
+        color: white;
+    }
+
+    /* cabeçalho específico da card de criação */
+    .consulta-header {
+        background: #2c5d7c;
+        color: #ffffff;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
+</style>
 
 <div class="container-fluid mt-4">
 
@@ -13,7 +38,7 @@
 
             <div class="card shadow-sm">
 
-                <div class="card-header text-center">
+                <div class="card-header text-center consulta-header">
                     <strong>Criar nova consulta</strong>
                 </div>
 
@@ -23,11 +48,13 @@
 
                         @Html.AntiForgeryToken()
 
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <div class="col-12">
 
                             <label class="form-label">Animal</label>
 
-                            <select name="AnimalId"
+                            <select asp-for="AnimalId"
                                     class="form-select"
                                     asp-items="ViewBag.Animais">
 
@@ -35,15 +62,19 @@
 
                             </select>
 
+                            <span asp-validation-for="AnimalId" class="text-danger"></span>
+
                         </div>
 
                         <div class="col-md-6">
 
                             <label class="form-label">Data e hora</label>
 
-                            <input name="Data"
+                            <input asp-for="Data"
                                    type="datetime-local"
                                    class="form-control" />
+
+                            <span asp-validation-for="Data" class="text-danger"></span>
 
                         </div>
 
@@ -51,23 +82,26 @@
 
                             <label class="form-label">Descrição</label>
 
-                            <textarea name="Descricao"
+                            <textarea asp-for="Descricao"
                                       class="form-control"
                                       rows="5"></textarea>
+
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
 
                         </div>
 
                         <div class="col-12 d-flex justify-content-end mt-3">
 
-                            <button type="submit"
-                                    class="btn btn-primary">
-                                Salvar
-                            </button>
-
                             <a asp-action="Index"
-                               class="btn btn-secondary ms-2">
+                               class="btn btn-secondary">
                                 Cancelar
                             </a>
+
+                            <button type="submit"
+                                    class="btn btn-salvar ms-2">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Salvar
+                            </button>
 
                         </div>
 
