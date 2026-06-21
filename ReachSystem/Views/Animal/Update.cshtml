@@ -2,6 +2,7 @@
 @model ReachSystem.Models.Animal
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+
 <div class="box">
     <h1>Editar Animal</h1>
 
@@ -10,18 +11,56 @@
         <input type="hidden" asp-for="AnimalId" />
         <input type="hidden" asp-for="Foto" />
 
+        <!-- controles backend -->
+        <input type="hidden" id="imagemCortada" name="imagemCortada" />
+        <input type="hidden" id="removerFoto" name="removerFoto" value="false" />
+
+        <!-- FOTO ATUAL -->
         @if (!string.IsNullOrEmpty(Model.Foto))
         {
-            <img src="@Model.Foto" class="foto-preview" />
+            <img src="@Model.Foto" class="foto-preview" id="fotoAtual" />
+        }
+        else
+        {
+            <img class="foto-preview" id="fotoAtual" style="display:none;" />
         }
 
+        <!-- LABEL -->
         <label>Nova Foto</label>
-        <input type="hidden" id="imagemCortada" name="imagemCortada" />
-        <input type="file" name="fotoArquivo" id="inputImagem" accept="image/*" />
-        <div class="crop-container">
-            <img id="preview" style="max-width:100%; margin-top:10px; visibility:hidden;" />
+
+        <!-- BOTÕES (APENAS VISUAIS + JS) -->
+        <div id="areaBotoesFoto" style="margin-bottom:10px; display:@(string.IsNullOrEmpty(Model.Foto) ? "none" : "block");">
+
+            <button type="button" id="btnEditarFoto">
+                Editar foto
+            </button>
+
+            <button type="button" id="btnRemoverFoto">
+                Remover foto
+            </button>
+            <button type="button" id="btnEscolherArquivo">
+                Trocar foto
+            </button>
+
+            <span id="textoArquivo" style="margin-left:10px; font-size:12px;">
+                Nenhum arquivo selecionado
+            </span>
         </div>
 
+        <!-- INPUT ESCONDIDO -->
+        <input type="file"
+               name="fotoArquivo"
+               id="inputImagem"
+               accept="image/*"
+               style="display:none;" />
+
+        <!-- CROP -->
+        <div class="crop-container">
+            <img id="preview"
+                 style="max-width:100%; margin-top:10px; visibility:hidden;" />
+        </div>
+
+        <!-- CAMPOS -->
         <label asp-for="Nome"></label>
         <input asp-for="Nome" />
 
@@ -138,8 +177,6 @@
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-
 <script>
     let cropper;
 
@@ -147,17 +184,110 @@
     const preview = document.getElementById("preview");
     const form = document.getElementById("formAnimal");
 
+    const btnEditar = document.getElementById("btnEditarFoto");
+    const btnRemover = document.getElementById("btnRemoverFoto");
+    const btnEscolher = document.getElementById("btnEscolherArquivo");
+
+    const fotoAtual = document.getElementById("fotoAtual");
+    const removerFoto = document.getElementById("removerFoto");
+
+    const textoArquivo = document.getElementById("textoArquivo");
+
+    // =========================
+    // ESTADO INICIAL
+    // =========================
+    function atualizarTexto() {
+        if (!fotoAtual || fotoAtual.style.display === "none" || !fotoAtual.src) {
+            textoArquivo.textContent = "Nenhum arquivo selecionado";
+        } else {
+            textoArquivo.textContent = "Foto atual (clique para trocar)";
+        }
+    }
+
+    atualizarTexto();
+
+    // =========================
+    // BOTÃO ESCOLHER ARQUIVO
+    // =========================
+    btnEscolher.addEventListener("click", function () {
+        input.click();
+    });
+
+    // =========================
+    // EDITAR FOTO
+    // =========================
+    btnEditar.addEventListener("click", function () {
+
+        removerFoto.value = "false";
+
+        if (fotoAtual && fotoAtual.src && fotoAtual.style.display !== "none") {
+
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+
+            preview.src = fotoAtual.src;
+            preview.style.visibility = "visible";
+
+            cropper = new Cropper(preview, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 1,
+                movable: true,
+                zoomable: true,
+                cropBoxResizable: true
+            });
+
+            textoArquivo.textContent = "Editando foto atual";
+
+            return;
+        }
+
+        input.click();
+    });
+
+    // =========================
+    // REMOVER FOTO
+    // =========================
+    btnRemover.addEventListener("click", function () {
+
+        removerFoto.value = "true";
+
+        if (fotoAtual) {
+            fotoAtual.style.display = "none";
+            fotoAtual.src = "";
+        }
+
+        input.value = "";
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        preview.style.display = "none";
+        preview.src = "";
+
+        textoArquivo.textContent = "Nenhum arquivo selecionado";
+    });
+
+    // =========================
+    // NOVA IMAGEM
+    // =========================
     input.addEventListener("change", function (e) {
 
         const file = e.target.files[0];
         if (!file) return;
+
+        removerFoto.value = "false";
 
         const reader = new FileReader();
 
         reader.onload = function (event) {
 
             preview.src = event.target.result;
-            preview.style.display = "block";
+            preview.style.visibility = "visible";
 
             if (cropper) {
                 cropper.destroy();
@@ -171,11 +301,16 @@
                 zoomable: true,
                 cropBoxResizable: true
             });
+
+            textoArquivo.textContent = "Foto selecionada ✔";
         };
 
         reader.readAsDataURL(file);
     });
 
+    // =========================
+    // SUBMIT
+    // =========================
     form.addEventListener("submit", function () {
 
         if (cropper) {
@@ -184,6 +319,8 @@
                 width: 500,
                 height: 500
             });
+
+            if (!canvas) return;
 
             document.getElementById("imagemCortada").value =
                 canvas.toDataURL("image/jpeg");

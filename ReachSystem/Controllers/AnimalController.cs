@@ -87,58 +87,89 @@ namespace ReachSystem.Controllers
 
         // POST: Animal/Update/id
         [HttpPost("Animal/Update/{id}")]
-        public async Task<IActionResult> Update(int id, Animal animal, IFormFile? fotoArquivo, string? imagemCortada)
+        public async Task<IActionResult> Update(
+    int id,
+    Animal animal,
+    IFormFile? fotoArquivo,
+    string? imagemCortada,
+    string? removerFoto)
         {
-            if (id != animal.AnimalId)
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return View(animal);
-
+            // =========================
+            // 1. BUSCA ENTIDADE REAL
+            // =========================
             var animalExistente = await _animalService.GetAnimalByIdAsync(id);
 
             if (animalExistente == null)
                 return NotFound();
 
+            if (id != animalExistente.AnimalId)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return View(animal);
+
             string? fotoAtual = animalExistente.Foto;
 
             // =========================
-            // 1. ATUALIZA CAMPOS SEMPRE
+            // 2. REMOVE FOTO (PRIORIDADE)
             // =========================
-            animalExistente.Nome = animal.Nome;
-            animalExistente.Especie = animal.Especie;
-            animalExistente.Raca = animal.Raca;
-            animalExistente.Idade = animal.Idade;
-            animalExistente.Porte = animal.Porte;
-            animalExistente.SexoAnimal = animal.SexoAnimal;
-            animalExistente.StatusAnimal = animal.StatusAnimal;
-            animalExistente.DataDeEntrada = animal.DataDeEntrada;
-
-            // =========================
-            // 2. IMAGEM CORTADA (PRIORIDADE)
-            // =========================
-            if (!string.IsNullOrEmpty(imagemCortada) && imagemCortada.Contains(","))
+            if (removerFoto == "true")
             {
-                string base64 = imagemCortada.Split(',')[1];
-                byte[] bytes = Convert.FromBase64String(base64);
+                if (!string.IsNullOrEmpty(fotoAtual))
+                {
+                    string caminhoAntigo = Path.Combine(
+                        _webHostEnvironment.WebRootPath,
+                        fotoAtual.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
+                    );
 
-                string nomeArquivo = Guid.NewGuid() + ".jpg";
+                    try
+                    {
+                        if (System.IO.File.Exists(caminhoAntigo))
+                            System.IO.File.Delete(caminhoAntigo);
+                    }
+                    catch
+                    {
+                        // evita crash por IO lock
+                    }
+                }
 
-                string pasta = Path.Combine(
-                    _webHostEnvironment.WebRootPath,
-                    "images",
-                    "animais");
-
-                Directory.CreateDirectory(pasta);
-
-                string caminhoCompleto = Path.Combine(pasta, nomeArquivo);
-
-                await System.IO.File.WriteAllBytesAsync(caminhoCompleto, bytes);
-
-                animalExistente.Foto = "/images/animais/" + nomeArquivo;
+                animalExistente.Foto = null;
             }
+
             // =========================
-            // 3. IMAGEM NORMAL
+            // 3. IMAGEM CORTADA (PRIORIDADE)
+            // =========================
+            else if (!string.IsNullOrEmpty(imagemCortada) && imagemCortada.Contains(","))
+            {
+                try
+                {
+                    string base64 = imagemCortada.Split(',')[1];
+                    byte[] bytes = Convert.FromBase64String(base64);
+
+                    string nomeArquivo = Guid.NewGuid() + ".jpg";
+
+                    string pasta = Path.Combine(
+                        _webHostEnvironment.WebRootPath,
+                        "images",
+                        "animais"
+                    );
+
+                    Directory.CreateDirectory(pasta);
+
+                    string caminhoCompleto = Path.Combine(pasta, nomeArquivo);
+
+                    await System.IO.File.WriteAllBytesAsync(caminhoCompleto, bytes);
+
+                    animalExistente.Foto = "/images/animais/" + nomeArquivo;
+                }
+                catch
+                {
+                    return BadRequest("Erro ao processar imagem cortada.");
+                }
+            }
+
+            // =========================
+            // 4. IMAGEM NORMAL (UPLOAD)
             // =========================
             else if (fotoArquivo != null)
             {
@@ -149,8 +180,15 @@ namespace ReachSystem.Controllers
                         fotoAtual.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
                     );
 
-                    if (System.IO.File.Exists(caminhoAntigo))
-                        System.IO.File.Delete(caminhoAntigo);
+                    try
+                    {
+                        if (System.IO.File.Exists(caminhoAntigo))
+                            System.IO.File.Delete(caminhoAntigo);
+                    }
+                    catch
+                    {
+                        // ignora erro de delete
+                    }
                 }
 
                 string nomeArquivo =
@@ -159,7 +197,8 @@ namespace ReachSystem.Controllers
                 string pasta = Path.Combine(
                     _webHostEnvironment.WebRootPath,
                     "images",
-                    "animais");
+                    "animais"
+                );
 
                 Directory.CreateDirectory(pasta);
 
@@ -174,7 +213,19 @@ namespace ReachSystem.Controllers
             }
 
             // =========================
-            // 4. SALVA UMA VEZ
+            // 5. ATUALIZA CAMPOS SEMPRE
+            // =========================
+            animalExistente.Nome = animal.Nome;
+            animalExistente.Especie = animal.Especie;
+            animalExistente.Raca = animal.Raca;
+            animalExistente.Idade = animal.Idade;
+            animalExistente.Porte = animal.Porte;
+            animalExistente.SexoAnimal = animal.SexoAnimal;
+            animalExistente.StatusAnimal = animal.StatusAnimal;
+            animalExistente.DataDeEntrada = animal.DataDeEntrada;
+
+            // =========================
+            // 6. SALVA
             // =========================
             await _animalService.UpdateAnimalAsync(animalExistente);
 
