@@ -1,1 +1,102 @@
-﻿<h1>Delete Form</h1>
+﻿@model ReachSystem.Models.Evento
+
+@{
+    ViewData["Title"] = "Excluir Evento";
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 400px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #d9534f;
+        margin-bottom: 10px;
+    }
+
+    .info {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+        .info p {
+            margin: 8px 0;
+            color: #444;
+        }
+
+    .label {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
+
+    .btn {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-delete {
+        background: #d9534f;
+        color: white;
+    }
+
+    .btn-back {
+        background: #ccc;
+        margin-left: 10px;
+    }
+
+    .warning {
+        color: #999;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+        <h2>Excluir Evento</h2>
+        <p>Tem certeza que deseja excluir este evento?</p>
+
+        <div class="info">
+            <p><span class="label">Nome:</span> @Model.Nome</p>
+            <p><span class="label">Data:</span> @Model.Data.ToString("dd/MM/yyyy")</p>
+            <p><span class="label">Local:</span> @Model.Local</p>
+            <p><span class="label">Descrição:</span> @Model.Descricao</p>
+        </div>
+
+        <p class="warning">Essa ação não pode ser desfeita.</p>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="EventoId" />
+
+            <button type="submit" class="btn btn-delete">
+                Confirmar Exclusão
+            </button>
+
+            <a asp-action="Index" class="btn btn-back">
+                Cancelar
+            </a>
+        </form>
+    </div>
+</div>
