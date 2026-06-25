@@ -27,3 +27,10 @@ body {
 .site-navbar .navbar-brand {
     color: #ffffff !important;
 }
+
+@media (max-width: 576px) {
+    .card {
+        padding: 20px;
+        max-width: 360px;
+    }
+}

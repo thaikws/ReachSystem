@@ -6,121 +6,97 @@
 
 <style>
     body {
+        margin: 0;
+        font-family: Arial;
         background: #f4f7fb;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 400px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #d9534f;
+        margin-bottom: 10px;
+    }
+
+    .info {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+        .info p {
+            margin: 8px 0;
+            color: #444;
+        }
+
+    .label {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
+
+    .btn {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-delete {
+        background: #d9534f;
+        color: white;
+    }
+
+    .btn-back {
+        background: #ccc;
+        margin-left: 10px;
+    }
+
+    .warning {
+        color: #999;
+        font-size: 14px;
+        margin-top: 10px;
     }
 </style>
 
-<div class="container mt-5">
+<div class="container">
+    <div class="card">
+        <h2>Excluir Consulta</h2>
+        <p>Tem certeza que deseja excluir esta consulta?</p>
 
-    <div class="row justify-content-center">
-
-        <div class="col-md-8">
-
-            <div class="card shadow border-danger">
-
-                <!-- HEADER -->
-                <div class="card-header bg-danger text-white text-center">
-
-                    <h4 class="mb-0">
-                        Excluir Consulta
-                    </h4>
-
-                </div>
-
-                <!-- BODY -->
-                <div class="card-body">
-
-                    <!-- ALERTA -->
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        Tem certeza que deseja excluir essa consulta?
-                    </div>
-
-                    <!-- DADOS -->
-                    <div class="mb-3">
-
-                        <label class="fw-bold">
-                            ID da Consulta
-                        </label>
-
-                        <input class="form-control"
-                               value="@Model.ConsultaID"
-                               readonly />
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="fw-bold">
-                            Animal ID
-                        </label>
-
-                        <input class="form-control"
-                               value="@Model.AnimalId"
-                               readonly />
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="fw-bold">
-                            Data
-                        </label>
-
-                        <input class="form-control"
-                               value="@Model.Data.ToString("dd/MM/yyyy HH:mm")"
-                               readonly />
-
-                    </div>
-
-                    <div class="mb-4">
-
-                        <label class="fw-bold">
-                            Descrição
-                        </label>
-
-                        <textarea class="form-control"
-                                  rows="5"
-                                  readonly>@Model.Descricao</textarea>
-
-                    </div>
-
-                    <!-- FORM -->
-                    <form asp-action="Delete"
-                          asp-route-id="@Model.ConsultaID"
-                          method="post">
-
-                        @Html.AntiForgeryToken()
-
-                        <div class="d-flex justify-content-end">
-
-                            <!-- CANCELAR -->
-                            <a asp-action="Index"
-                               class="btn btn-secondary">
-
-                                Cancelar
-
-                            </a>
-
-                            <!-- EXCLUIR -->
-                            <button type="submit"
-                                    class="btn btn-danger ms-2">
-
-                                <i class="bi bi-trash"></i>
-                                Excluir
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
+        <div class="info">
+            <p><span class="label">ID da Consulta:</span> @Model.ConsultaID</p>
+            <p><span class="label">Animal:</span> @Model.AnimalNome</p>
+            <p><span class="label">Data:</span> @Model.Data.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><span class="label">Descrição:</span> @Model.Descricao</p>
         </div>
 
-    </div>
+        <p class="warning">Essa ação não pode ser desfeita.</p>
 
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="ConsultaID" />
+
+            <button type="submit" class="btn btn-delete">
+                Confirmar Exclusão
+            </button>
+
+            <a asp-action="Index" class="btn btn-back">
+                Cancelar
+            </a>
+        </form>
+    </div>
 </div>
