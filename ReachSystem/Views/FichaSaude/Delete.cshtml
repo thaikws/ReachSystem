@@ -1,49 +1,45 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<h2>Excluir Ficha de Saúde</h2>
+<div class="container mt-5" style="max-width: 800px;">
 
-<div class="alert alert-danger">
-    Tem certeza que deseja excluir esta ficha?
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header text-white rounded-4"
+             style="background-color:#8DB6D9;">
+            <h2 class="mb-0">Excluir Ficha de Saúde</h2>
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-danger rounded-3">
+                Tem certeza que deseja excluir esta ficha?
+            </div>
+
+            <div class="mb-3"><strong>ID:</strong> @Model.FichaSaudeId</div>
+            <div class="mb-3"><strong>Animal ID:</strong> @Model.AnimalId</div>
+            <div class="mb-3"><strong>Descrição:</strong> @Model.Descricao</div>
+            <div class="mb-3"><strong>Vacinas:</strong> @Model.Vacinas</div>
+            <div class="mb-3"><strong>Alergias:</strong> @Model.Alergias</div>
+            <div class="mb-3"><strong>Doenças Pré-existentes:</strong> @Model.DoencasPreExistentes</div>
+            <div class="mb-3"><strong>Medicamentos:</strong> @Model.Medicamentos</div>
+
+            <form asp-action="Delete" method="post">
+
+                <input type="hidden" asp-for="FichaSaudeId" />
+
+                <button type="submit" class="btn btn-danger rounded-3">
+                    Confirmar Exclusão
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-light border rounded-3">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
-
-<div class="mb-3">
-    <strong>ID:</strong> @Model.FichaSaudeId
-</div>
-
-<div class="mb-3">
-    <strong>Animal ID:</strong> @Model.AnimalId
-</div>
-
-<div class="mb-3">
-    <strong>Descrição:</strong> @Model.Descricao
-</div>
-
-<div class="mb-3">
-    <strong>Vacinas:</strong> @Model.Vacinas
-</div>
-
-<div class="mb-3">
-    <strong>Alergias:</strong> @Model.Alergias
-</div>
-
-<div class="mb-3">
-    <strong>Doenças Pré-existentes:</strong> @Model.DoencasPreExistentes
-</div>
-
-<div class="mb-3">
-    <strong>Medicamentos:</strong> @Model.Medicamentos
-</div>
-
-<form asp-action="Delete" method="post">
-
-    <input type="hidden" asp-for="FichaSaudeId" />
-
-    <button type="submit" class="btn btn-danger">
-        Confirmar Exclusão
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Cancelar
-    </a>
-
-</form>

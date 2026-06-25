@@ -1,42 +1,76 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<h2>Editar Ficha de Saúde</h2>
+<div class="container mt-5" style="max-width: 800px;">
 
-<form asp-action="Update" method="post">
+    <div class="card shadow border-0 rounded-4">
 
-    <input type="hidden" asp-for="FichaSaudeId" />
+        <div class="card-header text-white rounded-4"
+             style="background-color:#8DB6D9;">
 
-    <div class="mb-3">
-        <label asp-for="AnimalId" class="form-label"></label>
-        <input asp-for="AnimalId" class="form-control" />
+            <h2 class="mb-0">
+                Editar Ficha de Saúde
+            </h2>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Update" method="post">
+
+                <input type="hidden" asp-for="FichaSaudeId" />
+
+                <input type="hidden" asp-for="AnimalId" />
+
+                <div class="mb-3">
+                    <label class="form-label">Animal ID</label>
+                    <input value="@Model.AnimalId"
+                           class="form-control rounded-3"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descricao" class="form-label"></label>
+                    <textarea asp-for="Descricao"
+                              class="form-control rounded-3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vacinas" class="form-label"></label>
+                    <input asp-for="Vacinas" class="form-control rounded-3" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Alergias" class="form-label"></label>
+                    <input asp-for="Alergias" class="form-control rounded-3" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DoencasPreExistentes" class="form-label"></label>
+                    <input asp-for="DoencasPreExistentes"
+                           class="form-control rounded-3" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Medicamentos" class="form-label"></label>
+                    <textarea asp-for="Medicamentos"
+                              class="form-control rounded-3"></textarea>
+                </div>
+
+                <button type="submit"
+                        class="btn text-white rounded-3"
+                        style="background-color:#8DB6D9;">
+                    Atualizar
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-light border rounded-3">
+                    Voltar
+                </a>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Descricao" class="form-label"></label>
-        <input asp-for="Descricao" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Vacinas" class="form-label"></label>
-        <input asp-for="Vacinas" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Alergias" class="form-label"></label>
-        <input asp-for="Alergias" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="DoencasPreExistentes" class="form-label"></label>
-        <input asp-for="DoencasPreExistentes" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Medicamentos" class="form-label"></label>
-        <input asp-for="Medicamentos" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-warning">Atualizar</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-
-</form>
+</div>
