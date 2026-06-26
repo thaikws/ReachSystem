@@ -1,11 +1,21 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
+<div>
+
+    <style>
+			body {
+                background-color: #F4F7FB;
+                min-height: 100vh;
+                padding: 30px 0;
+			}
+    </style>
+
 <div class="container mt-5" style="max-width: 800px;">
 
     <div class="card shadow border-0 rounded-4">
 
         <div class="card-header text-white rounded-4"
-             style="background-color:#8DB6D9;">
+             style="background-color:#2C5D7C;">
 
             <h2 class="mb-0">
                 Ficha de Saúde
@@ -15,7 +25,7 @@
 
         <div class="card-body">
 
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post">    
 
                 <div class="mb-3">
                     <label asp-for="AnimalId" class="form-label">
@@ -68,7 +78,7 @@
 
                 <button type="submit"
                         class="btn text-white rounded-3"
-                        style="background-color:#8DB6D9;">
+                        style="background-color:#2C5D7C;">
                     Salvar
                 </button>
 
