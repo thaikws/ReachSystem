@@ -21,9 +21,9 @@ namespace ReachSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string email, string senha)
+        public async Task<IActionResult> Login(string email, string senha, bool rememberMe)
         {
-            var result = await _accountService.LoginAsync(email, senha);
+            var result = await _accountService.LoginAsync(email, senha, rememberMe);
 
             if (result.Succeeded)
             {

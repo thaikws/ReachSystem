@@ -12,12 +12,12 @@ namespace ReachSystem.Services
             _signInManager = signInManager;
         }
 
-        public async Task<SignInResult> LoginAsync(string email, string senha)
+        public async Task<SignInResult> LoginAsync(string email, string senha, bool rememberMe)
         {
             return await _signInManager.PasswordSignInAsync(
                 email,
                 senha,
-                isPersistent: false,
+                isPersistent: rememberMe,
                 lockoutOnFailure: false);
         }
 

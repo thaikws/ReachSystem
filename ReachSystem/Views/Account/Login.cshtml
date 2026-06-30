@@ -2,28 +2,125 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<style>
+    body {
+        background: #e9eef5;
+    }
 
-<form asp-action="Login" method="post">
+    .login-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-    @Html.AntiForgeryToken()
+    .login-card {
+        width: 420px;
+        background: #fff;
+        border: 2px solid #4f86c6;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
 
-    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    .login-title {
+        text-align: center;
+        font-weight: 600;
+        color: #2f5d9b;
+        margin-bottom: 24px;
+        font-size: 22px;
+    }
 
-    <div class="mb-3">
-        <label>E-mail</label>
-        <input name="email" class="form-control" />
+    .form-control {
+        border-radius: 20px;
+        padding: 10px 14px;
+        background: #eef3f8;
+        border: none;
+        margin-bottom: 12px;
+    }
+
+    .btn-login {
+        width: 100%;
+        border-radius: 20px;
+        background: #4f86c6;
+        border: none;
+        padding: 10px;
+        color: white;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+        .btn-login:hover {
+            background: #3f73ad;
+        }
+
+    .login-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 18px;
+        font-size: 14px;
+    }
+
+        .login-links a {
+            text-decoration: none;
+            color: #4f86c6;
+        }
+
+    .remember {
+        font-size: 13px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #555;
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 10px;
+        display: block;
+    }
+</style>
+
+<div class="login-wrapper">
+
+    <div class="login-card">
+
+        <div class="login-title">
+            Login
+        </div>
+
+        <form asp-action="Login" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input name="email"
+                   class="form-control"
+                   placeholder="E-mail" />
+
+            <input name="senha"
+                   type="password"
+                   class="form-control"
+                   placeholder="Senha" />
+
+            <div class="remember">
+                <input type="checkbox" name="rememberMe" />
+                Lembrar de mim
+            </div>
+
+            <button type="submit" class="btn-login">
+                Entrar
+            </button>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <span class="text-danger">
+                    E-mail ou senha inválidos.
+                </span>
+            }
+
+        </form>
+
     </div>
 
-    <div class="mb-3">
-        <label>Senha</label>
-        <input name="senha"
-               type="password"
-               class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Entrar
-    </button>
-
-</form>
+</div>
