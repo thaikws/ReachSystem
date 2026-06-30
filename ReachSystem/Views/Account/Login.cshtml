@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label>E-mail</label>
+        <input type="text" name="email" />
+    </div>
+
+    <div>
+        <label>Senha</label>
+        <input type="password" name="senha" />
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" name="rememberMe" />
+            Lembrar de mim
+        </label>
+    </div>
+
+    <button type="submit">Entrar</button>
+
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <p style="color:red;">E-mail ou senha inválidos.</p>
+}
