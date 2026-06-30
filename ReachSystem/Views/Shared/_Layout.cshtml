@@ -86,12 +86,16 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                 <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Minha Conta</a></li>
                                 <li>
-                                    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Sair
-                                        </button>
-                                    </form>
+                                        <form asp-controller="Account"
+                                              asp-action="Logout"
+                                              method="post">
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right me-2"></i>
+                                                Sair
+                                            </button>
+                                        </form>
                                 </li>
                             </ul>
                         </li>
@@ -99,12 +103,11 @@
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Entrar</a>
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Entrar</a>
                             </li>
                         }
 
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
