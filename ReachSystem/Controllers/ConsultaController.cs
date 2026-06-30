@@ -44,8 +44,7 @@ namespace ReachSystem.Controllers
         {
             var animais = await _animalService.GetAllAnimalsAsync();
 
-            ViewBag.AnimaisRaw = animais;
-
+            ViewBag.Animais = animais; 
             return View();
         }
 

@@ -1,76 +1,157 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Nova Consulta";
+}
 
-    <div class="card shadow-sm">
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
+    }
 
-        <div class="card-header text-center">
-            <strong>Criar nova consulta</strong>
-        </div>
+    .page-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 160px);
+        padding: 40px;
+        box-sizing: border-box;
+    }
 
-        <div class="card-body">
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 100%;
+        max-width: 420px;
+        max-height: calc(100vh - 200px);
+        overflow: auto;
+    }
 
-            <form asp-action="Create" method="post">
-                @Html.AntiForgeryToken()
+    h2 {
+        color: #2c5d7c;
+        margin-bottom: 20px;
+    }
 
-                <!-- PREVIEW -->
-                <div class="animal-preview d-flex gap-3 align-items-center mb-3">
+    .form-group {
+        margin-bottom: 15px;
+    }
 
-                    <img id="animalPreview"
-                         style="width:90px;height:140px;object-fit:cover;border-radius:10px;display:none;" />
+    label {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
 
-                    <div>
-                        <h5 id="animalNome">Selecionar animal</h5>
-                        <small>Pré-visualização</small>
-                    </div>
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        box-sizing: border-box;
+    }
 
+    .btn {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background: #2c5d7c;
+        color: white;
+    }
+
+    .btn-back {
+        background: #ccc;
+        margin-left: 10px;
+    }
+
+    /* 🔥 PREVIEW (sem mudar layout geral) */
+    .animal-preview {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #f9fbfd;
+        border: 1px solid #e6edf5;
+    }
+
+        .animal-preview img {
+            width: 80px;
+            height: 120px; /* mais compacto pra caber no card pequeno */
+            object-fit: cover;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .animal-preview h5 {
+            margin: 0;
+            font-size: 14px;
+            color: #2c5d7c;
+        }
+
+        .animal-preview small {
+            color: #777;
+        }
+</style>
+
+<div class="page-container">
+    <div class="card">
+
+        <h2>Nova Consulta</h2>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- 🔥 PREVIEW -->
+            <div class="animal-preview">
+                <img id="animalPreview" />
+
+                <div>
+                    <h5 id="animalNome">Selecione um animal</h5>
+                    <small>Pré-visualização</small>
                 </div>
+            </div>
 
-                <!-- SELECT -->
-                <div class="mb-3">
-                    <label>Animal</label>
+            <div class="form-group">
+                <label>Animal</label>
 
-                    <select name="AnimalId"
-                            id="animalSelect"
-                            class="form-select">
+                <select asp-for="AnimalId" id="animalSelect">
+                    <option value="">Selecione</option>
 
-                        <option value="">-- Selecionar --</option>
+                    @foreach (var animal in ViewBag.Animais)
+                    {
+                        <option value="@animal.AnimalId"
+                                data-foto="@animal.Foto"
+                                data-nome="@animal.Nome">
+                            @animal.Nome
+                        </option>
+                    }
+                </select>
+            </div>
 
-                        @foreach (var animal in ViewBag.AnimaisRaw)
-                        {
-                            <option value="@animal.AnimalId"
-                                    data-foto="@animal.Foto"
-                                    data-nome="@animal.Nome">
-                                @animal.Nome
-                            </option>
-                        }
+            <div class="form-group">
+                <label>Data</label>
+                <input asp-for="Data" type="datetime-local" />
+            </div>
 
-                    </select>
-                </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea asp-for="Descricao"></textarea>
+            </div>
 
-                <!-- DATA -->
-                <div class="mb-3">
-                    <label>Data e hora</label>
-                    <input name="Data" type="datetime-local" class="form-control" />
-                </div>
+            <button type="submit" class="btn btn-save">Salvar</button>
+            <a asp-action="Index" class="btn btn-back">Voltar</a>
+        </form>
 
-                <!-- DESCRIÇÃO -->
-                <div class="mb-3">
-                    <label>Descrição</label>
-                    <textarea name="Descricao" class="form-control"></textarea>
-                </div>
-
-                <button class="btn btn-sm text-white mt-3" style="background-color:#2C5D7C;">
-                    Salvar
-                </button>
-                <a asp-action="Index"
-                   class="btn btn-outline-secondary btn-sm mt-3">
-                    Voltar
-                </a>
-
-            </form>
-
-        </div>
     </div>
 </div>
 
@@ -86,7 +167,7 @@
         const foto = option.getAttribute("data-foto");
         const nomeAnimal = option.getAttribute("data-nome");
 
-        nome.innerText = nomeAnimal ?? "Selecionar animal";
+        nome.innerText = nomeAnimal ?? "Selecione um animal";
 
         if (foto) {
             preview.src = foto;
