@@ -44,11 +44,7 @@ namespace ReachSystem.Controllers
         {
             var animais = await _animalService.GetAllAnimalsAsync();
 
-            ViewBag.Animais = animais.Select(a => new SelectListItem
-            {
-                Value = a.AnimalId.ToString(),
-                Text = a.Nome
-            }).ToList();
+            ViewBag.AnimaisRaw = animais;
 
             return View();
         }
@@ -60,12 +56,7 @@ namespace ReachSystem.Controllers
             if (!ModelState.IsValid)
             {
                 var animais = await _animalService.GetAllAnimalsAsync();
-
-                ViewBag.Animais = animais.Select(a => new SelectListItem
-                {
-                    Value = a.AnimalId.ToString(),
-                    Text = a.Nome
-                }).ToList();
+                ViewBag.AnimaisRaw = animais;
 
                 return View(consulta);
             }

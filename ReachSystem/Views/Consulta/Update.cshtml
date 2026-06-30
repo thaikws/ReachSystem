@@ -1,58 +1,46 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
-@{
-    ViewData["Title"] = "Editar Consulta";
-}
+<div class="container mt-4" style="max-width: 900px;">
 
-<style>
-    body {
-        background: #f4f7fb;
-    }
+    <div class="card shadow border-0 rounded-4">
 
-    .btn-salvar {
-        background: #2c5d7c;
-        color: white;
-        border: 1px solid rgba(0,0,0,0.08);
-    }
+        <!-- HEADER -->
+        <div class="card-header text-white"
+             style="background-color:#2C5D7C;">
+            <h4 class="mb-0">Editar Consulta</h4>
+        </div>
 
-    .btn-salvar:hover {
-        opacity: 0.9;
-        color: white;
-    }
+        <div class="card-body">
 
-    /* cabeçalho específico da card de edição */
-    .consulta-header {
-        background: #2c5d7c;
-        color: #ffffff;
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-    }
-</style>
+            <form asp-action="Update" asp-route-id="@Model.ConsultaID" method="post">
 
-<div class="container-fluid mt-4">
+                @Html.AntiForgeryToken()
 
-    <div class="row justify-content-center align-items-center"
-         style="min-height: calc(80vh - 180px);">
+                <input asp-for="ConsultaID" type="hidden" />
 
-        <div class="col-md-7">
+                <div class="row">
 
-            <div class="card shadow-sm">
+                    <!-- ESQUERDA (ANIMAL) -->
+                    <div class="col-md-4">
 
-                <div class="card-header text-center consulta-header">
-                    <strong>Editar consulta</strong>
-                </div>
+                        <div class="animal-preview flex-column text-center">
 
-                <div class="card-body">
+                            <img src="@Model.AnimalFoto"
+                                 class="animal-img"
+                                 style="width:120px;height:180px;object-fit:cover;border-radius:10px;" />
 
-                    <form asp-action="Update" asp-route-id="@Model.ConsultaID" method="post" class="row g-3">
+                            <h5>@Model.AnimalNome</h5>
+                            <small>ID: @Model.AnimalId</small>
 
-                        @Html.AntiForgeryToken()
+                        </div>
 
-                        <input asp-for="ConsultaID" type="hidden" />
+                    </div>
 
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <!-- DIREITA (FORM) -->
+                    <div class="col-md-8">
 
-                        <div class="col-12">
+                        <!-- ANIMAL SELECT -->
+                        <div class="mb-3">
                             <label class="form-label">Animal</label>
 
                             @if (ViewBag.Animais != null)
@@ -65,53 +53,55 @@
                             }
                             else
                             {
-                                <!-- fallback quando o controller não repopula ViewBag.Animais -->
                                 <select asp-for="AnimalId" class="form-select">
                                     <option value="">-- Selecionar --</option>
-                                    <option value="@Model.AnimalId" selected>@Model.AnimalNome</option>
+                                    <option value="@Model.AnimalId" selected>
+                                        @Model.AnimalNome
+                                    </option>
                                 </select>
                             }
-
-                            <span asp-validation-for="AnimalId" class="text-danger"></span>
                         </div>
 
-                        <div class="col-md-6">
+                        <!-- DATA -->
+                        <div class="mb-3">
                             <label class="form-label">Data e hora</label>
 
                             <input asp-for="Data"
                                    type="datetime-local"
                                    class="form-control"
                                    value='@Model.Data.ToString("yyyy-MM-ddTHH:mm")' />
-
-                            <span asp-validation-for="Data" class="text-danger"></span>
                         </div>
 
-                        <div class="col-12">
+                        <!-- DESCRIÇÃO -->
+                        <div class="mb-3">
                             <label class="form-label">Descrição</label>
 
                             <textarea asp-for="Descricao"
                                       class="form-control"
                                       rows="5">@Model.Descricao</textarea>
-
-                            <span asp-validation-for="Descricao" class="text-danger"></span>
                         </div>
 
-                        <div class="col-12 d-flex justify-content-end mt-3">
-                            <a asp-action="Index" class="btn btn-secondary">
+                        <!-- BOTÕES -->
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+
+                            <a asp-action="Index"
+                               class="btn btn-light border">
                                 Cancelar
                             </a>
 
-                            <button type="submit" class="btn btn-salvar ms-2">
-                                <i class="bi bi-check-lg me-1"></i>
+                            <button type="submit"
+                                    class="btn text-white"
+                                    style="background-color:#2C5D7C;">
                                 Salvar
                             </button>
+
                         </div>
 
-                    </form>
+                    </div>
 
                 </div>
 
-            </div>
+            </form>
 
         </div>
 

@@ -1,84 +1,98 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
-@{
-    ViewData["Title"] = "Criar Consulta";
-}
+<div class="container mt-4">
 
-<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
 
-    <div class="row justify-content-center align-items-center"
-         style="min-height: calc(80vh - 180px);">
-
-        <div class="col-md-7">
-
-            <div class="card shadow-sm">
-
-                <div class="card-header text-center">
-                    <strong>Criar nova consulta</strong>
-                </div>
-
-                <div class="card-body">
-
-                    <form asp-action="Create" method="post" class="row g-3">
-
-                        @Html.AntiForgeryToken()
-
-                        <div class="col-12">
-
-                            <label class="form-label">Animal</label>
-
-                            <select name="AnimalId"
-                                    class="form-select"
-                                    asp-items="ViewBag.Animais">
-
-                                <option value="">-- Selecionar --</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <label class="form-label">Data e hora</label>
-
-                            <input name="Data"
-                                   type="datetime-local"
-                                   class="form-control" />
-
-                        </div>
-
-                        <div class="col-12">
-
-                            <label class="form-label">Descrição</label>
-
-                            <textarea name="Descricao"
-                                      class="form-control"
-                                      rows="5"></textarea>
-
-                        </div>
-
-                        <div class="col-12 d-flex justify-content-end mt-3">
-
-                            <button type="submit"
-                                    class="btn btn-primary">
-                                Salvar
-                            </button>
-
-                            <a asp-action="Index"
-                               class="btn btn-secondary ms-2">
-                                Cancelar
-                            </a>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
+        <div class="card-header text-center">
+            <strong>Criar nova consulta</strong>
         </div>
 
-    </div>
+        <div class="card-body">
 
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- PREVIEW -->
+                <div class="animal-preview d-flex gap-3 align-items-center mb-3">
+
+                    <img id="animalPreview"
+                         style="width:90px;height:140px;object-fit:cover;border-radius:10px;display:none;" />
+
+                    <div>
+                        <h5 id="animalNome">Selecionar animal</h5>
+                        <small>Pré-visualização</small>
+                    </div>
+
+                </div>
+
+                <!-- SELECT -->
+                <div class="mb-3">
+                    <label>Animal</label>
+
+                    <select name="AnimalId"
+                            id="animalSelect"
+                            class="form-select">
+
+                        <option value="">-- Selecionar --</option>
+
+                        @foreach (var animal in ViewBag.AnimaisRaw)
+                        {
+                            <option value="@animal.AnimalId"
+                                    data-foto="@animal.Foto"
+                                    data-nome="@animal.Nome">
+                                @animal.Nome
+                            </option>
+                        }
+
+                    </select>
+                </div>
+
+                <!-- DATA -->
+                <div class="mb-3">
+                    <label>Data e hora</label>
+                    <input name="Data" type="datetime-local" class="form-control" />
+                </div>
+
+                <!-- DESCRIÇÃO -->
+                <div class="mb-3">
+                    <label>Descrição</label>
+                    <textarea name="Descricao" class="form-control"></textarea>
+                </div>
+
+                <button class="btn btn-sm text-white mt-3" style="background-color:#2C5D7C;">
+                    Salvar
+                </button>
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary btn-sm mt-3">
+                    Voltar
+                </a>
+
+            </form>
+
+        </div>
+    </div>
 </div>
+
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
+    const nome = document.getElementById("animalNome");
+
+    select.addEventListener("change", function () {
+
+        const option = this.options[this.selectedIndex];
+
+        const foto = option.getAttribute("data-foto");
+        const nomeAnimal = option.getAttribute("data-nome");
+
+        nome.innerText = nomeAnimal ?? "Selecionar animal";
+
+        if (foto) {
+            preview.src = foto;
+            preview.style.display = "block";
+        } else {
+            preview.style.display = "none";
+        }
+    });
+</script>

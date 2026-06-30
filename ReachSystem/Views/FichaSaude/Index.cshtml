@@ -86,9 +86,20 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <strong>Ficha #@item.FichaSaudeId</strong>
 
-                            <span class="badge bg-light text-dark">
-                                Animal @item.AnimalId
-                            </span>
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <img src="@item.Animal?.Foto"
+                                         style="width:45px;height:45px;border-radius:50%;object-fit:cover;"
+                                         onerror="this.style.display='none'" />
+
+                                    <div>
+                                        <strong>Ficha #@item.FichaSaudeId</strong>
+                                        <div style="font-size:12px;opacity:0.8;">
+                                            @item.Animal?.Nome
+                                        </div>
+                                    </div>
+
+                                </div>
                         </div>
 
                     </div>
@@ -128,6 +139,12 @@
                                 Editar
                             </a>
 
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.FichaSaudeId"
+                                   class="btn btn-sm text-white rounded-3 w-100"
+                                   style="background-color:#C72100;">
+                                    Excluir
+                                </a>
                         </div>
 
                     </div>

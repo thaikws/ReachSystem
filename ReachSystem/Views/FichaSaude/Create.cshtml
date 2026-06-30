@@ -1,89 +1,111 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<div>
+<style>
+    .animal-card {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 15px;
+    }
 
-    <style>
-			body {
-                background-color: #F4F7FB;
-                min-height: 100vh;
-                padding: 30px 0;
-			}
-    </style>
+    /* FOTO RETANGULAR (vertical) */
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #eee;
+    }
 
-<div class="container mt-5" style="max-width: 800px;">
+    .animal-info h5 {
+        margin: 0;
+        color: #2C5D7C;
+    }
+
+    .animal-info small {
+        color: #777;
+    }
+</style>
+
+<div class="container mt-4">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header text-white rounded-4"
-             style="background-color:#2C5D7C;">
-
-            <h2 class="mb-0">
-                Ficha de Saúde
-            </h2>
-
+        <!-- HEADER -->
+        <div class="card-header text-white" style="background:#2C5D7C;">
+            <h4 class="mb-0">Ficha de Saúde</h4>
         </div>
 
         <div class="card-body">
 
-            <form asp-action="Create" method="post">    
+            <form asp-action="Create" method="post">
 
-                <div class="mb-3">
-                    <label asp-for="AnimalId" class="form-label">
-                        Animal
-                    </label>
+                <!-- CARD ANIMAL -->
+                <div class="animal-preview">
 
-            <select asp-for="AnimalId" class="form-select rounded-3">
-                <option value="">Selecione um animal</option>
+                    <img id="animalPreview"
+                         class="animal-img"
+                         style="display:none;" src="https://via.placeholder.com/120x160"/>
 
-                    @foreach (var animal in ViewBag.Animais)
-                    {
-                        <option value="@animal.AnimalId">
-                            @animal.Nome
-                        </option>
-                    }
-            </select>
+                    <div>
+                        <h5>Selecionar animal</h5>
+                        <small>Pré-Visualização</small>
+                    </div>
 
-            <span asp-validation-for="AnimalId" class="text-danger"></span>
-        </div>
-
-                <div class="mb-3">
-                    <label asp-for="Descricao" class="form-label"></label>
-                    <textarea asp-for="Descricao"
-                              class="form-control rounded-3"></textarea>
                 </div>
 
+                <!-- SELECT -->
                 <div class="mb-3">
-                    <label asp-for="Vacinas" class="form-label"></label>
-                    <input asp-for="Vacinas"
-                           class="form-control rounded-3" />
+                    <label class="form-label">Animal</label>
+
+                    <select asp-for="AnimalId" class="form-select" id="animalSelect">
+
+                        <option value="">Selecione</option>
+
+                        @foreach (var animal in ViewBag.Animais)
+                        {
+                            <option value="@animal.AnimalId"
+                                    data-foto="@animal.Foto">
+                                @animal.Nome
+                            </option>
+                        }
+
+                    </select>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Alergias" class="form-label"></label>
-                    <input asp-for="Alergias"
-                           class="form-control rounded-3" />
+                <!-- CAMPOS -->
+                <div class="mb-2">
+                    <textarea asp-for="Descricao" class="form-control" placeholder="Descrição"></textarea>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="DoencasPreExistentes" class="form-label"></label>
-                    <input asp-for="DoencasPreExistentes"
-                           class="form-control rounded-3" />
+                <div class="mb-2">
+                    <input asp-for="Vacinas" class="form-control" placeholder="Vacinas" />
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Medicamentos" class="form-label"></label>
-                    <textarea asp-for="Medicamentos"
-                              class="form-control rounded-3"></textarea>
+                <div class="mb-2">
+                    <input asp-for="Alergias" class="form-control" placeholder="Alergias" />
                 </div>
 
+                <div class="mb-2">
+                    <input asp-for="DoencasPreExistentes" class="form-control" placeholder="Doenças pré-existentes" />
+                </div>
+
+                <div class="mb-2">
+                    <textarea asp-for="Medicamentos" class="form-control" placeholder="Medicamentos"></textarea>
+                </div>
+
+                <!-- BOTÃO -->
                 <button type="submit"
-                        class="btn text-white rounded-3"
-                        style="background-color:#2C5D7C;">
+                        class="btn text-white mt-2"
+                        style="background:#2C5D7C;">
                     Salvar
                 </button>
-
                 <a asp-action="Index"
-                   class="btn btn-light border rounded-3">
+                   class="btn btn-outline-secondary mt-2">
                     Voltar
                 </a>
 
@@ -94,3 +116,22 @@
     </div>
 
 </div>
+
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
+
+    select.addEventListener("change", function () {
+
+        const option = this.options[this.selectedIndex];
+        const foto = option.getAttribute("data-foto");
+
+        if (foto && foto !== "") {
+            preview.src = foto;
+            preview.style.display = "block";
+        } else {
+            preview.src = "";
+            preview.style.display = "none";
+        }
+    });
+</script>
