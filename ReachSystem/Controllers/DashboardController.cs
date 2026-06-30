@@ -4,6 +4,7 @@ using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly DashboardService _dashboardService;

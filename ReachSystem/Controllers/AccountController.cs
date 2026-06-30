@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
@@ -39,7 +40,7 @@ namespace ReachSystem.Controllers
         {
             await _accountService.LogoutAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
     }
 }
