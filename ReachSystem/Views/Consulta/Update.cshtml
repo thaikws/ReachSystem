@@ -1,1 +1,120 @@
-﻿﻿<h1>Form Update Animal</h1>
+﻿@model ReachSystem.DTOs.ConsultaDto
+
+@{
+    ViewData["Title"] = "Editar Consulta";
+}
+
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .btn-salvar {
+        background: #2c5d7c;
+        color: white;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .btn-salvar:hover {
+        opacity: 0.9;
+        color: white;
+    }
+
+    /* cabeçalho específico da card de edição */
+    .consulta-header {
+        background: #2c5d7c;
+        color: #ffffff;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <div class="row justify-content-center align-items-center"
+         style="min-height: calc(80vh - 180px);">
+
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-center consulta-header">
+                    <strong>Editar consulta</strong>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="Update" asp-route-id="@Model.ConsultaID" method="post" class="row g-3">
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="ConsultaID" type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="col-12">
+                            <label class="form-label">Animal</label>
+
+                            @if (ViewBag.Animais != null)
+                            {
+                                <select asp-for="AnimalId"
+                                        class="form-select"
+                                        asp-items="ViewBag.Animais">
+                                    <option value="">-- Selecionar --</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <!-- fallback quando o controller não repopula ViewBag.Animais -->
+                                <select asp-for="AnimalId" class="form-select">
+                                    <option value="">-- Selecionar --</option>
+                                    <option value="@Model.AnimalId" selected>@Model.AnimalNome</option>
+                                </select>
+                            }
+
+                            <span asp-validation-for="AnimalId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Data e hora</label>
+
+                            <input asp-for="Data"
+                                   type="datetime-local"
+                                   class="form-control"
+                                   value='@Model.Data.ToString("yyyy-MM-ddTHH:mm")' />
+
+                            <span asp-validation-for="Data" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Descrição</label>
+
+                            <textarea asp-for="Descricao"
+                                      class="form-control"
+                                      rows="5">@Model.Descricao</textarea>
+
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end mt-3">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-salvar ms-2">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Salvar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

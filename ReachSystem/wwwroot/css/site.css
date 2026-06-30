@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+.site-navbar,
+.site-navbar a,
+.site-navbar .nav-link,
+.site-navbar .navbar-brand {
+    color: #ffffff !important;
+}

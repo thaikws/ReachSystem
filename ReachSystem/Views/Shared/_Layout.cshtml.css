@@ -26,6 +26,7 @@ a {
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -46,3 +47,63 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.site-navbar {
+    background: #2c5d7c;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    overflow: visible; /* permitir dropdowns fora do navbar */
+    position: relative; /* contexto para z-index */
+    z-index: 1050;
+}
+
+.site-navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    padding-right: 1rem;
+}
+
+.site-navbar .nav-link {
+    color: #ffffff !important;
+    padding-top: .45rem;
+    padding-bottom: .45rem;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.site-navbar .nav-link:hover {
+    color: #e6f0f7 !important;
+    opacity: 0.95;
+}
+
+.site-navbar .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.dropdown-menu {
+    z-index: 2050 !important;
+}
+
+.dropdown-item i.bi {
+    vertical-align: -.125em;
+}
+
+main[role="main"] h1,
+main[role="main"] .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2c5d7c;
+    margin-bottom: 1rem;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+
