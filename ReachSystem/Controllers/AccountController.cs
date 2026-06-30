@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using ReachSystem.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AccountService _accountService;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager)
+        public AccountController(AccountService accountService)
         {
-            _signInManager = signInManager;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -23,11 +22,7 @@ namespace ReachSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string email, string senha)
         {
-            var result = await _signInManager.PasswordSignInAsync(
-                email,
-                senha,
-                false,
-                false);
+            var result = await _accountService.LoginAsync(email, senha);
 
             if (result.Succeeded)
             {
@@ -38,9 +33,11 @@ namespace ReachSystem.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _accountService.LogoutAsync();
 
             return RedirectToAction(nameof(Login));
         }

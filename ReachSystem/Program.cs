@@ -13,6 +13,7 @@ builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<AccountService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
