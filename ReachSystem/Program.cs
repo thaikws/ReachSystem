@@ -27,6 +27,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ReachSystemDbContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+});
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -54,7 +59,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())

@@ -39,7 +39,7 @@ namespace ReachSystem.Controllers
         {
             await _accountService.LogoutAsync();
 
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Index", "Home");
         }
     }
 }
