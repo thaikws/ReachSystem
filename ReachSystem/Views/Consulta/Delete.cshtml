@@ -5,98 +5,88 @@
 }
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial;
-        background: #f4f7fb;
+
+    body { 
+        margin:0; 
+        font-family: Arial; 
+        background:#f4f7fb; 
     }
 
-    .container {
-        display: flex;
-        justify-content: center;
-        padding: 40px;
+    .page-container { 
+        display:flex; 
+        align-items:center; 
+        justify-content:center; 
+        min-height:calc(100vh - 160px); 
+        padding:40px; 
+        box-sizing:border-box; 
     }
 
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        width: 400px;
-        text-align: center;
+    .card { 
+        background:#fff; 
+        padding:30px; 
+        border-radius:16px; 
+        box-shadow:0 4px 12px rgba(0,0,0,0.06); 
+        width:100%;
+        max-width:420px; 
+        text-align:left; 
     }
 
-    h2 {
-        color: #d9534f;
-        margin-bottom: 10px;
+    h2 { 
+        color:#d9534f; 
+        margin-bottom:10px; 
     }
 
-    .info {
-        margin-top: 20px;
-        text-align: left;
+    .info { 
+        margin-top:20px; 
+        color:#444; 
     }
 
-        .info p {
-            margin: 8px 0;
-            color: #444;
-        }
-
-    .label {
-        font-weight: bold;
-        color: #2c5d7c;
+    .label { 
+        font-weight:700; 
+        color:#2c5d7c; 
     }
 
-    .btn {
-        margin-top: 20px;
-        padding: 10px 15px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
+    .btn-delete { 
+        background:#d9534f; 
+        color:#fff; 
+        border-radius:8px; 
+        padding:8px 14px; 
+        border:none; 
     }
 
-    .btn-delete {
-        background: #d9534f;
-        color: white;
+    .btn-back { 
+        background:#ccc; 
+        color:#000; 
+        border-radius:8px; 
+        padding:8px 14px; 
+        margin-left:10px; 
+        text-decoration:none; 
+        display:inline-block; 
     }
 
-    .btn-back {
-        background: #ccc;
-        margin-left: 10px;
-    }
-
-    .warning {
-        color: #999;
-        font-size: 14px;
-        margin-top: 10px;
-    }
 </style>
 
-<div class="container">
+<div class="page-container">
     <div class="card">
         <h2>Excluir Consulta</h2>
         <p>Tem certeza que deseja excluir esta consulta?</p>
 
         <div class="info">
-            <p><span class="label">ID da Consulta:</span> @Model.ConsultaID</p>
+            <p><span class="label">ID:</span> @Model.ConsultaID</p>
             <p><span class="label">Animal:</span> @Model.AnimalNome</p>
             <p><span class="label">Data:</span> @Model.Data.ToString("dd/MM/yyyy HH:mm")</p>
             <p><span class="label">Descrição:</span> @Model.Descricao</p>
         </div>
 
-        <p class="warning">Essa ação não pode ser desfeita.</p>
+        <p style="color:#999; margin-top:10px;">Essa ação não pode ser desfeita.</p>
 
-        <form asp-action="Delete" method="post">
-            <input type="hidden" asp-for="ConsultaID" />
-
-            <button type="submit" class="btn btn-delete">
-                Confirmar Exclusão
-            </button>
-
-            <a asp-action="Index" class="btn btn-back">
-                Cancelar
-            </a>
+        <form asp-action="Delete" asp-route-id="@Model.ConsultaID" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="ConsultaID" type="hidden" />
+            <div class="d-flex justify-content-end">
+                <a asp-action="Index" class="btn-back">Cancelar</a>
+                <button type="submit" class="btn-delete ms-2">Confirmar Exclusão</button>
+            </div>
         </form>
     </div>
 </div>
