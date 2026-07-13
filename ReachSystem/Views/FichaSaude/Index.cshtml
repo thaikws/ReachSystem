@@ -1,194 +1,117 @@
 ﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
 
+<style>
+    body {
+        background: #F4F7FB;
+    }
 
-    <div class="container-fluid px-5 mt-5">
+    .card-ficha {
+        transition: .2s;
+        border-radius: 20px !important;
+        overflow: hidden;
+    }
 
-        <!-- Cabeçalho -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        .card-ficha:hover {
+            transform: translateY(-4px);
+        }
+</style>
 
-            <div>
-                <h2 class="fw-bold mb-0" style="color:#173746;">
-                    Fichas de Saúde
-                </h2>
-                <small style="color:#6C7A89;">
-                    Visão geral dos registros
-                </small>
-            </div>
+<div class="container-fluid px-5 py-5">
 
-            <a asp-action="Create"
-               class="btn rounded-3 shadow-sm text-white"
-               style="background-color:#2C5D7C; border:none;">
-                + Nova Ficha
-            </a>
-
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0" style="color:#173746;">
+                Fichas de Saúde
+            </h2>
+            <small style="color:#6C7A89;">
+                Visão geral dos registros
+            </small>
         </div>
 
-        <!-- Cards de resumo -->
-        <div class="row g-3 mb-4">
+        <a asp-action="Create"
+           class="btn text-white shadow-sm"
+           style="background:#2C5D7C;">
+            + Nova Ficha
+        </a>
+    </div>
 
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100"
-                     style="background:#FFFFFF; border-left:6px solid #2C5D7C;">
+    <!-- Cards Resumo -->
+    <div class="row g-3 mb-4">
 
-                    <div class="card-body">
-                        <small style="color:#6C7A89;">
-                            Total de Fichas
-                        </small>
-
-                        <h3 class="fw-bold mb-0" style="color:#173746;">
-                            @Model.Count()
-                        </h3>
-                    </div>
-
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <small>Total de Fichas</small>
+                    <h3 class="fw-bold">
+                        @Model.Count()
+                    </h3>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100"
-                     style="background:#FFFFFF; border-left:6px solid #1B6EC2;">
-
-                    <div class="card-body">
-                        <small style="color:#6C7A89;">
-                            Registros
-                        </small>
-
-                        <h3 class="fw-bold mb-0" style="color:#173746;">
-                            @Model.Count()
-                        </h3>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100"
-                     style="background:#FFFFFF; border-left:6px solid #2C5D7C;">
-
-                    <div class="card-body">
-                        <small style="color:#6C7A89;">
-                            Último ID
-                        </small>
-
-                        <h3 class="fw-bold mb-0" style="color:#173746;">
-                            @(Model.OrderByDescending(x => x.FichaSaudeId)
-                                  .FirstOrDefault()?.FichaSaudeId ?? 0)
-                        </h3>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
-        <!-- Lista -->
-        <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <small>Último ID</small>
 
-            @foreach (var item in Model)
-            {
-                <div class="col-lg-4 col-md-6">
+                    <h3 class="fw-bold">
 
-                    <div class="card border-0 shadow-sm rounded-4 h-100"
-                         style="background:#FFFFFF;">
+                        @{
+                            int ultimoId = 0;
 
-                        <!-- Cabeçalho do Card -->
-                        <div class="card-header border-0 text-white"
-                             style="background:#2C5D7C; border-radius:1rem 1rem 0 0;">
+                            foreach (var ficha in Model)
+                            {
+                                if (ficha.FichaSaudeId > ultimoId)
+                                {
+                                    ultimoId = ficha.FichaSaudeId;
+                                }
+                            }
+                        }
 
-                            <div class="d-flex align-items-center">
+                        @ultimoId
 
-                                <img src="@item.Animal?.Foto"
-                                     alt="@item.Animal?.Nome"
-                                     class="me-3"
-                                     style="width:55px;
-                                height:55px;
-                                border-radius:50%;
-                                object-fit:cover;
-                                border:3px solid white;"
-                                     onerror="this.style.display='none'" />
+                    </h3>
 
-                                <div>
-                                    <small style="mb-0 fw-bold;">
-                                        @item.Animal?.Nome
-                                    </small>
-                                    
-                                    <h6 class="opacity:.85;">
-                                        Ficha #@item.FichaSaudeId
-                                    </h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Lista das Fichas -->
+    <div class="row g-3">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                <div class="card card-ficha shadow-sm border-0 h-100 rounded-4">
+
+                    <!-- Cabeçalho -->
+                    <div class="card-header text-white py-2 border-0"
+                         style="background:#2C5D7C;">
+
+                        <div class="d-flex align-items-center">
+
+                            <img src="@item.Animal?.Foto"
+                                 alt="@item.Animal?.Nome"
+                                 onerror="this.style.display='none'"
+                                 style="width:45px;
+                            height:45px;
+                            border-radius:50%;
+                            object-fit:cover;
+                            border:2px solid white;" />
+
+                            <div class="ms-2">
+
+                                <div class="fw-bold">
+                                    @item.Animal?.Nome
                                 </div>
 
-                            </div>
-
-                        </div>
-
-                        <!-- Corpo -->
-                      
-                 <style>
-                       body{
-                        background:#faf7fb;" 
-                       }
-                       </style>
-                        <div class="card-body">
-                           
-                           
-                            <div class="mb-3">
-
-                                <div class="fw-semibold mb-1"
-                                     style="color:#173746;">
-                                    Descrição
-                                </div>
-
-                                <div style="color:#6C7A89;">
-                                    @(string.IsNullOrEmpty(item.Descricao)
-                                        ? "-"
-                                        : item.Descricao.Length > 80
-                                            ? item.Descricao.Substring(0, 80) + "..."
-                                            : item.Descricao)
-                                </div>
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <div class="fw-semibold mb-1"
-                                     style="color:#173746;">
-                                    Vacinas
-                                </div>
-
-                                <div style="color:#6C7A89;">
-                                    @(string.IsNullOrEmpty(item.Vacinas)
-                                        ? "-"
-                                        : item.Vacinas.Length > 80
-                                            ? item.Vacinas.Substring(0, 80) + "..."
-                                            : item.Vacinas)
-                                </div>
-
-                            </div>
-                           
-                            <hr style="border-color:#E6EDF5;" />
-
-                            <!-- Botões -->
-                            <div class="d-grid gap-2">
-
-                                <a asp-action="Details"
-                                   asp-route-id="@item.FichaSaudeId"
-                                   class="btn btn-outline-primary rounded-3"
-                                   style="border-color:#1B6EC2; color:#1B6EC2;">
-                                    Ver
-                                </a>
-
-                                <a asp-action="Update"
-                                   asp-route-id="@item.FichaSaudeId"
-                                   class="btn rounded-3 text-white"
-                                   style="background:#2C5D7C;">
-                                    Editar
-                                </a>
-
-                                <a asp-action="Delete"
-                                   asp-route-id="@item.FichaSaudeId"
-                                   class="btn rounded-3 text-white"
-                                   style="background:#D9534F;">
-                                    Excluir
-                                </a>
+                                <small>
+                                    Ficha #@item.FichaSaudeId
+                                </small>
 
                             </div>
 
@@ -196,10 +119,70 @@
 
                     </div>
 
-                </div>
-            }
+                    <!-- Corpo -->
+                    <div class="card-body p-3">
 
-        </div>
+                        <div class="mb-2">
+
+                            <strong>Descrição</strong>
+
+                            <div class="text-muted small">
+
+                                @(string.IsNullOrEmpty(item.Descricao)
+                                    ? "-"
+                                    : item.Descricao.Length > 50
+                                        ? item.Descricao.Substring(0, 50) + "..."
+                                        : item.Descricao)
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <strong>Vacinas</strong>
+
+                            <div class="text-muted small">
+
+                                @(string.IsNullOrEmpty(item.Vacinas)
+                                    ? "-"
+                                    : item.Vacinas.Length > 50
+                                        ? item.Vacinas.Substring(0, 50) + "..."
+                                        : item.Vacinas)
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-grid gap-1">
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.FichaSaudeId"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver
+                            </a>
+
+                            <a asp-action="Update"
+                               asp-route-id="@item.FichaSaudeId"
+                               class="btn btn-sm text-white"
+                               style="background:#2C5D7C;">
+                                Editar
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.FichaSaudeId"
+                               class="btn btn-sm btn-danger">
+                                Excluir
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
 
     </div>
 
