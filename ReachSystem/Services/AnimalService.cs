@@ -77,5 +77,10 @@ namespace ReachSystem.Services
             }
             return true;
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.Animais.CountAsync();
+        }
     }
 }

@@ -4,26 +4,41 @@
     ViewData["Title"] = "Animais";
 }
 
-<!-- TOPO -->
 <div class="topo">
     <h1 class="titulo">Animais Abrigados</h1>
 
-    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar animais..." />
+    <input type="text"
+           id="searchInput"
+           class="search-box"
+           placeholder="Pesquisar animais..." />
+
 </div>
 
-<!-- LINHA -->
 <div class="linha"></div>
 
-<!-- AÇÕES -->
 <div class="acoes">
-    <a asp-action="Create" class="btn-add">+ Adicionar</a>
+    <a asp-action="Create" class="btn-add">
+        + Adicionar
+    </a>
 </div>
 
-<!-- CARDS -->
 <div class="lista" id="listaAnimais">
     @foreach (var item in Model)
     {
-        <div class="card-animal item" data-nome="@item.Nome.ToLower()">
+        <div class="card-animal item"
+             data-nome="@item.Nome.ToLower()">
+
+            @if (!string.IsNullOrEmpty(item.Foto))
+            {
+                <img src="@item.Foto"
+                     class="foto-animal" />
+            }
+            else
+            {
+                <img src="/images/sem-foto.png"
+                     class="foto-animal" />
+            }
+
             <h3>@item.Nome</h3>
 
             <p><strong>ID:</strong> @item.AnimalId</p>
@@ -37,10 +52,12 @@
             </a>
         </div>
     }
+
 </div>
 
-<!-- EMPTY STATE -->
-<div id="emptyState" class="empty-state" style="display:none;">
+<div id="emptyState"
+     class="empty-state"
+     style="display:none;">
     <div class="icon">🔍</div>
     <h2>Nenhum animal encontrado</h2>
     <p>Tente pesquisar por outro nome.</p>
@@ -53,7 +70,6 @@
         background: #f8f9fb;
     }
 
-    /* TOPO */
     .topo {
         display: flex;
         align-items: center;
@@ -78,14 +94,12 @@
         outline: none;
     }
 
-    /* LINHA */
     .linha {
         width: 100%;
         height: 2px;
         background: #dcdcdc;
     }
 
-    /* BOTÃO */
     .acoes {
         display: flex;
         justify-content: flex-end;
@@ -106,19 +120,17 @@
             opacity: 0.9;
         }
 
-    /* GRID DE CARDS */
     .lista {
         padding: 0 60px;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
         gap: 20px;
     }
 
-    /* CARD */
     .card-animal {
         background: white;
-        padding: 20px;
         border-radius: 12px;
+        overflow: hidden;
         box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         transition: 0.2s;
     }
@@ -127,22 +139,41 @@
             transform: translateY(-5px);
         }
 
-        .card-animal h3 {
-            margin: 0;
-            color: #2c5d7c;
+    .foto-animal {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+    }
+
+    .card-animal h3 {
+        margin: 15px;
+        color: #2c5d7c;
+    }
+
+    .card-animal p {
+        margin: 8px 15px;
+        color: #555;
+    }
+
+    .btn-detalhes {
+        display: inline-block;
+        margin: 15px;
+        background: #2c5d7c;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-detalhes:hover {
+            opacity: 0.9;
         }
 
-        .card-animal p {
-            margin-top: 10px;
-            color: #555;
-        }
-
-    /* IMPORTANTE: NÃO QUEBRAR CARD */
     .item {
         display: block;
     }
 
-    /* EMPTY STATE */
     .empty-state {
         position: absolute;
         top: 55%;
@@ -156,31 +187,6 @@
             font-size: 50px;
             margin-bottom: 10px;
             opacity: 0.5;
-        }
-
-        .empty-state h2 {
-            margin: 10px 0 5px;
-            font-weight: 600;
-        }
-
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-    .btn-detalhes {
-        display: inline-block;
-        margin-top: 10px;
-        background: #2c5d7c;
-        color: white;
-        padding: 8px 14px;
-        border-radius: 8px;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-        .btn-detalhes:hover {
-            opacity: 0.9;
         }
 </style>
 
@@ -204,11 +210,8 @@
             } else {
                 item.style.display = "none";
             }
-
         });
 
-        if (emptyState) {
-            emptyState.style.display = encontrou ? "none" : "block";
-        }
+        emptyState.style.display = encontrou ? "none" : "block";
     });
 </script>

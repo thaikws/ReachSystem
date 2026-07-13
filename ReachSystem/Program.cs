@@ -11,8 +11,10 @@ builder.Services.AddScoped<ConsultaService>();
 builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<EventoService>();
-builder.Services.AddScoped <UsuarioService>();
+builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ParticipacaoService>();
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<AccountService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -26,6 +28,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ReachSystemDbContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+});
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -53,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())

@@ -1,84 +1,179 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
 @{
-    ViewData["Title"] = "Criar Consulta";
+    ViewData["Title"] = "Nova Consulta";
 }
 
-<div class="container-fluid mt-4">
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
+    }
 
-    <div class="row justify-content-center align-items-center"
-         style="min-height: calc(80vh - 180px);">
+    .page-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 160px);
+        padding: 40px;
+        box-sizing: border-box;
+    }
 
-        <div class="col-md-7">
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 100%;
+        max-width: 420px;
+        max-height: calc(100vh - 200px);
+        overflow: auto;
+    }
 
-            <div class="card shadow-sm">
+    h2 {
+        color: #2c5d7c;
+        margin-bottom: 20px;
+    }
 
-                <div class="card-header text-center">
-                    <strong>Criar nova consulta</strong>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #2c5d7c;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        box-sizing: border-box;
+    }
+
+    .btn {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background: #2c5d7c;
+        color: white;
+    }
+
+    .btn-back {
+        background: #ccc;
+        margin-left: 10px;
+    }
+
+    /* 🔥 PREVIEW (sem mudar layout geral) */
+    .animal-preview {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #f9fbfd;
+        border: 1px solid #e6edf5;
+    }
+
+        .animal-preview img {
+            width: 80px;
+            height: 120px; /* mais compacto pra caber no card pequeno */
+            object-fit: cover;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .animal-preview h5 {
+            margin: 0;
+            font-size: 14px;
+            color: #2c5d7c;
+        }
+
+        .animal-preview small {
+            color: #777;
+        }
+</style>
+
+<div class="page-container">
+    <div class="card">
+
+        <h2>Nova Consulta</h2>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- 🔥 PREVIEW -->
+            <div class="animal-preview">
+                <img id="animalPreview" />
+
+                <div>
+                    <h5 id="animalNome">Selecione um animal</h5>
+                    <small>Pré-visualização</small>
                 </div>
-
-                <div class="card-body">
-
-                    <form asp-action="Create" method="post" class="row g-3">
-
-                        @Html.AntiForgeryToken()
-
-                        <div class="col-12">
-
-                            <label class="form-label">Animal</label>
-
-                            <select name="AnimalId"
-                                    class="form-select"
-                                    asp-items="ViewBag.Animais">
-
-                                <option value="">-- Selecionar --</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <label class="form-label">Data e hora</label>
-
-                            <input name="Data"
-                                   type="datetime-local"
-                                   class="form-control" />
-
-                        </div>
-
-                        <div class="col-12">
-
-                            <label class="form-label">Descrição</label>
-
-                            <textarea name="Descricao"
-                                      class="form-control"
-                                      rows="5"></textarea>
-
-                        </div>
-
-                        <div class="col-12 d-flex justify-content-end mt-3">
-
-                            <button type="submit"
-                                    class="btn btn-primary">
-                                Salvar
-                            </button>
-
-                            <a asp-action="Index"
-                               class="btn btn-secondary ms-2">
-                                Cancelar
-                            </a>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
             </div>
 
-        </div>
+            <div class="form-group">
+                <label>Animal</label>
+
+                <select asp-for="AnimalId" id="animalSelect">
+                    <option value="">Selecione</option>
+
+                    @foreach (var animal in ViewBag.Animais)
+                    {
+                        <option value="@animal.AnimalId"
+                                data-foto="@animal.Foto"
+                                data-nome="@animal.Nome">
+                            @animal.Nome
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input asp-for="Data" type="datetime-local" />
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea asp-for="Descricao"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-save">Salvar</button>
+            <a asp-action="Index" class="btn btn-back">Voltar</a>
+        </form>
 
     </div>
-
 </div>
+
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
+    const nome = document.getElementById("animalNome");
+
+    select.addEventListener("change", function () {
+
+        const option = this.options[this.selectedIndex];
+
+        const foto = option.getAttribute("data-foto");
+        const nomeAnimal = option.getAttribute("data-nome");
+
+        nome.innerText = nomeAnimal ?? "Selecione um animal";
+
+        if (foto) {
+            preview.src = foto;
+            preview.style.display = "block";
+        } else {
+            preview.style.display = "none";
+        }
+    });
+</script>

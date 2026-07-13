@@ -1,45 +1,160 @@
 ﻿@model IEnumerable<ReachSystem.Models.FichaSaude>
 
-<h2>Fichas de Saúde</h2>
+<div style="background-color:#F4F7FB; min-height:100vh; padding:20px 0;">
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Nova Ficha de Saúde</a>
-</p>
+    <div class="container-fluid px-5 mt-5">
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>AnimalID</th>
-            <th>Descrição</th>
-            <th>Vacinas</th>
-            <th>Alergias</th>
-            <th>Doenças Pré-existentes</th>
-            <th>Medicamentos</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+  
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <tbody>
+        <div>
+            <h2 class="fw-bold mb-0" style="color:#2C5D7C;">
+                Dashboard - Fichas de Saúde
+            </h2>
+            <small class="text-muted">Visão geral dos registros</small>
+        </div>
+
+        <a asp-action="Create"
+           class="btn text-white rounded-3 shadow-sm"
+           style="background-color:#2C5D7C;">
+            + Nova Ficha
+        </a>
+
+    </div>
+
+  
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4"
+                 style="border-left: 5px solid #2C5D7C;">
+
+                <div class="card-body">
+                    <small class="text-muted">Total de Fichas</small>
+                    <h3 class="fw-bold mb-0" style="color:#2C5D7C;">
+                        @Model.Count()
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4"
+                 style="border-left: 5px solid #2C5D7C;">
+
+                <div class="card-body">
+                    <small class="text-muted">Registros</small>
+                    <h3 class="fw-bold mb-0" style="color:#2C5D7C;">
+                        @Model.Count()
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4"
+                 style="border-left: 5px solid #2C5D7C;">
+
+                <div class="card-body">
+                    <small class="text-muted">Último ID</small>
+                    <h3 class="fw-bold mb-0" style="color:#2C5D7C;">
+                        @(Model.OrderByDescending(x => x.FichaSaudeId)
+                          .FirstOrDefault()?.FichaSaudeId ?? 0)
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CARDS LISTA -->
+    <div class="row g-3">
+
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.FichaSaudeId</td>
-                <td>@item.AnimalId</td>
-                <td>@item.Descricao</td>
-                <td>@item.Vacinas</td>
-                <td>@item.Alergias</td>
-                <td>@item.DoencasPreExistentes</td>
-                <td>@item.Medicamentos</td>
+            <div class="col-md-4">
 
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.FichaSaudeId" class="btn btn-info btn-sm">Detalhes</a>
+                <div class="card border-0 shadow-sm rounded-4 h-100">
 
-                    <a asp-action="Update" asp-route-id="@item.FichaSaudeId" class="btn btn-warning btn-sm">Editar</a>
+                    <!-- topo colorido -->
+                    <div class="card-header text-white border-0"
+                         style="background-color:#2C5D7C; border-radius: 1rem 1rem 0 0;">
 
-                    <a asp-action="Delete" asp-route-id="@item.FichaSaudeId" class="btn btn-danger btn-sm">Excluir</a>
-                </td>
-            </tr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>Ficha #@item.FichaSaudeId</strong>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <img src="@item.Animal?.Foto"
+                                         style="width:45px;height:45px;border-radius:50%;object-fit:cover;"
+                                         onerror="this.style.display='none'" />
+
+                                    <div>
+                                        <strong>Ficha #@item.FichaSaudeId</strong>
+                                        <div style="font-size:12px;opacity:0.8;">
+                                            @item.Animal?.Nome
+                                        </div>
+                                    </div>
+
+                                </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <p class="mb-2">
+                            <strong style="color:#2C5D7C;">Descrição:</strong><br />
+                            <span class="text-muted">
+                                @(item.Descricao?.Length > 80
+                                    ? item.Descricao.Substring(0, 80) + "..."
+                                    : item.Descricao)
+                            </span>
+                        </p>
+
+                        <p class="mb-3">
+                            <strong style="color:#2C5D7C;">Vacinas:</strong><br />
+                            <span class="text-muted">
+                                @(item.Vacinas?.Length > 80
+                                    ? item.Vacinas.Substring(0, 80) + "..."
+                                    : item.Vacinas)
+                            </span>
+                        </p>
+
+                        <div class="d-flex gap-2">
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.FichaSaudeId"
+                               class="btn btn-outline-secondary btn-sm rounded-3 w-100">
+                                Ver
+                            </a>
+
+                            <a asp-action="Update"
+                               asp-route-id="@item.FichaSaudeId"
+                               class="btn btn-sm text-white rounded-3 w-100"
+                               style="background-color:#2C5D7C;">
+                                Editar
+                            </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.FichaSaudeId"
+                                   class="btn btn-sm text-white rounded-3 w-100"
+                                   style="background-color:#C72100;">
+                                    Excluir
+                                </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
         }
-    </tbody>
-</table>
+
+    </div>
+
+</div>
+</div>

@@ -1,10 +1,18 @@
 ﻿@using ReachSystem.Enums;
 @model ReachSystem.Models.Animal
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 <div class="box">
     <h1>Cadastrar Animal</h1>
 
-    <form asp-action="Create">
+    <form asp-action="Create" id="formAnimal" enctype="multipart/form-data">
+
+        <label>Foto do Animal</label>
+        <input type="hidden" id="imagemCortada" name="imagemCortada" />
+        <input type="file" name="fotoArquivo" id="inputImagem" accept="image/*" />
+        <div class="crop-container">
+            <img id="preview" style="max-width:100%; margin-top:10px; visibility:hidden;" />
+        </div>
 
         <label asp-for="Nome"></label>
         <input asp-for="Nome" />
@@ -94,5 +102,70 @@
         text-align: center;
         margin-top: 10px;
     }
+
+    .crop-container {
+        width: 300px;
+        height: 300px;
+        margin: 10px auto;
+        overflow: hidden;
+    }
+
+    #preview {
+        max-width: 100%;
+        display: block;
+    }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+<script>
+    let cropper;
+
+    const input = document.getElementById("inputImagem");
+    const preview = document.getElementById("preview");
+    const form = document.getElementById("formAnimal");
+
+    input.addEventListener("change", function (e) {
+
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+
+            preview.src = event.target.result;
+            preview.style.display = "block";
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(preview, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 1,
+                movable: true,
+                zoomable: true,
+                cropBoxResizable: true
+            });
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    form.addEventListener("submit", function () {
+
+        if (cropper) {
+
+            const canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            });
+
+            document.getElementById("imagemCortada").value =
+                canvas.toDataURL("image/jpeg");
+        }
+    });
+</script>

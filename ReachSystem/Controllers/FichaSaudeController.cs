@@ -10,10 +10,12 @@ namespace ReachSystem.Controllers
     {
 
         private readonly FichaSaudeService _fichaSaudeService;
+        private readonly AnimalService _animalService;
 
-        public FichaSaudeController(FichaSaudeService fichaSaudeService)
+        public FichaSaudeController(FichaSaudeService fichaSaudeService, AnimalService animalService)
         {
             _fichaSaudeService = fichaSaudeService;
+            _animalService = animalService;
         }
 
         public async Task<IActionResult> Index()
@@ -25,9 +27,15 @@ namespace ReachSystem.Controllers
         // GET: FichaSaude/Create
         [HttpGet]
         [Authorize(Roles = "Admin,Funcionario")]
-        public IActionResult Create(int animalId)
+        public async Task<IActionResult> Create(int? animalId)
         {
-            var ficha = new FichaSaude { AnimalId = animalId };
+            ViewBag.Animais = await _animalService.GetAllAnimalsAsync(); 
+            var ficha = new FichaSaude();
+
+            if (animalId.HasValue)
+            {
+                ficha.AnimalId = animalId.Value;
+            }
             return View(ficha);
         }
 
@@ -38,13 +46,11 @@ namespace ReachSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (fichaSaude.AnimalId <= 0)
-                {
-                    return BadRequest("Id do Animal inválido");
-                }
                 var novaFicha = await _fichaSaudeService.AddFichaSaudeAsync(fichaSaude);
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Animais = await _animalService.GetAllAnimalsAsync();
+
             return View(fichaSaude);
         }
 

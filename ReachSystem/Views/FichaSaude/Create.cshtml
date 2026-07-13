@@ -1,47 +1,137 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<h2>Nova Ficha de Saúde</h2>
+<style>
+    .animal-card {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 15px;
+    }
 
-<form asp-action="Create" method="post">
+    /* FOTO RETANGULAR (vertical) */
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #eee;
+    }
 
-    <input type="hidden" asp-for="AnimalId" />
+    .animal-info h5 {
+        margin: 0;
+        color: #2C5D7C;
+    }
 
-    <div class="mb-3">
-        <label class="form-label">Animal ID</label>
-        <input value="@Model.AnimalId" class="form-control" readonly />
+    .animal-info small {
+        color: #777;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <!-- HEADER -->
+        <div class="card-header text-white" style="background:#2C5D7C;">
+            <h4 class="mb-0">Ficha de Saúde</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <!-- CARD ANIMAL -->
+                <div class="animal-preview">
+
+                    <img id="animalPreview"
+                         class="animal-img"
+                         style="display:none;" src="https://via.placeholder.com/120x160"/>
+
+                    <div>
+                        <h5>Selecionar animal</h5>
+                        <small>Pré-Visualização</small>
+                    </div>
+
+                </div>
+
+                <!-- SELECT -->
+                <div class="mb-3">
+                    <label class="form-label">Animal</label>
+
+                    <select asp-for="AnimalId" class="form-select" id="animalSelect">
+
+                        <option value="">Selecione</option>
+
+                        @foreach (var animal in ViewBag.Animais)
+                        {
+                            <option value="@animal.AnimalId"
+                                    data-foto="@animal.Foto">
+                                @animal.Nome
+                            </option>
+                        }
+
+                    </select>
+                </div>
+
+                <!-- CAMPOS -->
+                <div class="mb-2">
+                    <textarea asp-for="Descricao" class="form-control" placeholder="Descrição"></textarea>
+                </div>
+
+                <div class="mb-2">
+                    <input asp-for="Vacinas" class="form-control" placeholder="Vacinas" />
+                </div>
+
+                <div class="mb-2">
+                    <input asp-for="Alergias" class="form-control" placeholder="Alergias" />
+                </div>
+
+                <div class="mb-2">
+                    <input asp-for="DoencasPreExistentes" class="form-control" placeholder="Doenças pré-existentes" />
+                </div>
+
+                <div class="mb-2">
+                    <textarea asp-for="Medicamentos" class="form-control" placeholder="Medicamentos"></textarea>
+                </div>
+
+                <!-- BOTÃO -->
+                <button type="submit"
+                        class="btn text-white mt-2"
+                        style="background:#2C5D7C;">
+                    Salvar
+                </button>
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary mt-2">
+                    Voltar
+                </a>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Descricao" class="form-label"></label>
-        <textarea asp-for="Descricao" class="form-control"></textarea>
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Vacinas" class="form-label"></label>
-        <input asp-for="Vacinas" class="form-control" />
-    </div>
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
 
-    <div class="mb-3">
-        <label asp-for="Alergias" class="form-label"></label>
-        <input asp-for="Alergias" class="form-control" />
-    </div>
+    select.addEventListener("change", function () {
 
-    <div class="mb-3">
-        <label asp-for="DoencasPreExistentes" class="form-label"></label>
-        <input asp-for="DoencasPreExistentes" class="form-control" />
-    </div>
+        const option = this.options[this.selectedIndex];
+        const foto = option.getAttribute("data-foto");
 
-    <div class="mb-3">
-        <label asp-for="Medicamentos" class="form-label"></label>
-        <textarea asp-for="Medicamentos" class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        Salvar
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Voltar
-    </a>
-
-</form>
+        if (foto && foto !== "") {
+            preview.src = foto;
+            preview.style.display = "block";
+        } else {
+            preview.src = "";
+            preview.style.display = "none";
+        }
+    });
+</script>

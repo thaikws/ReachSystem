@@ -7,5 +7,6 @@
         public string AnimalNome { get; set; } = string.Empty;
         public DateTime Data { get; set; }
         public string Descricao { get; set; } = string.Empty;
+        public string? AnimalFoto { get; set; }
     }
 }

@@ -4,14 +4,15 @@
     ViewData["Title"] = "Consultas";
 
     var consultasJson = System.Text.Json.JsonSerializer.Serialize(
-        Model.Select(c => new
-        {
-            c.ConsultaID,
-            c.AnimalNome,
-            c.Descricao,
-            Data = c.Data.ToString("yyyy-MM-ddTHH:mm:ss")
-        })
-    );
+    Model.Select(c => new
+    {
+        c.ConsultaID,
+        c.AnimalNome,
+        c.AnimalFoto,
+        c.Descricao,
+        Data = c.Data.ToString("yyyy-MM-ddTHH:mm:ss")
+    })
+);
 }
 
 <style>
@@ -165,6 +166,13 @@
         .btn-delete:hover {
             opacity: 0.85;
         }
+
+    .animal-img-sm {
+        width: 90px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
 </style>
 
 <div class="topbar">
@@ -273,26 +281,28 @@
         if (lista.length === 0) {
             html = "<p style='color:#777'>Nenhuma consulta</p>";
         } else {
-            lista.forEach(c => {
-                html += `
-                    <div class="consulta-item">
-                        <div class="animal">${c.AnimalNome}</div>
-                        <div class="desc">${c.Descricao}</div>
+                lista.forEach(c => {
+        html += `
+        <div class="consulta-item d-flex gap-3 align-items-center">
 
-                        <div>
-                            <a class="btn btn-edit"
-                               href="/Consulta/Update/${c.ConsultaID}">
-                               Editar
-                            </a>
+            <img src="${c.AnimalFoto ?? ''}"
+                 class="animal-img-sm"
+                 onerror="this.style.display='none'" />
 
-                            <a class="btn btn-delete"
-                               href="/Consulta/Delete/${c.ConsultaID}">
-                               Excluir
-                            </a>
-                        </div>
-                    </div>
-                `;
-            });
+            <div>
+                <div class="animal">${c.AnimalNome}</div>
+                <div class="desc">${c.Descricao}</div>
+
+                <div>
+                    <a class="btn btn-edit" href="/Consulta/Details/${c.ConsultaID}">Ver</a>
+                    <a class="btn btn-edit" href="/Consulta/Update/${c.ConsultaID}">Editar</a>
+                    <a class="btn btn-delete" href="/Consulta/Delete/${c.ConsultaID}">Excluir</a>
+                </div>
+            </div>
+
+        </div>
+        `;
+    });
         }
 
         document.getElementById("listaConsultas").innerHTML = html;
