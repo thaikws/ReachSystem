@@ -1,39 +1,259 @@
-﻿@{
+﻿@using ReachSystem.Models
+@{
     ViewData["Title"] = "Dashboard";
 }
 
-<h2>Dashboard</h2>
+<div class="dashboard">
 
-<div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
-
-    <div class="card">
-        <h3>Animais</h3>
-        <p>@ViewBag.TotalAnimais</p>
+    <div class="mb-4">
+        <h2 class="dashboard-title">
+            Bem-vindo(a), @User.Identity?.Name
+        </h2>
+        <p class="dashboard-subtitle">
+            Visão geral
+        </p>
     </div>
 
-    <div class="card">
-        <h3>Eventos</h3>
-        <p>@ViewBag.TotalEventos</p>
+    <!-- Cards de estatísticas -->
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <span class="stats-title">Animais</span>
+                <h2>@ViewBag.TotalAnimais</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <span class="stats-title">Eventos</span>
+                <h2>@ViewBag.TotalEventos</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <span class="stats-title">Fichas</span>
+                <h2>@ViewBag.TotalFichas</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <span class="stats-title">Usuários</span>
+                <h2>@ViewBag.TotalUsuarios</h2>
+            </div>
+        </div>
+
     </div>
 
-    <div class="card">
-        <h3>Fichas</h3>
-        <p>@ViewBag.TotalFichas</p>
-    </div>
+    <!-- Conteúdo inferior -->
 
-    <div class="card">
-        <h3>Usuários</h3>
-        <p>@ViewBag.TotalUsuarios</p>
+    <div class="row mt-4 g-4">
+
+        <div class="col-lg-5">
+            <div class="dashboard-card">
+                <h4>Últimos Cadastros</h4>
+
+                @foreach (var animal in (List<Animal>)ViewBag.UltimosAnimais)
+                {
+                    <div class="dashboard-item">
+
+                        @if (!string.IsNullOrEmpty(animal.Foto))
+                        {
+                            <img src="@animal.Foto"
+                                 alt="@animal.Nome"
+                                 class="animal-avatar" />
+                        }
+                        else
+                        {
+                            <div class="animal-icon">
+                                <i class="bi bi-heart-fill"></i>
+                            </div>
+                        }
+
+                        <div class="animal-info">
+                            <strong>@animal.Nome</strong>
+                            <small>@animal.Especie • @animal.Raca</small>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="dashboard-card">
+                <h4>Oq colocar aqui????</h4>
+            </div>
+        </div>
+
     </div>
 
 </div>
 
 <style>
-    .card {
-        padding: 20px;
-        border-radius: 10px;
-        background: #f5f5f5;
-        min-width: 150px;
-        text-align: center;
+body {
+    background: #F4F7FB;
+    color: #173746;
+}
+
+/* ---------- Título ---------- */
+
+.dashboard-title {
+    font-weight: 700;
+    color: #173746;
+    margin-bottom: 0;
+}
+
+.dashboard-subtitle {
+    color: #6c7b88;
+}
+
+/* ---------- Cards ---------- */
+
+.stats-card {
+
+    background: #FFF;
+    border: 1px solid #E6EDF5;
+    border-radius: 15px;
+
+    text-align: center;
+
+    padding: 22px;
+
+    transition: .2s;
+}
+
+.stats-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 10px 25px rgba(44,93,124,.10);
+}
+
+.stats-title {
+
+    color: #2C5D7C;
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.stats-card h2 {
+
+    margin-top: 10px;
+    margin-bottom: 0;
+
+    font-size: 2rem;
+    color: #173746;
+    font-weight: bold;
+}
+
+/* ---------- Card grande ---------- */
+
+.dashboard-card {
+
+    background: #FFF;
+
+    border: 1px solid #E6EDF5;
+
+    border-radius: 16px;
+
+    padding: 25px;
+
+    height: 100%;
+}
+
+.dashboard-card h4 {
+
+    color: #2C5D7C;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+/* ---------- Lista ---------- */
+
+.dashboard-item {
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #E6EDF5;
+
+    color: #23384A;
+}
+
+.dashboard-item:last-child {
+    border: none;
+}
+
+.dashboard-item i {
+
+    color: #1B6EC2;
+
+    margin-right: 10px;
+}
+
+.task-list {
+
+    margin: 0;
+    padding-left: 20px;
+}
+
+.task-list li {
+
+    margin-bottom: 12px;
+
+    color: #23384A;
+}
+
+    .dashboard-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #E6EDF5;
     }
+
+        .dashboard-item:last-child {
+            border-bottom: none;
+        }
+
+    .animal-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #E6EDF5;
+        flex-shrink: 0;
+    }
+
+    .animal-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #E6EDF5;
+        color: #2C5D7C;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .animal-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .animal-info strong {
+            color: #173746;
+            font-size: .95rem;
+        }
+
+        .animal-info small {
+            color: #6c7b88;
+            font-size: .8rem;
+        }
 </style>

@@ -20,7 +20,7 @@ namespace ReachSystem.Controllers
             ViewBag.TotalEventos = await _dashboardService.GetTotalEventos();
             ViewBag.TotalFichas = await _dashboardService.GetTotalFichas();
             ViewBag.TotalUsuarios = await _dashboardService.GetTotalUsuarios();
-
+            ViewBag.UltimosAnimais = await _dashboardService.GetUltimosAnimaisAsync();
             return View();
         }
     }
