@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReachSystem.Data;
 
@@ -11,9 +12,11 @@ using ReachSystem.Data;
 namespace ReachSystem.Data.Migrations
 {
     [DbContext(typeof(ReachSystemDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260713200604_AddParticipacao")]
+    partial class AddParticipacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,9 +175,6 @@ namespace ReachSystem.Data.Migrations
 
                     b.Property<string>("Especie")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Foto")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Idade")
@@ -375,9 +375,6 @@ namespace ReachSystem.Data.Migrations
                     b.Property<int>("EventoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -386,8 +383,7 @@ namespace ReachSystem.Data.Migrations
 
                     b.HasIndex("EventoId");
 
-                    b.HasIndex("UsuarioId", "EventoId")
-                        .IsUnique();
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Participacoes");
                 });

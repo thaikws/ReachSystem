@@ -12,6 +12,7 @@ builder.Services.AddScoped<FichaSaudeService>();
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ParticipacaoService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<AccountService>();
 
