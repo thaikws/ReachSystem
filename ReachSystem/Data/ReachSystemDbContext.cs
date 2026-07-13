@@ -53,6 +53,15 @@ namespace ReachSystem.Data
             modelBuilder.Entity<Animal>()
                 .Property(a => a.StatusAnimal)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<Participacao>()
+                .Property(p => p.Status)
+                .HasConversion<int>();
+
+            //Impede participação duplicada
+            modelBuilder.Entity<Participacao>()
+                .HasIndex(p => new { p.UsuarioId, p.EventoId })
+                .IsUnique();
         }
     }
 }

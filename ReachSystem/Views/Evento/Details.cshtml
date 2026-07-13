@@ -1,0 +1,67 @@
+﻿@model ReachSystem.Models.Evento
+
+@{
+    ViewData["Title"] = "Detalhes do Evento";
+
+    var participantes = ViewBag.Participantes as IEnumerable<ReachSystem.Models.ApplicationUser>;
+}
+
+<h2>Detalhes do Evento</h2>
+
+<hr />
+
+<p>
+    <strong>Nome:</strong>
+    @Model.Nome
+</p>
+
+<p>
+    <strong>Data:</strong>
+    @Model.Data.ToString("dd/MM/yyyy")
+</p>
+
+<p>
+    <strong>Local:</strong>
+    @Model.Local
+</p>
+
+<p>
+    <strong>Descrição:</strong><br />
+    @Model.Descricao
+</p>
+
+<hr />
+
+<form asp-action="Participar" method="post">
+    <input type="hidden" name="eventoId" value="@Model.EventoId" />
+    <button type="submit">
+        Participar
+    </button>
+</form>
+
+<br />
+
+<form asp-action="CancelarParticipacao" method="post">
+    <input type="hidden" name="eventoId" value="@Model.EventoId" />
+    <button type="submit">
+        Cancelar Participação
+    </button>
+</form>
+
+<hr />
+
+<h3>Participantes</h3>
+
+@if (participantes != null && participantes.Any())
+{
+        <ul>
+        @foreach (var participante in participantes)
+        {
+                    <li>@participante.Nome</li>
+        }
+        </ul>
+}
+else
+{
+        <p>Nenhum participante inscrito.</p>
+}
