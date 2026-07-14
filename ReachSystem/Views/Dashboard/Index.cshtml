@@ -3,57 +3,60 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="dashboard">
+<div class="mb-4">
+    <h2 class="dashboard-title">
+        Bem-vindo(a), @ViewBag.NomeUsuario!
+    </h2>
+    <p class="dashboard-subtitle">
+        Visão geral
+    </p>
+</div>
 
-    <div class="mb-4">
-        <h2 class="dashboard-title">
-            Bem-vindo(a), @User.Identity?.Name
-        </h2>
-        <p class="dashboard-subtitle">
-            Visão geral
-        </p>
+<!-- Cards de estatísticas -->
+<div class="row g-4">
+
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <span class="stats-title">Animais</span>
+            <h2>@ViewBag.TotalAnimais</h2>
+        </div>
     </div>
 
-    <!-- Cards de estatísticas -->
-    <div class="row g-4">
-
-        <div class="col-lg-3 col-md-6">
-            <div class="stats-card">
-                <span class="stats-title">Animais</span>
-                <h2>@ViewBag.TotalAnimais</h2>
-            </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <span class="stats-title">Eventos</span>
+            <h2>@ViewBag.TotalEventos</h2>
         </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="stats-card">
-                <span class="stats-title">Eventos</span>
-                <h2>@ViewBag.TotalEventos</h2>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="stats-card">
-                <span class="stats-title">Fichas</span>
-                <h2>@ViewBag.TotalFichas</h2>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="stats-card">
-                <span class="stats-title">Usuários</span>
-                <h2>@ViewBag.TotalUsuarios</h2>
-            </div>
-        </div>
-
     </div>
 
-    <!-- Conteúdo inferior -->
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <span class="stats-title">Fichas</span>
+            <h2>@ViewBag.TotalFichas</h2>
+        </div>
+    </div>
 
-    <div class="row mt-4 g-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <span class="stats-title">Usuários</span>
+            <h2>@ViewBag.TotalUsuarios</h2>
+        </div>
+    </div>
 
-        <div class="col-lg-5">
-            <div class="dashboard-card">
+</div>
+
+<!-- Conteúdo inferior -->
+<div class="row mt-4 g-4">
+
+    <!-- Últimos Cadastros -->
+    <div class="col-lg-6">
+        <div class="dashboard-card">
+
+            <div class="dashboard-header">
                 <h4>Últimos Cadastros</h4>
+            </div>
+
+            <div class="dashboard-body">
 
                 @foreach (var animal in (List<Animal>)ViewBag.UltimosAnimais)
                 {
@@ -79,15 +82,30 @@
 
                     </div>
                 }
-            </div>
-        </div>
 
-        <div class="col-lg-7">
-            <div class="dashboard-card">
-                <h4>Oq colocar aqui????</h4>
             </div>
-        </div>
 
+        </div>
+    </div>
+
+    <!-- Próximos Eventos -->
+    <div class="col-lg-6">
+        <div class="dashboard-card">
+
+            <div class="dashboard-header">
+                <h4>Próximos Eventos</h4>
+            </div>
+
+            <div class="dashboard-body">
+
+                <!-- Depois você troca por um foreach -->
+                <p class="text-muted mb-0">
+                    Nenhum evento cadastrado.
+                </p>
+
+            </div>
+
+        </div>
     </div>
 
 </div>
@@ -135,7 +153,7 @@ body {
 .stats-title {
 
     color: #2C5D7C;
-    font-size: .95rem;
+    font-size: 25px;
     font-weight: 600;
 }
 
@@ -151,18 +169,13 @@ body {
 
 /* ---------- Card grande ---------- */
 
-.dashboard-card {
-
-    background: #FFF;
-
-    border: 1px solid #E6EDF5;
-
-    border-radius: 16px;
-
-    padding: 25px;
-
-    height: 100%;
-}
+    .dashboard-card {
+        background: #FFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        overflow: hidden;
+        height: 100%;
+    }
 
 .dashboard-card h4 {
 
@@ -221,8 +234,8 @@ body {
         }
 
     .animal-avatar {
-        width: 42px;
-        height: 42px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #E6EDF5;
@@ -230,8 +243,8 @@ body {
     }
 
     .animal-icon {
-        width: 42px;
-        height: 42px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background: #E6EDF5;
         color: #2C5D7C;
@@ -256,4 +269,19 @@ body {
             color: #6c7b88;
             font-size: .8rem;
         }
+
+    .dashboard-header {
+        background: #2C5D7C;
+        padding: 16px 20px;
+    }
+
+        .dashboard-header h4 {
+            color: #FFF;
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .dashboard-body {
+        padding: 18px 20px;
+    }
 </style>
