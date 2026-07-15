@@ -25,6 +25,7 @@ namespace ReachSystem.Controllers
             ViewBag.TotalFichas = await _dashboardService.GetTotalFichas();
             ViewBag.TotalUsuarios = await _dashboardService.GetTotalUsuarios();
             ViewBag.UltimosAnimais = await _dashboardService.GetUltimosAnimaisAsync();
+            ViewBag.ProximosEventos = await _dashboardService.GetProximosEventosAsync();
 
             var usuario = await _userManager.GetUserAsync(User);
             ViewBag.NomeUsuario = usuario?.Nome;

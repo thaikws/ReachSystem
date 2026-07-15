@@ -41,5 +41,9 @@ namespace ReachSystem.Services
         {
             return await _animalService.GetUltimosAnimaisAsync();
         }
+        public async Task<List<Evento>> GetProximosEventosAsync()
+        {
+            return await _eventoService.GetProximosEventosAsync();
+        }
     }
 }

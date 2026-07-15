@@ -98,10 +98,32 @@
 
             <div class="dashboard-body">
 
-                <!-- Depois você troca por um foreach -->
-                <p class="text-muted mb-0">
-                    Nenhum evento cadastrado.
-                </p>
+                @if (ViewBag.ProximosEventos != null && ((List<Evento>)ViewBag.ProximosEventos).Any())
+                {
+                    foreach (var evento in (List<Evento>)ViewBag.ProximosEventos)
+                    {
+                        <div class="dashboard-item">
+
+                            <div class="animal-icon">
+                                <i class="bi bi-calendar-event"></i>
+                            </div>
+
+                            <div class="animal-info">
+                                <strong>@evento.Nome</strong>
+                                <small>
+                                    @evento.Data.ToString("dd/MM/yyyy")
+                                </small>
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted mb-0">
+                        Nenhum evento cadastrado.
+                    </p>
+                }
 
             </div>
 
