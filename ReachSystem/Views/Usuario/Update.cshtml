@@ -1,35 +1,93 @@
 ﻿@model ReachSystem.Models.ApplicationUser
 
-<h1>Atualizar Usuário</h1>
+<style>
+    body {
+        background: #F4F7FB !important;
+    }
+</style>
+<div class="container mt-4" style="max-width:900px;">
 
-<form asp-action="Update">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <input type="hidden" name="id" value="@Model.Id" />
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#173746;">
+                Atualizar Usuário
+            </h2>
 
-    <div>
-        <label>Nome</label>
-        <input type="text" name="nome" value="@Model.Nome" />
-    </div>
+            <p class="mb-0" style="color:#6C7A89;">
+                Edite as informações do usuário.
+            </p>
+        </div>
 
-    <div>
-        <label>Email</label>
-        <input type="email" name="email" value="@Model.Email" />
-    </div>
-    <div>
-        <label>Cargo</label>
-
-        <select name="role">
-
-            <option value="Admin">Admin</option>
-
-            <option value="Funcionario">Funcionário</option>
-
-            <option value="Voluntario">Voluntário</option>
-
-        </select>
+        <a asp-action="Index"
+           class="btn text-white rounded-3"
+           style="background:#2C5D7C;">
+            Voltar
+        </a>
 
     </div>
 
-    <button type="submit">Salvar</button>
-    <a asp-action="Index">Voltar</a>
-</form>
+    <!-- Card -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <form asp-action="Update">
+
+                <input asp-for="Id" type="hidden" />
+
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label fw-semibold"></label>
+
+                    <input asp-for="Nome"
+                           class="form-control rounded-3" />
+
+                    <span asp-validation-for="Nome"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+
+                    <input asp-for="Email"
+                           class="form-control rounded-3" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Cargo
+                    </label>
+
+                    <select class="form-select rounded-3">
+                        <option>Administrador</option>
+                        <option>Funcionário</option>
+                        <option>Voluntário</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary rounded-3">
+                        Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn text-white rounded-3"
+                            style="background:#2C5D7C;">
+                        Salvar Alterações
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
