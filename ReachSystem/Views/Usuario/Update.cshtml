@@ -93,14 +93,76 @@
                         <span asp-validation-for="Email"
                               class="text-danger"></span>
                     </div>
+                    <div class="form-section">
+
+                        <label>Nova Senha</label>
+
+                        <div class="position-relative">
+
+                            <input type="password"
+                                   id="novaSenha"
+                                   name="novaSenha"
+                                   class="form-control"
+                                   placeholder="Deixe vazio para manter a senha atual" />
+
+                            <button type="button"
+                                    class="btn position-absolute end-0 top-50 translate-middle-y me-2"
+                                    onclick="mostrarSenha('novaSenha')">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
 
                     <div class="form-section">
                         <label>Cargo</label>
 
-                        <select class="form-select">
-                            <option>Administrador</option>
-                            <option>Funcionário</option>
-                            <option>Voluntário</option>
+                        <select name="role" class="form-select">
+
+                            @if (ViewBag.Role == "Admin")
+                            {
+                                <option value="Admin" selected>
+                                    Administrador
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Admin">
+                                    Administrador
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Role == "Funcionario")
+                            {
+                                <option value="Funcionario" selected>
+                                    Funcionário
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Funcionario">
+                                    Funcionário
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Role == "Voluntario")
+                            {
+                                <option value="Voluntario" selected>
+                                    Voluntário
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Voluntario">
+                                    Voluntário
+                                </option>
+                            }
+
                         </select>
                     </div>
 
@@ -128,3 +190,29 @@
     </div>
 
 </div>
+<script>
+
+    function mostrarSenha(id) {
+
+        var input = document.getElementById(id);
+
+        var icon = event.currentTarget.querySelector("i");
+
+
+        if (input.type === "password") {
+
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>
