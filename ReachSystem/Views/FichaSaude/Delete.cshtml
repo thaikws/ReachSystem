@@ -1,40 +1,291 @@
 ﻿@model ReachSystem.Models.FichaSaude
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<div class="container mt-5" style="max-width: 800px;">
+<style>
+    body {
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
+    }
 
-    <div class="card shadow border-0 rounded-4">
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
 
-        <div class="card-header text-white rounded-4"
-             style="background-color:#8DB6D9;">
-            <h2 class="mb-0">Excluir Ficha de Saúde</h2>
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
+
+    .text-muted-custom {
+        color: #6C7A89;
+    }
+
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #D9534F;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    /* Card do Animal */
+
+    .animal-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 18px;
+        margin-bottom: 25px;
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 2px solid #E6EDF5;
+        background: #E6EDF5;
+    }
+
+    .animal-info h5 {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .animal-info small {
+        color: #6C7A89;
+    }
+
+    /* Alerta */
+
+    .alert-delete {
+        background: #FDECEC;
+        color: #D9534F;
+        border: 1px solid #F5C2C7;
+        border-radius: 12px;
+        padding: 15px;
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    /* Cards de informação */
+
+    .info-card {
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 12px;
+        padding: 15px;
+        height: 100%;
+    }
+
+        .info-card h6 {
+            color: #2C5D7C;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #173746;
+            white-space: pre-wrap;
+        }
+
+    /* Botões */
+
+    .btn-danger-custom {
+        background: #D9534F;
+        color: #FFFFFF;
+        border: none;
+    }
+
+        .btn-danger-custom:hover {
+            background: #C9302C;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: #FFFFFF;
+    }
+
+        .btn-outline-custom:hover {
+            background: #1B6EC2;
+            color: #FFFFFF;
+        }
+</style>
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h2 class="page-title">
+            Excluir Ficha de Saúde
+        </h2>
+
+        <small class="text-muted-custom">
+            Revise as informações antes de confirmar a exclusão.
+        </small>
+
+    </div>
+
+    <div class="card card-custom shadow-sm">
+
+        <!-- Cabeçalho -->
+
+        <div class="card-header card-header-custom">
+            <h4>Confirmação de Exclusão</h4>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4">
 
-            <div class="alert alert-danger rounded-3">
-                Tem certeza que deseja excluir esta ficha?
+            <div class="alert-delete">
+                ⚠ Esta ação é permanente e não poderá ser desfeita.
             </div>
 
-            <div class="mb-3"><strong>ID:</strong> @Model.FichaSaudeId</div>
-            <div class="mb-3"><strong>Animal ID:</strong> @Model.AnimalId</div>
-            <div class="mb-3"><strong>Descrição:</strong> @Model.Descricao</div>
-            <div class="mb-3"><strong>Vacinas:</strong> @Model.Vacinas</div>
-            <div class="mb-3"><strong>Alergias:</strong> @Model.Alergias</div>
-            <div class="mb-3"><strong>Doenças Pré-existentes:</strong> @Model.DoencasPreExistentes</div>
-            <div class="mb-3"><strong>Medicamentos:</strong> @Model.Medicamentos</div>
+            <!-- Animal -->
+
+            <div class="animal-card">
+
+                <img src="@Model.Animal?.Foto"
+                     class="animal-img"
+                     alt="@Model.Animal?.Nome"
+                     onerror="this.style.display='none'" />
+
+                <div class="animal-info">
+
+                    <h5>@Model.Animal?.Nome</h5>
+
+                    <small>
+                        Animal #@Model.AnimalId
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- Informações -->
+
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-6">
+
+                    <div class="info-card">
+
+                        <h6>Descrição</h6>
+
+                        <p>
+                            @(string.IsNullOrWhiteSpace(Model.Descricao)
+                                ? "Não informado."
+                                : Model.Descricao)
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="info-card">
+
+                        <h6>Vacinas</h6>
+
+                        <p>
+                            @(string.IsNullOrWhiteSpace(Model.Vacinas)
+                                ? "Não informado."
+                                : Model.Vacinas)
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="info-card">
+
+                        <h6>Alergias</h6>
+
+                        <p>
+                            @(string.IsNullOrWhiteSpace(Model.Alergias)
+                                ? "Não informado."
+                                : Model.Alergias)
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="info-card">
+
+                        <h6>Doenças Pré-existentes</h6>
+
+                        <p>
+                            @(string.IsNullOrWhiteSpace(Model.DoencasPreExistentes)
+                                ? "Não informado."
+                                : Model.DoencasPreExistentes)
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+
+                    <div class="info-card">
+
+                        <h6>Medicamentos</h6>
+
+                        <p>
+                            @(string.IsNullOrWhiteSpace(Model.Medicamentos)
+                                ? "Não informado."
+                                : Model.Medicamentos)
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Botões -->
 
             <form asp-action="Delete" method="post">
 
                 <input type="hidden" asp-for="FichaSaudeId" />
 
-                <button type="submit" class="btn btn-danger rounded-3">
-                    Confirmar Exclusão
-                </button>
+                <div class="d-flex gap-2">
 
-                <a asp-action="Index"
-                   class="btn btn-light border rounded-3">
-                    Cancelar
-                </a>
+                    <button type="submit"
+                            class="btn btn-danger-custom px-4">
+                        Confirmar Exclusão
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-custom px-4">
+                        Cancelar
+                    </a>
+
+                </div>
 
             </form>
 
