@@ -2,89 +2,119 @@
 
 <style>
     body {
-        background: #F4F7FB !important;
+        background: #F4F7FB;
+    }
+
+    .form-section {
+        margin-bottom: 22px;
+    }
+
+        .form-section label {
+            font-weight: 600;
+            color: #173746;
+            margin-bottom: 6px;
+        }
+
+    .form-control,
+    .form-select {
+        border-radius: 12px;
+        height: 48px;
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .card {
+        border-radius: 22px !important;
+        overflow: hidden;
     }
 </style>
-<div class="container mt-4" style="max-width:900px;">
 
-    <!-- Cabeçalho -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div style="background:#F4F7FB; min-height:100vh; padding:30px 0;">
 
-        <div>
-            <h2 class="fw-bold mb-1" style="color:#173746;">
+    <div class="container" style="max-width:1100px;">
+
+      
+        <div class="mb-4">
+            <h2 class="fw-bold" style="color:#173746;">
                 Atualizar Usuário
             </h2>
 
-            <p class="mb-0" style="color:#6C7A89;">
+            <p style="color:#6C7A89;">
                 Edite as informações do usuário.
             </p>
         </div>
 
-        <a asp-action="Index"
-           class="btn text-white rounded-3"
-           style="background:#2C5D7C;">
-            Voltar
-        </a>
+      
+        <div class="card shadow border-0">
 
-    </div>
+ 
+            <div class="card-header text-white py-3"
+                 style="background:#2C5D7C;">
 
-    <!-- Card -->
-    <div class="card border-0 shadow-sm rounded-4">
+                <h4 class="mb-0 fw-bold">
+                    Dados do Usuário
+                </h4>
 
-        <div class="card-body p-4">
+            </div>
 
-            <form asp-action="Update">
+            <div class="card-body p-5">
 
-                <input asp-for="Id" type="hidden" />
+                <form asp-action="Update">
 
-                <div class="mb-3">
-                    <label asp-for="Nome" class="form-label fw-semibold"></label>
+                    <input asp-for="Id" type="hidden" />
 
-                    <input asp-for="Nome"
-                           class="form-control rounded-3" />
+                  
+                    <div class="form-section">
+                        <label asp-for="Nome"></label>
 
-                    <span asp-validation-for="Nome"
-                          class="text-danger"></span>
-                </div>
+                        <input asp-for="Nome"
+                               class="form-control" />
 
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                        <span asp-validation-for="Nome"
+                              class="text-danger"></span>
+                    </div>
 
-                    <input asp-for="Email"
-                           class="form-control rounded-3" />
+                   
+                    <div class="form-section">
+                        <label asp-for="Email"></label>
 
-                    <span asp-validation-for="Email"
-                          class="text-danger"></span>
-                </div>
+                        <input asp-for="Email"
+                               class="form-control" />
 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">
-                        Cargo
-                    </label>
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
 
-                    <select class="form-select rounded-3">
-                        <option>Administrador</option>
-                        <option>Funcionário</option>
-                        <option>Voluntário</option>
-                    </select>
-                </div>
+                    <div class="form-section">
+                        <label>Cargo</label>
 
-                <div class="d-flex justify-content-end gap-2">
+                        <select class="form-select">
+                            <option>Administrador</option>
+                            <option>Funcionário</option>
+                            <option>Voluntário</option>
+                        </select>
+                    </div>
 
-                    <a asp-action="Index"
-                       class="btn btn-outline-secondary rounded-3">
-                        Cancelar
-                    </a>
+                    <div class="mt-5 d-flex gap-3">
 
-                    <button type="submit"
-                            class="btn text-white rounded-3"
-                            style="background:#2C5D7C;">
-                        Salvar Alterações
-                    </button>
+                        <button type="submit"
+                                class="btn text-white px-5 py-2"
+                                style="background:#2C5D7C;">
+                            Atualizar
+                        </button>
 
-                </div>
+                        <a asp-action="Index"
+                           class="btn btn-light border px-5 py-2">
+                            Voltar
+                        </a>
 
-            </form>
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 
