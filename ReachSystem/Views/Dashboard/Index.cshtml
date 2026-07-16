@@ -8,38 +8,65 @@
         Bem-vindo(a), @ViewBag.NomeUsuario!
     </h2>
     <p class="dashboard-subtitle">
-        Visão geral
+        Visão geral do sistema
     </p>
 </div>
 
 <!-- Cards de estatísticas -->
-<div class="row g-4">
+<div class="row g-3">
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-6 col-lg-3">
         <div class="stats-card">
-            <span class="stats-title">Animais</span>
+
+            <div class="stats-title">
+                <i class="fa-solid fa-paw"></i>
+                Animais
+            </div>
+
             <h2>@ViewBag.TotalAnimais</h2>
+
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+
+    <div class="col-6 col-lg-3">
         <div class="stats-card">
-            <span class="stats-title">Eventos</span>
+
+            <div class="stats-title">
+                <i class="bi bi-calendar-event"></i>
+                Eventos
+            </div>
+
             <h2>@ViewBag.TotalEventos</h2>
+
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+
+    <div class="col-6 col-lg-3">
         <div class="stats-card">
-            <span class="stats-title">Fichas</span>
+
+            <div class="stats-title">
+                <i class="bi bi-file-earmark-medical"></i>
+                Fichas
+            </div>
+
             <h2>@ViewBag.TotalFichas</h2>
+
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+
+    <div class="col-6 col-lg-3">
         <div class="stats-card">
-            <span class="stats-title">Usuários</span>
+
+            <div class="stats-title">
+                <i class="bi bi-people-fill"></i>
+                Usuários
+            </div>
+
             <h2>@ViewBag.TotalUsuarios</h2>
+
         </div>
     </div>
 
@@ -133,177 +160,209 @@
 </div>
 
 <style>
-body {
-    background: #F4F7FB;
-    color: #173746;
-}
+    body {
+        background: #F4F7FB;
+        color: #173746;
+    }
 
-/* ---------- Título ---------- */
 
-.dashboard-title {
-    font-weight: 700;
-    color: #173746;
-    margin-bottom: 0;
-}
+    /* ======================
+       TÍTULO
+    ====================== */
 
-.dashboard-subtitle {
-    color: #6c7b88;
-}
+    .dashboard-title {
+        font-weight: 700;
+        color: #173746;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        margin-top: 40px;
+    }
 
-/* ---------- Cards ---------- */
+    .dashboard-subtitle {
+        color: #6c7b88;
+        margin-bottom: 0;
+    }
 
-.stats-card {
 
-    background: #FFF;
-    border: 1px solid #E6EDF5;
-    border-radius: 15px;
+    /* ======================
+       CARDS ESTATÍSTICAS
+    ====================== */
 
-    text-align: center;
+    .stats-card {
+        background: white;
+        border: 1px solid #E6EDF5;
+        border-radius: 18px;
+        padding: 20px 15px;
+        text-align: center;
+        height: 100%;
+        transition: .2s;
+    }
 
-    padding: 22px;
 
-    transition: .2s;
-}
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(44,93,124,.12);
+        }
 
-.stats-card:hover {
 
-    transform: translateY(-4px);
+    .stats-title {
+        color: #2C5D7C;
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
 
-    box-shadow: 0 10px 25px rgba(44,93,124,.10);
-}
+        .stats-title i {
+            font-size: 1.1rem;
+        }
 
-.stats-title {
+    .stats-card h2 {
+        margin: 8px 0 0;
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: #173746;
+        font-weight: 700;
+    }
 
-    color: #2C5D7C;
-    font-size: 25px;
-    font-weight: 600;
-}
 
-.stats-card h2 {
-
-    margin-top: 10px;
-    margin-bottom: 0;
-
-    font-size: 2rem;
-    color: #173746;
-    font-weight: bold;
-}
-
-/* ---------- Card grande ---------- */
+    /* ======================
+       CARDS PRINCIPAIS
+    ====================== */
 
     .dashboard-card {
-        background: #FFF;
+        background: white;
         border: 1px solid #E6EDF5;
-        border-radius: 16px;
+        border-radius: 18px;
         overflow: hidden;
         height: 100%;
     }
 
-.dashboard-card h4 {
-
-    color: #2C5D7C;
-
-    font-weight: 700;
-
-    margin-bottom: 20px;
-}
-
-/* ---------- Lista ---------- */
-
-.dashboard-item {
-
-    padding: 10px 0;
-
-    border-bottom: 1px solid #E6EDF5;
-
-    color: #23384A;
-}
-
-.dashboard-item:last-child {
-    border: none;
-}
-
-.dashboard-item i {
-
-    color: #1B6EC2;
-
-    margin-right: 10px;
-}
-
-.task-list {
-
-    margin: 0;
-    padding-left: 20px;
-}
-
-.task-list li {
-
-    margin-bottom: 12px;
-
-    color: #23384A;
-}
-
-    .dashboard-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid #E6EDF5;
-    }
-
-        .dashboard-item:last-child {
-            border-bottom: none;
-        }
-
-    .animal-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #E6EDF5;
-        flex-shrink: 0;
-    }
-
-    .animal-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: #E6EDF5;
-        color: #2C5D7C;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-
-    .animal-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-        .animal-info strong {
-            color: #173746;
-            font-size: .95rem;
-        }
-
-        .animal-info small {
-            color: #6c7b88;
-            font-size: .8rem;
-        }
 
     .dashboard-header {
         background: #2C5D7C;
         padding: 16px 20px;
     }
 
+
         .dashboard-header h4 {
-            color: #FFF;
+            color: white;
             margin: 0;
             font-weight: 600;
+            font-size: 1.1rem;
         }
+
 
     .dashboard-body {
         padding: 18px 20px;
+    }
+
+
+    /* ======================
+       LISTAS
+    ====================== */
+
+    .dashboard-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid #E6EDF5;
+    }
+
+
+        .dashboard-item:last-child {
+            border-bottom: none;
+        }
+
+
+    .animal-avatar,
+    .animal-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+
+    .animal-avatar {
+        object-fit: cover;
+        border: 2px solid #E6EDF5;
+    }
+
+
+    .animal-icon {
+        background: #E6EDF5;
+        color: #2C5D7C;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .animal-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+        .animal-info strong {
+            color: #173746;
+            font-size: .95rem;
+        }
+
+
+        .animal-info small {
+            color: #6c7b88;
+            font-size: .8rem;
+        }
+
+
+
+    /* ======================
+       MOBILE
+    ====================== */
+
+    @@media(max-width:576px) {
+        .container
+
+    {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+
+    .dashboard-title {
+        font-size: 1.4rem;
+    }
+
+
+    .stats-card {
+        padding: 16px 10px;
+        border-radius: 15px;
+    }
+
+
+    .dashboard-header {
+        padding: 14px 16px;
+    }
+
+
+    .dashboard-body {
+        padding: 12px 16px;
+    }
+
+
+    .animal-avatar,
+    .animal-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .dashboard-item {
+        gap: 10px;
+    }
+
     }
 </style>
