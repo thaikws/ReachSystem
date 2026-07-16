@@ -135,5 +135,25 @@ namespace ReachSystem.Services
         {
             return await _userManager.Users.CountAsync();
         }
+
+        public async Task<IdentityResult> ChangePasswordAsync(string id, string novaSenha)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado.");
+            }
+
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+            return await _userManager.ResetPasswordAsync(
+                user,
+                token,
+                novaSenha
+            );
+        }
     }
 }
