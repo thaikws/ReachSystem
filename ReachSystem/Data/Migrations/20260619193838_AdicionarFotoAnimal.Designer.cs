@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReachSystem.Data;
 
@@ -11,9 +12,11 @@ using ReachSystem.Data;
 namespace ReachSystem.Data.Migrations
 {
     [DbContext(typeof(ReachSystemDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260619193838_AdicionarFotoAnimal")]
+    partial class AdicionarFotoAnimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,34 +367,6 @@ namespace ReachSystem.Data.Migrations
                     b.ToTable("FichasSaude");
                 });
 
-            modelBuilder.Entity("ReachSystem.Models.Participacao", b =>
-                {
-                    b.Property<int>("ParticipacaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParticipacaoId"));
-
-                    b.Property<int>("EventoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsuarioId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ParticipacaoId");
-
-                    b.HasIndex("EventoId");
-
-                    b.HasIndex("UsuarioId", "EventoId")
-                        .IsUnique();
-
-                    b.ToTable("Participacoes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -465,40 +440,11 @@ namespace ReachSystem.Data.Migrations
                     b.Navigation("Animal");
                 });
 
-            modelBuilder.Entity("ReachSystem.Models.Participacao", b =>
-                {
-                    b.HasOne("ReachSystem.Models.Evento", "Evento")
-                        .WithMany("Participacoes")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ReachSystem.Models.ApplicationUser", "Usuario")
-                        .WithMany("Participacoes")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Evento");
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("ReachSystem.Models.Animal", b =>
                 {
                     b.Navigation("Consultas");
 
                     b.Navigation("FichaSaude");
-                });
-
-            modelBuilder.Entity("ReachSystem.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Participacoes");
-                });
-
-            modelBuilder.Entity("ReachSystem.Models.Evento", b =>
-                {
-                    b.Navigation("Participacoes");
                 });
 #pragma warning restore 612, 618
         }

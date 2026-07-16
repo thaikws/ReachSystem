@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,60 +11,79 @@
     <link rel="stylesheet" href="~/ReachSystem.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm site-navbar">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ReachSystem</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Início</a>
-                    </li>
-
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Animal" asp-action="Index">Animais</a>
-                        </li>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ReachSystem</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Evento" asp-action="Index">Eventos</a>
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Home
+                            </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Consulta" asp-action="Index">Consultas</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="FichaSaude" asp-action="Index">Ficha de Saúde</a>
-                        </li>
-
-                        @if (User.IsInRole("Admin"))
+                        @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Usuario" asp-action="Index">Usuários</a>
+                                <a class="nav-link text-dark"
+                                   asp-controller="Animal"
+                                   asp-action="Index">
+                                    Animais
+                                </a>
                             </li>
-                        }
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Sobre</a>
-                        </li>
-                    }
-                </ul>
 
-                <ul class="navbar-nav ms-auto">
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                @User.Identity?.Name
-                            </a>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Evento"
+                                   asp-action="Index">
+                                    Eventos
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Consulta"
+                                   asp-action="Index">
+                                    Consultas
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="FichaSaude"
+                                   asp-action="Index">
+                                    Ficha de Saúde
+                                </a>
+                            </li>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Usuario"
+                                       asp-action="Index">
+                                        Usuários
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Home"
+                                   asp-action="Privacy">
+                                    Sobre
+                                </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                 <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Minha Conta</a></li>
                                 <li>
@@ -77,17 +97,23 @@
                             </ul>
                         </li>
                     }
-                    else
+                </ul>
+
+                <ul class="navbar-nav">
+
+                    @if (User.Identity?.IsAuthenticated == true)
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Entrar</a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
+                            </li>
+                        }
 
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

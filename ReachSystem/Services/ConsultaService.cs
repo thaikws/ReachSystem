@@ -14,7 +14,7 @@ namespace ReachSystem.Services
             _context = context;
         }
 
-        // Método Get para retornar as consultas com o Animal incluído
+        // LISTAR
         public async Task<List<ConsultaDto>> GetAllConsultasAsync()
         {
             return await _context.Consultas
@@ -24,13 +24,14 @@ namespace ReachSystem.Services
                     ConsultaID = c.ConsultaID,
                     AnimalId = c.AnimalId,
                     AnimalNome = c.Animal.Nome,
+                    AnimalFoto = c.Animal.Foto, // 👈 NOVO
                     Data = c.Data,
                     Descricao = c.Descricao
                 })
                 .ToListAsync();
         }
 
-        // Método Get por Id
+        // GET POR ID
         public async Task<ConsultaDto?> GetConsultaByIdAsync(int id)
         {
             return await _context.Consultas
@@ -41,13 +42,14 @@ namespace ReachSystem.Services
                     ConsultaID = c.ConsultaID,
                     AnimalId = c.AnimalId,
                     AnimalNome = c.Animal.Nome,
+                    AnimalFoto = c.Animal.Foto, // 👈 NOVO
                     Data = c.Data,
                     Descricao = c.Descricao
                 })
                 .FirstOrDefaultAsync();
         }
 
-        // Add
+        // ADD
         public async Task<Consulta> AddConsultaAsync(Consulta consulta)
         {
             var exists = await _context.Consultas
@@ -65,7 +67,7 @@ namespace ReachSystem.Services
             return consulta;
         }
 
-        // Update
+        // UPDATE
         public async Task<bool> UpdateConsultaAsync(Consulta consulta)
         {
             var existente = await _context.Consultas.FindAsync(consulta.ConsultaID);
@@ -81,7 +83,7 @@ namespace ReachSystem.Services
             return true;
         }
 
-        // Delete
+        // DELETE
         public async Task<bool> DeleteConsultaAsync(int id)
         {
             var consulta = await _context.Consultas.FindAsync(id);

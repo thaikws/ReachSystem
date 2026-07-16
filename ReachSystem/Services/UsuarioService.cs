@@ -130,5 +130,10 @@ namespace ReachSystem.Services
 
             await _userManager.DeleteAsync(user);
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await _userManager.Users.CountAsync();
+        }
     }
 }

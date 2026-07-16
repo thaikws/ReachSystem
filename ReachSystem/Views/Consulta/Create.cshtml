@@ -5,95 +5,175 @@
 }
 
 <style>
-
-    body { 
-        margin:0; 
-        font-family: Arial; 
-        background:#f4f7fb; 
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f4f7fb;
     }
 
-    .page-container { 
-        display:flex; 
-        align-items:center; 
-        justify-content:center; 
-        min-height:calc(100vh - 160px); 
-        padding:40px; 
-        box-sizing:border-box; 
+    .page-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 160px);
+        padding: 40px;
+        box-sizing: border-box;
     }
 
-    .card { background:#fff; 
-        padding:30px; 
-        border-radius:16px; 
-        box-shadow:0 4px 12px rgba(0,0,0,0.06); 
-        width:100%; 
-        max-width:420px; 
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 100%;
+        max-width: 420px;
+        max-height: calc(100vh - 200px);
+        overflow: auto;
     }
 
-    h2 { 
-        color:#2c5d7c; 
-        margin-bottom:20px; 
+    h2 {
+        color: #2c5d7c;
+        margin-bottom: 20px;
     }
 
-    .form-group { 
-        margin-bottom:15px; 
+    .form-group {
+        margin-bottom: 15px;
     }
 
-    label { 
-        font-weight:700; 
-        color:#2c5d7c; 
+    label {
+        font-weight: bold;
+        color: #2c5d7c;
     }
 
-    .btn-save { 
-        background:#2c5d7c; 
-        color:#fff; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        border:none; 
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        box-sizing: border-box;
     }
 
-    .btn-back { 
-        background:#ccc; 
-        color:#000; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        margin-left:10px; 
-        text-decoration:none; 
-        display:inline-block; 
+    .btn {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
     }
 
+    .btn-save {
+        background: #2c5d7c;
+        color: white;
+    }
+
+    .btn-back {
+        background: #ccc;
+        margin-left: 10px;
+    }
+
+    /* 🔥 PREVIEW (sem mudar layout geral) */
+    .animal-preview {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #f9fbfd;
+        border: 1px solid #e6edf5;
+    }
+
+        .animal-preview img {
+            width: 80px;
+            height: 120px; /* mais compacto pra caber no card pequeno */
+            object-fit: cover;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .animal-preview h5 {
+            margin: 0;
+            font-size: 14px;
+            color: #2c5d7c;
+        }
+
+        .animal-preview small {
+            color: #777;
+        }
 </style>
 
 <div class="page-container">
     <div class="card">
+
         <h2>Nova Consulta</h2>
 
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
 
+            <!-- 🔥 PREVIEW -->
+            <div class="animal-preview">
+                <img id="animalPreview" />
+
+                <div>
+                    <h5 id="animalNome">Selecione um animal</h5>
+                    <small>Pré-visualização</small>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Animal</label>
-                <select asp-for="AnimalId" asp-items="ViewBag.Animais" class="form-control">
-                    <option value="">-- Selecionar --</option>
+
+                <select asp-for="AnimalId" id="animalSelect">
+                    <option value="">Selecione</option>
+
+                    @foreach (var animal in ViewBag.Animais)
+                    {
+                        <option value="@animal.AnimalId"
+                                data-foto="@animal.Foto"
+                                data-nome="@animal.Nome">
+                            @animal.Nome
+                        </option>
+                    }
                 </select>
-                <span asp-validation-for="AnimalId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label>Data</label>
-                <input asp-for="Data" type="datetime-local" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                <input asp-for="Data" type="datetime-local" />
             </div>
 
             <div class="form-group">
                 <label>Descrição</label>
-                <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Descricao" class="text-danger"></span>
+                <textarea asp-for="Descricao"></textarea>
             </div>
 
-            <div class="d-flex justify-content-end">
-                <a asp-action="Index" class="btn-back">Voltar</a>
-                <button type="submit" class="btn-save ms-2">Salvar</button>
-            </div>
+            <button type="submit" class="btn btn-save">Salvar</button>
+            <a asp-action="Index" class="btn btn-back">Voltar</a>
         </form>
+
     </div>
 </div>
+
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
+    const nome = document.getElementById("animalNome");
+
+    select.addEventListener("change", function () {
+
+        const option = this.options[this.selectedIndex];
+
+        const foto = option.getAttribute("data-foto");
+        const nomeAnimal = option.getAttribute("data-nome");
+
+        nome.innerText = nomeAnimal ?? "Selecione um animal";
+
+        if (foto) {
+            preview.src = foto;
+            preview.style.display = "block";
+        } else {
+            preview.style.display = "none";
+        }
+    });
+</script>

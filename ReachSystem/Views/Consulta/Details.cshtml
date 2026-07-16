@@ -1,14 +1,63 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
-<h2>Detalhes da Consulta</h2>
+<div class="card shadow border-0 rounded-4">
 
-<hr />
+    <!-- HEADER -->
+    <div class="card-header text-white"
+         style="background-color:#2C5D7C;">
+        <h2 class="mb-0">Detalhes da Consulta</h2>
+    </div>
 
-<p><strong>ID Consulta:</strong> @Model.ConsultaID</p>
-<p><strong>ID Animal:</strong> @Model.AnimalId</p>
-<p><strong>Data:</strong> @Model.Data</p>
-<p><strong>Descrição:</strong> @Model.Descricao</p>
+    <div class="card-body">
 
-<hr />
+        <div class="row">
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            <!-- ESQUERDA -->
+            <div class="col-md-3">
+
+                <div class="animal-preview flex-column text-center">
+
+                    <img src="@Model.AnimalFoto"
+                         class="animal-img"
+                         style="width:120px;height:180px;object-fit:cover;border-radius:10px;" />
+
+                    <h5>@Model.AnimalNome</h5>
+                    <small>ID: @Model.AnimalId</small>
+
+                </div>
+
+            </div>
+
+            <!-- DIREITA -->
+            <div class="col-md-9">
+
+                <div class="border p-3 mb-3">
+                    <strong>Descrição</strong>
+                    <hr />
+                    @Model.Descricao
+                </div>
+
+                <div class="border p-3">
+                    <strong>Data</strong>
+                    <hr />
+                    @Model.Data
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOTÕES -->
+        <div class="mt-4 d-flex gap-2">
+
+            <a asp-action="Index"
+               class="btn text-white"
+               style="background-color:#2C5D7C;">
+                Voltar
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

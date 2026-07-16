@@ -1,83 +1,85 @@
-﻿using ReachSystem.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using ReachSystem.Data;
-using Microsoft.EntityFrameworkCore;
+using ReachSystem.Models;
 
 namespace ReachSystem.Services
 {
     public class FichaSaudeService
     {
-        // Injeção de dependência do DbContext
         private readonly ReachSystemDbContext _context;
+
         public FichaSaudeService(ReachSystemDbContext context)
         {
             _context = context;
         }
 
-        //Método Get
+        // LISTAR
         public async Task<IEnumerable<FichaSaude>> GetAllFichasSaudeAsync()
         {
-            return await _context.FichasSaude.Include(a => a.Animal).ToListAsync();
+            return await _context.FichasSaude
+                .Include(f => f.Animal)
+                .ToListAsync();
         }
 
-        //Método Get por Id
+        // GET POR ID
         public async Task<FichaSaude?> GetFichaSaudeByIdAsync(int id)
         {
-            return await _context.FichasSaude.Include(a => a.Animal).FirstOrDefaultAsync(a => a.FichaSaudeId == id);
+            return await _context.FichasSaude
+                .Include(f => f.Animal)
+                .FirstOrDefaultAsync(f => f.FichaSaudeId == id);
         }
 
-        //Método Add
+        // ADD
         public async Task<FichaSaude> AddFichaSaudeAsync(FichaSaude fichaSaude)
         {
             if (string.IsNullOrWhiteSpace(fichaSaude.Descricao))
-            {
                 throw new ArgumentException("Descrição é obrigatória!");
-            }
-            else
+
             if (fichaSaude.AnimalId <= 0)
-            {
                 throw new ArgumentException("Id do Animal inválido");
-            }
-            else
-            {
-                _context.FichasSaude.Add(fichaSaude);
-                await _context.SaveChangesAsync();
-            }
+
+            _context.FichasSaude.Add(fichaSaude);
+            await _context.SaveChangesAsync();
+
             return fichaSaude;
         }
 
-        //Método Update
+        // UPDATE
         public async Task<bool> UpdateFichaSaudeAsync(FichaSaude fichaSaude)
         {
-            var existente = await _context.FichasSaude.FindAsync(fichaSaude.FichaSaudeId);
+            var existente = await _context.FichasSaude
+                .FindAsync(fichaSaude.FichaSaudeId);
 
             if (existente == null)
                 return false;
-            else
-            {
-                existente.Descricao = fichaSaude.Descricao;
-                existente.Vacinas = fichaSaude.Vacinas;
-                existente.Alergias = fichaSaude.Alergias;
-                existente.DoencasPreExistentes = fichaSaude.DoencasPreExistentes;
-                existente.Medicamentos = fichaSaude.Medicamentos;
 
-            }
+            existente.Descricao = fichaSaude.Descricao;
+            existente.Vacinas = fichaSaude.Vacinas;
+            existente.Alergias = fichaSaude.Alergias;
+            existente.DoencasPreExistentes = fichaSaude.DoencasPreExistentes;
+            existente.Medicamentos = fichaSaude.Medicamentos;
+
             await _context.SaveChangesAsync();
             return true;
         }
 
-        //Método Delete
+        // DELETE
         public async Task<bool> DeleteFichaSaudeAsync(int id)
         {
             var ficha = await _context.FichasSaude.FindAsync(id);
 
             if (ficha == null)
                 return false;
-            else
-            {
-                _context.FichasSaude.Remove(ficha);
-                await _context.SaveChangesAsync();
-            }
+
+            _context.FichasSaude.Remove(ficha);
+            await _context.SaveChangesAsync();
+
             return true;
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.FichasSaude.CountAsync();
         }
     }
 }

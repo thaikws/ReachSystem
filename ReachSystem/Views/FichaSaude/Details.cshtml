@@ -1,63 +1,128 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<div class="container mt-5" style="max-width: 800px;">
+<div class="container">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header text-white rounded-4"
-             style="background-color:#8DB6D9;">
-
-            <h2 class="mb-0">
-                Ficha de Saúde
-            </h2>
-
+        <div class="card-header text-white"
+             style="background-color:#2C5D7C;">
+            <h2 class="mb-0">Ficha de Saúde</h2>
         </div>
 
         <div class="card-body">
 
-            <div class="mb-3">
-                <strong>ID:</strong> @Model.FichaSaudeId
+            <div class="row">
+
+                <!-- ESQUERDA -->
+                <div class="col-md-3">
+
+                    <div class="animal-preview flex-column text-center">
+
+                        <img src="@Model.Animal?.Foto"
+                             class="animal-img"
+                             style="width:120px;height:180px;" />
+
+                        <h5>@Model.Animal?.Nome</h5>
+                        <small>ID: @Model.AnimalId</small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DIREITA -->
+                <div class="col-md-9">
+
+                    <div class="row g-2">
+
+                        <div class="col-md-6">
+                            <div class="border p-3 h-100">
+                                <strong>Alergias</strong>
+                                <hr />
+                                @Model.Alergias
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="border p-3 h-100">
+                                <strong>Vacinação</strong>
+                                <hr />
+                                @Model.Vacinas
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="border p-3 h-100">
+                                <strong>Doenças</strong>
+                                <hr />
+                                @Model.DoencasPreExistentes
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="border p-3 h-100">
+                                <strong>Medicamentos</strong>
+                                <hr />
+                                @Model.Medicamentos
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="border p-3">
+                                <strong>Descrição</strong>
+                                <hr />
+                                @Model.Descricao
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="mb-3">
-                <strong>Animal ID:</strong> @Model.AnimalId
+            <div class="mt-4 d-flex gap-2">
+
+                <a asp-action="Index"
+                   class="btn text-white"
+                   style="background-color:#2C5D7C;">
+                    Ver Todas as Fichas
+                </a>
+
+                <a asp-controller="Animal"
+                   asp-action="Details"
+                   asp-route-id="@Model.AnimalId"
+                   class="btn btn-outline-secondary">
+                    Voltar para o Animal
+                </a>
+
             </div>
-
-            <div class="mb-3">
-                <strong>Descrição:</strong> @Model.Descricao
-            </div>
-
-            <div class="mb-3">
-                <strong>Vacinas:</strong> @Model.Vacinas
-            </div>
-
-            <div class="mb-3">
-                <strong>Alergias:</strong> @Model.Alergias
-            </div>
-
-            <div class="mb-3">
-                <strong>Doenças:</strong> @Model.DoencasPreExistentes
-            </div>
-
-            <div class="mb-3">
-                <strong>Medicamentos:</strong> @Model.Medicamentos
-            </div>
-
-            <a asp-controller="Animal"
-               asp-action="Details"
-               asp-route-id="@Model.AnimalId"
-               class="btn btn-light border rounded-3">
-                Voltar para o Animal
-            </a>
-
-            <a asp-action="Index"
-               class="btn text-white rounded-3"
-               style="background-color:#8DB6D9;">
-                Ver Todas as Fichas
-            </a>
 
         </div>
 
     </div>
 
 </div>
+<style>
+    .animal-card {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .animal-img {
+        width: 110px;
+        height: 150px; /* 🔥 vertical */
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .animal-info h5 {
+        margin: 0;
+        color: #2c5d7c;
+    }
+</style>

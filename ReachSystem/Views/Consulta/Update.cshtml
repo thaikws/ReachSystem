@@ -1,105 +1,109 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
-@{
-    ViewData["Title"] = "Editar Consulta";
-}
+<div class="container mt-4" style="max-width: 900px;">
 
-<style>
+    <div class="card shadow border-0 rounded-4">
 
-    body { 
-        margin:0; 
-        font-family: Arial; 
-        background:#f4f7fb; 
-    }
+        <!-- HEADER -->
+        <div class="card-header text-white"
+             style="background-color:#2C5D7C;">
+            <h4 class="mb-0">Editar Consulta</h4>
+        </div>
 
-    .page-container { 
-        display:flex; 
-        align-items:center; 
-        justify-content:center; 
-        min-height:calc(100vh - 160px); 
-        padding:40px; 
-        box-sizing:border-box; 
-    }
+        <div class="card-body">
 
-    .card { 
-        background:#fff; 
-        padding:30px; 
-        border-radius:16px; 
-        box-shadow:0 4px 12px rgba(0,0,0,0.06); 
-        width:100%; max-width:420px; 
-    }
+            <form asp-action="Update" asp-route-id="@Model.ConsultaID" method="post">
 
-    h2 { 
-        color:#2c5d7c; 
-        margin-bottom:20px; 
-    }
+                @Html.AntiForgeryToken()
 
-    .form-group { 
-        margin-bottom:15px; 
-    }
+                <input asp-for="ConsultaID" type="hidden" />
 
-    label { 
-        font-weight:700; 
-        color:#2c5d7c; 
-    }
+                <div class="row">
 
-    .btn-save { 
-        background:#2c5d7c; 
-        color:#fff; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        border:none; 
-    }
+                    <!-- ESQUERDA (ANIMAL) -->
+                    <div class="col-md-4">
 
-    .btn-back { 
-        background:#ccc; 
-        color:#000; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        margin-left:10px; 
-        text-decoration:none; 
-        display:inline-block; 
-    }
+                        <div class="animal-preview flex-column text-center">
 
-</style>
+                            <img src="@Model.AnimalFoto"
+                                 class="animal-img"
+                                 style="width:120px;height:180px;object-fit:cover;border-radius:10px;" />
 
-<div class="page-container">
-    <div class="card">
-        <h2>Editar Consulta</h2>
+                            <h5>@Model.AnimalNome</h5>
+                            <small>ID: @Model.AnimalId</small>
 
-        <form asp-action="Update" asp-route-id="@Model.ConsultaID" method="post">
-            @Html.AntiForgeryToken()
-            <input asp-for="ConsultaID" type="hidden" />
+                        </div>
 
-            <div class="form-group">
-                <label>Animal</label>
-                @if (ViewBag.Animais != null)
-                {
-                    <select asp-for="AnimalId" asp-items="ViewBag.Animais" class="form-control"></select>
-                }
-                else
-                {
-                    <select class="form-control"><option value="@Model.AnimalId" selected>@Model.AnimalNome</option></select>
-                }
-                <span asp-validation-for="AnimalId" class="text-danger"></span>
-            </div>
+                    </div>
 
-            <div class="form-group">
-                <label>Data</label>
-                <input asp-for="Data" type="datetime-local" class="form-control" value='@Model.Data.ToString("yyyy-MM-ddTHH:mm")' />
-                <span asp-validation-for="Data" class="text-danger"></span>
-            </div>
+                    <!-- DIREITA (FORM) -->
+                    <div class="col-md-8">
 
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea asp-for="Descricao" class="form-control" rows="4">@Model.Descricao</textarea>
-                <span asp-validation-for="Descricao" class="text-danger"></span>
-            </div>
+                        <!-- ANIMAL SELECT -->
+                        <div class="mb-3">
+                            <label class="form-label">Animal</label>
 
-            <div class="d-flex justify-content-end">
-                <a asp-action="Index" class="btn-back">Voltar</a>
-                <button type="submit" class="btn-save ms-2">Salvar</button>
-            </div>
-        </form>
+                            @if (ViewBag.Animais != null)
+                            {
+                                <select asp-for="AnimalId"
+                                        class="form-select"
+                                        asp-items="ViewBag.Animais">
+                                    <option value="">-- Selecionar --</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <select asp-for="AnimalId" class="form-select">
+                                    <option value="">-- Selecionar --</option>
+                                    <option value="@Model.AnimalId" selected>
+                                        @Model.AnimalNome
+                                    </option>
+                                </select>
+                            }
+                        </div>
+
+                        <!-- DATA -->
+                        <div class="mb-3">
+                            <label class="form-label">Data e hora</label>
+
+                            <input asp-for="Data"
+                                   type="datetime-local"
+                                   class="form-control"
+                                   value='@Model.Data.ToString("yyyy-MM-ddTHH:mm")' />
+                        </div>
+
+                        <!-- DESCRIÇÃO -->
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+
+                            <textarea asp-for="Descricao"
+                                      class="form-control"
+                                      rows="5">@Model.Descricao</textarea>
+                        </div>
+
+                        <!-- BOTÕES -->
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+
+                            <a asp-action="Index"
+                               class="btn btn-light border">
+                                Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn text-white"
+                                    style="background-color:#2C5D7C;">
+                                Salvar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
 </div>
