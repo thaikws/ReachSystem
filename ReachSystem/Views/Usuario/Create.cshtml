@@ -37,6 +37,65 @@
         border-radius: 22px !important;
         overflow: hidden;
     }
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+
+    @@media (max-width: 768px) {
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .card-body {
+            padding: 25px !important;
+        }
+
+        .card-header {
+            padding: 18px 22px !important;
+        }
+
+            .card-header h4 {
+                font-size: 1.15rem;
+            }
+
+        .form-section {
+            margin-bottom: 18px;
+        }
+
+        .form-control,
+        .form-select {
+            height: 50px;
+            font-size: .95rem;
+        }
+
+        .form-section label {
+            font-size: .95rem;
+        }
+        /* Botões */
+
+        .mt-5 {
+            margin-top: 2rem !important;
+        }
+
+            .mt-5.d-flex {
+                flex-direction: column;
+                gap: 12px !important;
+            }
+
+            .mt-5 .btn {
+                width: 100%;
+                padding: 13px 18px !important;
+            }
+        /* Botão do olho */
+
+        .position-relative .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+    }
 </style>
 
 <div style="background:#F4F7FB; min-height:100vh; padding:30px 0;">
