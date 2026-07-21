@@ -1,28 +1,177 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
 .site-navbar,
 .site-navbar a,
 .site-navbar .nav-link,
 .site-navbar .navbar-brand {
     color: #ffffff !important;
 }
+
+@media (max-width: 576px) {
+    .card {
+        padding: 20px;
+        max-width: 360px;
+    }
+}
+
+/* ===========================
+                   Navbar
+                =========================== */
+body {
+    font-family: "Public Sans", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Sora", sans-serif;
+}
+
+
+.navbar,
+.navbar * {
+    font-family: "Sora", sans-serif !important;
+}
+
+.navbar {
+    background-color: #2C5D7C;
+    padding: .35rem 1rem;
+    min-height: 52px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+/* Marca */
+
+.navbar-brand {
+    color: #fff !important;
+    font-size: 1rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.navbar form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+/* Links */
+
+.navbar-nav {
+    gap: .45rem;
+}
+
+.navbar .nav-link {
+    color: #fff !important;
+    font-size: .9rem;
+    line-height: 1.2;
+    padding: .45rem .75rem !important;
+    border-radius: 6px;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+    .navbar .nav-link:hover,
+    .navbar .nav-link:focus {
+        color: #E6F0F7 !important;
+        background: rgba(255,255,255,.10);
+    }
+
+/* Botão sair */
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    color: #fff !important;
+    font-size: .9rem;
+    line-height: 1.2;
+    padding: .45rem .75rem !important;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+    .logout-btn:hover {
+        color: #E6F0F7 !important;
+        background: rgba(255,255,255,.10);
+    }
+
+/* Ícones */
+
+.navbar .bi {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Botão hamburguer */
+
+.navbar-toggler {
+    border: 1px solid rgba(255,255,255,.35);
+    padding: .35rem .5rem;
+}
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* ===========================
+                   Mobile
+                =========================== */
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+        padding: .5rem .75rem;
+    }
+
+    .navbar-collapse {
+        margin-top: .75rem;
+    }
+
+    .navbar-nav {
+        gap: .15rem;
+    }
+
+    .navbar .nav-link,
+    .logout-btn {
+        width: 100%;
+        padding: .7rem 1rem !important;
+    }
+
+    .logout-btn {
+        justify-content: flex-start;
+    }
+
+    .navbar form {
+        width: 100%;
+        margin: 0;
+    }
+}
+

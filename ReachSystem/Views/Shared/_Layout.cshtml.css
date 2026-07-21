@@ -1,109 +1,166 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿/* Layout base */
+html, body {
+    background-color: #F4F7FB;
+    color: #173746;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  color: #0077cc;
-}
+/* Navbar: força a paleta primária (fundo azul), fonte Sora e tamanho reduzido */
+.navbar {
+    background-color: #2C5D7C !important;
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
-
-.site-navbar {
-    background: #2c5d7c;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    overflow: visible; /* permitir dropdowns fora do navbar */
-    position: relative; /* contexto para z-index */
+    padding-top: .35rem;
+    padding-bottom: .35rem;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    position: relative;
     z-index: 1050;
+    font-family: 'Sora', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 48px;
 }
 
-.site-navbar .navbar-brand {
-    color: #ffffff !important;
-    font-size: 1.25rem;
+.navbar,
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .btn,
+.navbar .btn-link,
+.navbar .dropdown-item,
+.navbar .bi {
+    color: #FFFFFF !important;
+}
+
+/* Marca (brand) */
+.navbar .navbar-brand {
     font-weight: 700;
-    line-height: 1;
-    padding-right: 1rem;
-}
-
-.site-navbar .nav-link {
-    color: #ffffff !important;
-    padding-top: .45rem;
-    padding-bottom: .45rem;
     font-size: 1rem;
-    line-height: 1.2;
+    line-height: 1;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    font-family: inherit;
 }
 
-.site-navbar .nav-link:hover {
+/* Links na navbar */
+.navbar .nav-link {
+    padding-top: .35rem;
+    padding-bottom: .35rem;
+    font-size: .88rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
     color: #e6f0f7 !important;
+    text-decoration: none;
     opacity: 0.95;
 }
 
-.site-navbar .container {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+/* Ícones na navbar */
+.navbar .bi {
+    vertical-align: -.125em;
+    font-size: 1rem;
 }
 
+/* Mantém itens da nav em uma linha; permite scroll horizontal se necessário */
+.navbar-nav {
+    flex-wrap: nowrap !important;
+    gap: .5rem;
+}
+
+.navbar-collapse {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Suaviza barra de scroll (opcional visual) */
+.navbar-collapse::-webkit-scrollbar {
+    height: 6px;
+}
+.navbar-collapse::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+}
+
+/* Botões principais e ações */
+.btn-primary {
+    color: #ffffff;
+    background-color: #1B6EC2;
+    border-color: #1861ac;
+}
+.btn-primary:hover {
+    background-color: #155da7;
+    border-color: #124f8f;
+}
+
+/* Links de destaque (accent) */
+a {
+    color: #1B6EC2;
+}
+a:hover {
+    color: #155da7;
+}
+
+/* Danger */
+.btn-danger {
+    background-color: #D9534F;
+    border-color: #b5433f;
+    color: #fff;
+}
+
+/* Bordas e elementos sutis */
+.border-top {
+    border-top: 1px solid #E6EDF5;
+}
+.border-bottom {
+    border-bottom: 1px solid #E6EDF5;
+}
+
+/* Card */
+.card {
+    background: #FFFFFF;
+    border: 1px solid #E6EDF5;
+}
+
+/* Footer fix minimal */
+.footer {
+    width: 100%;
+    line-height: 60px;
+    position: absolute;
+    bottom: 0;
+}
+
+/* Outros utilitários já existentes no projeto */
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+/* Dropdown z-index para evitar clipping */
 .dropdown-menu {
     z-index: 2050 !important;
 }
 
-.dropdown-item i.bi {
+/* Ícones dentro de dropdowns/alinhamento */
+.dropdown-item i.bi,
+.navbar .bi {
     vertical-align: -.125em;
 }
 
+/* Títulos de página */
 main[role="main"] h1,
 main[role="main"] .page-title {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #2c5d7c;
+    color: #2C5D7C;
     margin-bottom: 1rem;
 }
 
+/* Mantém scrollbar vertical sempre visível para evitar "jump" de layout */
 html {
     overflow-y: scroll;
 }
-
-

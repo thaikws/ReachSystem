@@ -1,35 +1,300 @@
 ﻿@model ReachSystem.Models.ApplicationUser
 
-<h1>Atualizar Usuário</h1>
+<style>
+    body {
+        background: #F4F7FB;
+    }
 
-<form asp-action="Update">
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
 
-    <input type="hidden" name="id" value="@Model.Id" />
+    .form-section {
+        margin-bottom: 22px;
+    }
 
-    <div>
-        <label>Nome</label>
-        <input type="text" name="nome" value="@Model.Nome" />
+        .form-section label {
+            font-weight: 600;
+            color: #173746;
+            margin-bottom: 6px;
+        }
+
+    .form-control,
+    .form-select {
+        border-radius: 12px;
+        height: 48px;
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .card {
+        border-radius: 22px !important;
+        overflow: hidden;
+    }
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+
+    @@media (max-width:768px) {
+        /* Container */
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        /* Card */
+
+        .card {
+            border-radius: 18px !important;
+        }
+
+        .card-header {
+            padding: 18px 22px !important;
+        }
+
+            .card-header h4 {
+                font-size: 1.15rem;
+            }
+
+        .card-body {
+            padding: 25px !important;
+        }
+        /* Formulário */
+
+        .form-section {
+            margin-bottom: 18px;
+        }
+
+            .form-section label {
+                display: block;
+                font-size: .95rem;
+                margin-bottom: 8px;
+            }
+
+        .form-control,
+        .form-select {
+            height: 50px;
+            font-size: .95rem;
+        }
+
+            .form-control::placeholder {
+                font-size: .85rem;
+                color: #8B97A3;
+            }
+        /* Botão do olho */
+
+        .position-relative .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #6C7A89;
+        }
+
+            .position-relative .btn:hover {
+                background: transparent;
+                color: #2C5D7C;
+            }
+
+            .position-relative .btn:focus {
+                box-shadow: none;
+            }
+        /* Botões */
+
+        .mt-5 {
+            margin-top: 2rem !important;
+        }
+
+            .mt-5.d-flex {
+                flex-direction: column;
+                gap: 12px !important;
+            }
+
+            .mt-5 .btn {
+                width: 100%;
+                padding: 13px 18px !important;
+            }
+    }
+</style>
+
+<div style="background:#F4F7FB; min-height:100vh; padding:30px 0;">
+
+    <div class="container" style="max-width:1100px;">
+
+      
+        <div class="mb-4">
+            <h2 class="fw-bold" style="color:#173746;">
+                Atualizar Usuário
+            </h2>
+
+            <p style="color:#6C7A89;">
+                Edite as informações do usuário.
+            </p>
+        </div>
+
+      
+        <div class="card shadow border-0">
+
+ 
+            <div class="card-header text-white py-3"
+                 style="background:#2C5D7C;">
+
+                <h4 class="mb-0 fw-bold">
+                    Dados do Usuário
+                </h4>
+
+            </div>
+
+            <div class="card-body p-5">
+
+                <form asp-action="Update">
+
+                    <input asp-for="Id" type="hidden" />
+
+                  
+                    <div class="form-section">
+                        <label asp-for="Nome"></label>
+
+                        <input asp-for="Nome"
+                               class="form-control" />
+
+                        <span asp-validation-for="Nome"
+                              class="text-danger"></span>
+                    </div>
+
+                   
+                    <div class="form-section">
+                        <label asp-for="Email"></label>
+
+                        <input asp-for="Email"
+                               class="form-control" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+                    <div class="form-section">
+
+                        <label>Nova Senha</label>
+
+                        <div class="position-relative">
+
+                            <input type="password"
+                                   id="novaSenha"
+                                   name="novaSenha"
+                                   class="form-control"
+                                   placeholder="Deixe vazio para manter a senha atual" />
+
+                            <button type="button"
+                                    class="btn position-absolute end-0 top-50 translate-middle-y me-2"
+                                    onclick="mostrarSenha('novaSenha')">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-section">
+                        <label>Cargo</label>
+
+                        <select name="role" class="form-select">
+
+                            @if (ViewBag.Role == "Admin")
+                            {
+                                <option value="Admin" selected>
+                                    Administrador
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Admin">
+                                    Administrador
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Role == "Funcionario")
+                            {
+                                <option value="Funcionario" selected>
+                                    Funcionário
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Funcionario">
+                                    Funcionário
+                                </option>
+                            }
+
+
+                            @if (ViewBag.Role == "Voluntario")
+                            {
+                                <option value="Voluntario" selected>
+                                    Voluntário
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Voluntario">
+                                    Voluntário
+                                </option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="mt-5 d-flex gap-3">
+
+                        <button type="submit"
+                                class="btn text-white px-5 py-2"
+                                style="background:#2C5D7C;">
+                            Atualizar
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-light border px-5 py-2">
+                            Voltar
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div>
-        <label>Email</label>
-        <input type="email" name="email" value="@Model.Email" />
-    </div>
-    <div>
-        <label>Cargo</label>
+</div>
+<script>
 
-        <select name="role">
+    function mostrarSenha(id) {
 
-            <option value="Admin">Admin</option>
+        var input = document.getElementById(id);
 
-            <option value="Funcionario">Funcionário</option>
+        var icon = event.currentTarget.querySelector("i");
 
-            <option value="Voluntario">Voluntário</option>
 
-        </select>
+        if (input.type === "password") {
 
-    </div>
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
 
-    <button type="submit">Salvar</button>
-    <a asp-action="Index">Voltar</a>
-</form>
+        } else {
+
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>

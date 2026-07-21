@@ -1,1 +1,115 @@
-﻿<h1>Update Form</h1>
+﻿    @model ReachSystem.Models.Evento
+
+@{
+    ViewData["Title"] = "Editar Evento";
+}
+
+<style>
+
+    body { 
+        margin:0; 
+        font-family: Arial; 
+        background:#f4f7fb; 
+    }
+
+    .page-container { 
+        display:flex; 
+        align-items:center; 
+        justify-content:center; 
+        min-height:calc(100vh - 160px); 
+        padding:40px; 
+        box-sizing:border-box; 
+    }
+
+    .card { 
+        background:#fff; 
+        padding:30px; 
+        border-radius:16px; 
+        box-shadow:0 4px 12px rgba(0,0,0,0.06); 
+        width:100%; 
+        max-width:420px; 
+    }
+
+    h2 { 
+        color:#2c5d7c; 
+        margin-bottom:20px; 
+    }
+
+    .form-group { 
+        margin-bottom:15px; 
+    }
+
+    label { 
+        font-weight:700; 
+        color:#2c5d7c; 
+        display:block; 
+        margin-bottom:6px; 
+    }
+
+    input.form-control, textarea.form-control { 
+        width:100%; 
+        padding:8px; 
+        border-radius:8px; 
+        border:1px solid #ccc; 
+        box-sizing:border-box; 
+    }
+
+    .btn-save { 
+        background:#2c5d7c; 
+        color:#fff; 
+        border-radius:8px; 
+        padding:8px 14px; 
+        border:none; 
+    }
+
+    .btn-back { 
+        background:#ccc; 
+        color:#000; 
+        border-radius:8px; 
+        padding:8px 14px; 
+        margin-left:10px; 
+        text-decoration:none; 
+        display:inline-block; 
+    }
+
+</style>
+
+<div class="page-container">
+    <div class="card">
+        <h2>Editar Evento</h2>
+
+        <form asp-action="Update" asp-route-id="@Model.EventoId" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="EventoId" type="hidden" />
+
+            <div class="form-group">
+                <label asp-for="Nome">Nome</label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Data">Data</label>
+                <input asp-for="Data" type="datetime-local" class="form-control" value='@Model.Data.ToString("yyyy-MM-ddTHH:mm")' />
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Local">Local</label>
+                <input asp-for="Local" class="form-control" />
+                <span asp-validation-for="Local" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Descricao">Descrição</label>
+                <textarea asp-for="Descricao" class="form-control" rows="4">@Model.Descricao</textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a asp-action="Index" class="btn-back">Voltar</a>
+                <button type="submit" class="btn-save ms-2">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>

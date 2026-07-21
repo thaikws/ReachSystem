@@ -67,13 +67,34 @@ namespace ReachSystem.Controllers
         //post update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(string id, string nome, string email, string role)
+        public async Task<IActionResult> Update(string id, string nome, string email, string role, string novaSenha)
         {
             var result = await _usuarioService.UpdateUserAsync(id, nome, email);
 
             if (result.Succeeded)
             {
                 await _usuarioService.ChangeRoleAsync(id, role);
+
+                if (!string.IsNullOrWhiteSpace(novaSenha))
+                {
+                    var passwordResult = await _usuarioService.ChangePasswordAsync(id, novaSenha);
+
+
+                    if (!passwordResult.Succeeded)
+                    {
+                        foreach (var error in passwordResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+
+
+                        var user = await _usuarioService.GetUserByIdAsync(id);
+
+                        return View(user);
+                    }
+                    TempData["Sucesso"] = "Senha alterada com sucesso!";
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
