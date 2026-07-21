@@ -1,93 +1,125 @@
 ﻿@model ReachSystem.Models.Animal
 
-<div class="box">
-    <h1>Cadastrar Animal</h1>
+@{
+    ViewData["Title"] = "Novo Animal";
+}
 
-    <form asp-action="Create">
+<div class="container">
+    <div class="card">
+        <h2>Cadastrar Animal</h2>
 
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
+        <form asp-action="Create">
 
-        <label asp-for="Especie"></label>
-        <input asp-for="Especie" />
+            <div class="form-group">
+                <label asp-for="Nome"></label>
+                <input asp-for="Nome" />
+            </div>
 
-        <label asp-for="Raca"></label>
-        <input asp-for="Raca" />
+            <div class="form-group">
+                <label asp-for="Especie"></label>
+                <input asp-for="Especie" />
+            </div>
 
-        <label asp-for="Idade"></label>
-        <input asp-for="Idade" />
+            <div class="form-group">
+                <label asp-for="Raca"></label>
+                <input asp-for="Raca" />
+            </div>
 
-        <label asp-for="Porte"></label>
-        <input asp-for="Porte" />
+            <div class="form-group">
+                <label asp-for="Idade"></label>
+                <input asp-for="Idade" />
+            </div>
 
-        <label asp-for="SexoAnimal"></label>
-        <input asp-for="SexoAnimal" />
+            <div class="form-group">
+                <label asp-for="Porte"></label>
+                <input asp-for="Porte" />
+            </div>
 
-        <label asp-for="StatusAnimal"></label>
-        <input asp-for="StatusAnimal" />
+            <div class="form-group">
+                <label asp-for="SexoAnimal"></label>
+                <input asp-for="SexoAnimal" />
+            </div>
 
-        <label asp-for="DataDeEntrada"></label>
-        <input asp-for="DataDeEntrada" />
+            <div class="form-group">
+                <label asp-for="StatusAnimal"></label>
+                <input asp-for="StatusAnimal" />
+            </div>
 
-        <button type="submit">Salvar</button>
-    </form>
+            <div class="form-group">
+                <label asp-for="DataDeEntrada"></label>
+                <input asp-for="DataDeEntrada" type="date" />
+            </div>
 
-    <a asp-action="Index">Voltar</a>
+            <button type="submit" class="btn btn-save">Salvar</button>
+            <a asp-action="Index" class="btn btn-back">Voltar</a>
+
+        </form>
+    </div>
 </div>
 
-<style>
+            <style>
     body {
+        margin: 0;
         font-family: Arial;
-        background-color: #f4f6f9;
+        background: #f4f7fb;
     }
 
-    .box {
+    .container {
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .card {
         background: white;
-        padding: 25px;
-        margin: 40px auto;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        width: 400px;
     }
 
-    h1 {
-        text-align: center;
+    h2 {
+        color: #2c5d7c;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
     }
 
     label {
         font-weight: bold;
-        display: block;
-        margin-top: 10px;
+        color: #2c5d7c;
     }
 
     input {
         width: 100%;
         padding: 8px;
-        margin-top: 5px;
-        border-radius: 6px;
+        border-radius: 8px;
         border: 1px solid #ccc;
+        margin-top: 5px;
     }
 
-    button {
-        width: 100%;
+    .btn {
         margin-top: 15px;
         padding: 10px;
+        border-radius: 10px;
         border: none;
-        border-radius: 6px;
-        background: #007bff;
-        color: white;
-        font-weight: bold;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
     }
 
-        button:hover {
-            background: #0056b3;
-        }
+    .btn-save {
+        background: #2c5d7c;
+        color: white;
+        width: 100%;
+    }
 
-    a {
-        display: block;
-        text-align: center;
+    .btn-back {
+        background: #ccc;
         margin-top: 10px;
+        width: 100%;
     }
 </style>
-
