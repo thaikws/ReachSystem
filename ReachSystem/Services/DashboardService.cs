@@ -36,5 +36,14 @@ namespace ReachSystem.Services
 
         public async Task<int> GetTotalUsuarios()
             => _userManager.Users.Count();
+
+        public async Task<List<Animal>> GetUltimosAnimaisAsync()
+        {
+            return await _animalService.GetUltimosAnimaisAsync();
+        }
+        public async Task<List<Evento>> GetProximosEventosAsync()
+        {
+            return await _eventoService.GetProximosEventosAsync();
+        }
     }
 }

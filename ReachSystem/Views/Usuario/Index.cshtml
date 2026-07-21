@@ -4,10 +4,6 @@
     ViewData["Title"] = "Usuários";
 }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
 
     body {
@@ -190,7 +186,177 @@
         .table tbody tr.selected:hover {
             background: #EAF3FC !important;
         }
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+    .mobile-select-all {
+        display: none;
+    }
 
+    @@media (max-width: 768px) {
+        /* ---------- Cabeçalho ---------- */
+
+        .top-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 15px;
+        }
+
+        .mobile-select-all {
+            display: block;
+            background: #fff;
+            padding: 15px 18px;
+            margin-bottom: 15px;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0,0,0,.06);
+        }
+
+            .mobile-select-all label {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-weight: 600;
+                color: #173746;
+                cursor: pointer;
+                margin: 0;
+            }
+        .btn-create {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 15px;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .selected-info {
+            text-align: center;
+        }
+        /* ---------- Tabela ---------- */
+
+        .table-container {
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        table,
+        thead,
+        tbody {
+            display: block;
+        }
+
+        thead {
+            display: none;
+        }
+
+        tbody tr {
+            display: block;
+            background: #fff;
+            border-radius: 18px;
+            margin-bottom: 18px;
+            padding: 18px;
+            box-shadow: 0 5px 18px rgba(0,0,0,.06);
+        }
+
+            tbody tr:hover {
+                background: #fff;
+            }
+
+        tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border: none;
+            border-bottom: 1px solid #EDF2F7;
+        }
+
+            tbody td:last-child {
+                border-bottom: none;
+            }
+
+            tbody td::before {
+                font-weight: 700;
+                color: #173746;
+                flex-shrink: 0;
+                margin-right: 20px;
+            }
+            /* ---------- Labels ---------- */
+
+            tbody td:nth-child(1)::before {
+                content: "Selecionar";
+            }
+
+            tbody td:nth-child(2)::before {
+                content: "Nome";
+            }
+
+            tbody td:nth-child(3)::before {
+                content: "Email";
+            }
+
+            tbody td:nth-child(4)::before {
+                content: "Cargo";
+            }
+
+            tbody td:nth-child(5)::before {
+                content: "Ações";
+            }
+            /* ---------- Texto ---------- */
+
+            tbody td:nth-child(2) {
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: #173746;
+            }
+
+            tbody td:nth-child(3) {
+                font-size: .92rem;
+                color: #6C7A89;
+                word-break: break-word;
+                text-align: right;
+            }
+        /* ---------- Cargo ---------- */
+
+        .role-badge {
+            font-size: .8rem;
+        }
+        /* ---------- Ações ---------- */
+
+        tbody td:nth-child(5) {
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 42px;
+            height: 42px;
+            margin: 0;
+            border-radius: 10px;
+        }
+        /* ---------- Checkbox ---------- */
+
+        input[type=checkbox] {
+            width: 20px;
+            height: 20px;
+        }
+    }
 </style>
 
 <div class="container py-4">
@@ -233,7 +399,17 @@
         </div>
 
     </div>
+    <div class="mobile-select-all">
 
+        <label>
+
+            <input type="checkbox" id="checkAllMobile">
+
+            <span>Selecionar todos</span>
+
+        </label>
+
+    </div>
     <div class="table-container">
 
         <table class="table table-hover align-middle">
@@ -301,21 +477,23 @@
 
                         <td class="text-center">
 
-                            <a asp-action="Update"
-                               asp-route-id="@item.Id"
-                               class="action-btn edit-btn">
+                            <div class="actions">
+                                <a asp-action="Update"
+                                   asp-route-id="@item.Id"
+                                   class="action-btn edit-btn">
 
-                                <i class="bi bi-pencil-fill"></i>
+                                    <i class="bi bi-pencil-fill"></i>
 
-                            </a>
+                                </a>
 
-                            <a asp-action="Delete"
-                               asp-route-id="@item.Id"
-                               class="action-btn delete-btn">
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="action-btn delete-btn">
 
-                                <i class="bi bi-trash-fill"></i>
+                                    <i class="bi bi-trash-fill"></i>
 
-                            </a>
+                                </a>
+                            </div>
 
                         </td>
 
@@ -373,6 +551,7 @@
     const checkAll = document.getElementById("checkAll");
     const checkboxes = document.querySelectorAll(".user-check");
     const selectedInfo = document.getElementById("selectedInfo");
+    const checkAllMobile = document.getElementById("checkAllMobile");
 
     checkAll.addEventListener("change", function () {
 
@@ -387,7 +566,12 @@
         atualizarSelecionados();
 
     });
+        checkAllMobile?.addEventListener("change", function () {
 
+        checkAll.checked = this.checked;
+        checkAll.dispatchEvent(new Event("change"));
+
+    });
     checkboxes.forEach(c => {
 
         c.addEventListener("change", function () {
@@ -426,7 +610,13 @@
             `;
 
             // Marca o checkbox principal se todos estiverem selecionados
-            checkAll.checked = total === checkboxes.length;
+                const todosSelecionados = total === checkboxes.length;
+
+                checkAll.checked = todosSelecionados;
+
+                if (checkAllMobile) {
+                    checkAllMobile.checked = todosSelecionados;
+                }
 
         }
 
