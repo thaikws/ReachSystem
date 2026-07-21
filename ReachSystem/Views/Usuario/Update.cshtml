@@ -33,6 +33,91 @@
         border-radius: 22px !important;
         overflow: hidden;
     }
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+
+    @@media (max-width:768px) {
+        /* Container */
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        /* Card */
+
+        .card {
+            border-radius: 18px !important;
+        }
+
+        .card-header {
+            padding: 18px 22px !important;
+        }
+
+            .card-header h4 {
+                font-size: 1.15rem;
+            }
+
+        .card-body {
+            padding: 25px !important;
+        }
+        /* Formulário */
+
+        .form-section {
+            margin-bottom: 18px;
+        }
+
+            .form-section label {
+                display: block;
+                font-size: .95rem;
+                margin-bottom: 8px;
+            }
+
+        .form-control,
+        .form-select {
+            height: 50px;
+            font-size: .95rem;
+        }
+
+            .form-control::placeholder {
+                font-size: .85rem;
+                color: #8B97A3;
+            }
+        /* Botão do olho */
+
+        .position-relative .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #6C7A89;
+        }
+
+            .position-relative .btn:hover {
+                background: transparent;
+                color: #2C5D7C;
+            }
+
+            .position-relative .btn:focus {
+                box-shadow: none;
+            }
+        /* Botões */
+
+        .mt-5 {
+            margin-top: 2rem !important;
+        }
+
+            .mt-5.d-flex {
+                flex-direction: column;
+                gap: 12px !important;
+            }
+
+            .mt-5 .btn {
+                width: 100%;
+                padding: 13px 18px !important;
+            }
+    }
 </style>
 
 <div style="background:#F4F7FB; min-height:100vh; padding:30px 0;">

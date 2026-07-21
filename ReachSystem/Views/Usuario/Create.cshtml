@@ -125,7 +125,7 @@
 
             <div class="card-body p-5">
 
-                <form asp-action="Create">
+                <form asp-action="Create" autocomplete="off">
 
                     <div class="form-section">
                         <label>Nome</label>
@@ -140,7 +140,9 @@
 
                         <input type="email"
                                name="email"
-                               class="form-control" />
+                               class="form-control" 
+                               autocomplete="off"
+                               />
                     </div>
 
                     <div class="form-section">
@@ -151,7 +153,9 @@
                             <input type="password"
                                    id="senha"
                                    name="senha"
-                                   class="form-control" />
+                                   class="form-control" 
+                                   autocomplete="new-password"
+                                   />
 
                             <button type="button"
                                     class="btn position-absolute end-0 top-50 translate-middle-y me-2"
@@ -168,6 +172,7 @@
                         <label>Cargo</label>
 
                         <select name="role" class="form-select">
+                            <option value="Administrador">Administrador</option>
                             <option value="Funcionario">Funcionário</option>
                             <option value="Voluntario">Voluntário</option>
                         </select>
