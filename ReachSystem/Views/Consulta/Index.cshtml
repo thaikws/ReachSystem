@@ -167,12 +167,41 @@
             opacity: 0.85;
         }
 
-    .animal-img-sm {
-        width: 90px;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 10px;
+    .container-grid {
+    flex-wrap: wrap;
+}
+
+@@media (max-width: 900px) {
+    .container-grid {
+        flex-direction: column;
     }
+
+    .lista {
+        width: 100%;
+    }
+}
+
+@@media (max-width: 600px) {
+    .topbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .titulo {
+        font-size: 20px;
+    }
+
+    .btn-add {
+        width: 100%;
+        text-align: center;
+    }
+
+    .dia {
+        height: 70px;
+        font-size: 12px;
+    }
+}
 </style>
 
 <div class="topbar">

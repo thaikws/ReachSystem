@@ -128,35 +128,20 @@
         margin-left: 10px;
     }
 
-    /* 🔥 PREVIEW (sem mudar layout geral) */
-    .animal-preview {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 15px;
+    @@media (max-width: 600px) {
+    .page-container {
         padding: 10px;
-        border-radius: 10px;
-        background: #f9fbfd;
-        border: 1px solid #e6edf5;
     }
 
-        .animal-preview img {
-            width: 80px;
-            height: 120px; /* mais compacto pra caber no card pequeno */
-            object-fit: cover;
-            border-radius: 10px;
-            display: none;
-        }
+    .card {
+        padding: 20px;
+    }
 
-        .animal-preview h5 {
-            margin: 0;
-            font-size: 14px;
-            color: #2c5d7c;
-        }
-
-        .animal-preview small {
-            color: #777;
-        }
+    h2 {
+        font-size: 20px;
+        text-align: center;
+    }
+}
 
 </style>
 
