@@ -4,192 +4,107 @@
     ViewData["Title"] = "Animais";
 }
 
-<!-- TOPO -->
-<div class="topo">
-    <h1 class="titulo">Animais Abrigados</h1>
-
-    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar animais..." />
-</div>
-
-<!-- LINHA -->
-<div class="linha"></div>
-
-<!-- AÇÕES -->
-<div class="acoes">
-    <a asp-action="Create" class="btn-add">+ Adicionar</a>
-</div>
-
-<!-- CARDS -->
-<div class="lista" id="listaAnimais">
-    @foreach (var item in Model)
-    {
-        <div class="card-animal item" data-nome="@item.Nome.ToLower()">
-            <h3>@item.Nome</h3>
-            <p>Idade: @item.Idade anos</p>
-        </div>
-    }
-</div>
-
-<!-- EMPTY STATE -->
-<div id="emptyState" class="empty-state" style="display:none;">
-    <div class="icon">🔍</div>
-    <h2>Nenhum animal encontrado</h2>
-    <p>Tente pesquisar por outro nome.</p>
-</div>
-
 <style>
     body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f8f9fb;
+        font-family: Arial;
+        background: #f4f7fb;
     }
 
-    /* TOPO */
-    .topo {
+    .topbar {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 30px;
-        padding: 30px 60px 20px 60px;
+        padding: 20px 30px;
     }
 
     .titulo {
-        font-size: 32px;
+        font-size: 24px;
         color: #2c5d7c;
-        margin: 0;
-        white-space: nowrap;
-    }
-
-    .search-box {
-        flex: 1;
-        max-width: 700px;
-        padding: 14px 25px;
-        border-radius: 30px;
-        border: 2px solid #2c5d7c;
-        font-size: 16px;
-        outline: none;
-    }
-
-    /* LINHA */
-    .linha {
-        width: 100%;
-        height: 2px;
-        background: #dcdcdc;
-    }
-
-    /* BOTÃO */
-    .acoes {
-        display: flex;
-        justify-content: flex-end;
-        padding: 20px 60px;
+        font-weight: bold;
     }
 
     .btn-add {
         background: #2c5d7c;
         color: white;
-        padding: 12px 22px;
+        padding: 10px 16px;
         border-radius: 10px;
         text-decoration: none;
-        font-size: 16px;
-        transition: 0.2s;
     }
 
-        .btn-add:hover {
-            opacity: 0.9;
-        }
+    .container {
+        padding: 0 30px 30px 30px;
+    }
 
-    /* GRID DE CARDS */
-    .lista {
-        padding: 0 60px;
+    .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 20px;
     }
 
-    /* CARD */
-    .card-animal {
+    .card {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        transition: 0.2s;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        padding: 15px;
     }
 
-        .card-animal:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-animal h3 {
-            margin: 0;
-            color: #2c5d7c;
-        }
-
-        .card-animal p {
-            margin-top: 10px;
-            color: #555;
-        }
-
-    /* IMPORTANTE: NÃO QUEBRAR CARD */
-    .item {
-        display: block;
+    .nome {
+        font-weight: bold;
+        color: #2c5d7c;
+        font-size: 18px;
     }
 
-    /* EMPTY STATE */
-    .empty-state {
-        position: absolute;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
+    .info {
+        font-size: 14px;
         color: #666;
+        margin-top: 5px;
     }
 
-        .empty-state .icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
+    .btn {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        text-decoration: none;
+        margin-top: 10px;
+        margin-right: 5px;
+    }
 
-        .empty-state h2 {
-            margin: 10px 0 5px;
-            font-weight: 600;
-        }
+    .btn-edit {
+        background: #2c5d7c;
+        color: white;
+    }
 
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-        }
+    .btn-delete {
+        background: #d9534f;
+        color: white;
+    }
+
+    .btn-details {
+        background: #5bc0de;
+        color: white;
+    }
 </style>
 
-<script>
-    const input = document.getElementById("searchInput");
-    const items = document.querySelectorAll(".item");
-    const emptyState = document.getElementById("emptyState");
+<div class="topbar">
+    <div class="titulo">Animais</div>
+    <a asp-action="Create" class="btn-add">+ Novo</a>
+</div>
 
-    input.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
+<div class="container">
+    <div class="grid">
+        @foreach (var item in Model)
+        {
+            <div class="card">
+                <div class="nome">@item.Nome</div>
+                <div class="info">@item.Especie - @item.Raca</div>
+                <div class="info">Idade: @item.Idade</div>
 
-            const filtro = input.value.toLowerCase();
-            let encontrou = false;
-
-            if (filtro === "") {
-                items.forEach(item => item.style.display = "block");
-                emptyState.style.display = "none";
-                return;
-            }
-
-            items.forEach(item => {
-                const nome = item.getAttribute("data-nome");
-
-                if (nome.includes(filtro)) {
-                    item.style.display = "block";
-                    encontrou = true;
-                } else {
-                    item.style.display = "none";
-                }
-            });
-
-            emptyState.style.display = encontrou ? "none" : "block";
+                <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-details">Ver</a>
+                <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-edit">Editar</a>
+                <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-delete">Excluir</a>
+            </div>
         }
-    });
-</script>
+    </div>
+</div>
