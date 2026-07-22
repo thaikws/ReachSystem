@@ -1,35 +1,79 @@
-﻿﻿@{
-ViewData["Title"] = "Login";
+﻿@{
+    ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<div class="container-fluid mt-4">
 
-<form asp-action="Login" method="post">
+    <div class="row justify-content-center align-items-center"
+         style="min-height: calc(80vh - 180px);">
 
-    @Html.AntiForgeryToken()
+        <div class="col-md-5">
 
-    <div>
-        <label>E-mail</label>
-        <input type="text" name="email" />
+            <div class="card shadow-sm">
+
+                <div class="card-header text-center">
+                    <strong>Login</strong>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="Login" method="post" class="row g-3">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="col-12">
+                            <label class="form-label">E-mail</label>
+                            <input type="text"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="Digite seu e-mail" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Senha</label>
+                            <input type="password"
+                                   name="senha"
+                                   class="form-control"
+                                   placeholder="Digite sua senha" />
+                        </div>
+
+                        <div class="col-12 form-check mt-2">
+                            <input type="checkbox"
+                                   name="rememberMe"
+                                   class="form-check-input" />
+                            <label class="form-check-label">
+                                Lembrar de mim
+                            </label>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end mt-3">
+
+                            <button type="submit"
+                                    class="btn"
+                                    style="background-color:#2c5d7c; color:white;">
+                                Entrar
+                            </button>
+
+                            <a asp-action="Register"
+                               class="btn btn-secondary ms-2">
+                                Criar conta
+                            </a>
+                        </div>
+
+                    </form>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="mt-3">
+                            <span class="text-danger">
+                                E-mail ou senha inválidos.
+                            </span>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <div>
-        <label>Senha</label>
-        <input type="password" name="senha" />
-    </div>
-
-    <div>
-        <label>
-            <input type="checkbox" name="rememberMe" />
-            Lembrar de mim
-        </label>
-    </div>
-
-    <button type="submit">Entrar</button>
-
-</form>
-
-@if (!ViewData.ModelState.IsValid)
-{
-    <p style="color:red;">E-mail ou senha inválidos.</p>
-}
+</div>
