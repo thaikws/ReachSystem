@@ -1,5 +1,55 @@
 ﻿@model ReachSystem.DTOs.ConsultaDto
 
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .page-content {
+        padding-top: 90px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .animal-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 2px solid #e6edf5;
+    }
+
+    .animal-preview h5 {
+        margin-top: 15px;
+        color: #2C5D7C;
+        font-weight: bold;
+    }
+
+    .info-box {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid #e6edf5;
+    }
+
+    @@media (max-width: 600px) {
+
+        h2 {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        body {
+            padding: 10px;
+        }
+
+        .animal-img {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+
+<div class="page-content">
 <div class="card shadow border-0 rounded-4">
 
     <!-- HEADER -->
@@ -8,47 +58,72 @@
         <h2 class="mb-0">Detalhes da Consulta</h2>
     </div>
 
+
     <div class="card-body">
 
-        <div class="row">
+        <div class="row g-4">
+
 
             <!-- ESQUERDA -->
             <div class="col-md-3">
 
-                <div class="animal-preview flex-column text-center">
+                <div class="animal-preview text-center">
 
                     <img src="@Model.AnimalFoto"
                          class="animal-img"
-                         style="width:120px;height:180px;object-fit:cover;border-radius:10px;" />
+                         onerror="this.style.display='none'" />
 
                     <h5>@Model.AnimalNome</h5>
-                    <small>ID: @Model.AnimalId</small>
+
+                    <small class="text-muted">
+                        ID: @Model.AnimalId
+                    </small>
 
                 </div>
 
             </div>
 
+
+
             <!-- DIREITA -->
             <div class="col-md-9">
 
-                <div class="border p-3 mb-3">
+
+                <div class="info-box mb-3">
+
                     <strong>Descrição</strong>
+
                     <hr />
-                    @Model.Descricao
+
+                    <p class="mb-0">
+                        @Model.Descricao
+                    </p>
+
                 </div>
 
-                <div class="border p-3">
+
+
+                <div class="info-box">
+
                     <strong>Data</strong>
+
                     <hr />
-                    @Model.Data
+
+                    <p class="mb-0">
+                        @Model.Data.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+
                 </div>
+
 
             </div>
 
         </div>
 
-        <!-- BOTÕES -->
-        <div class="mt-4 d-flex gap-2">
+
+
+        <!-- BOTÃO -->
+        <div class="mt-4">
 
             <a asp-action="Index"
                class="btn text-white"
@@ -58,6 +133,8 @@
 
         </div>
 
+
     </div>
 
+</div>
 </div>
