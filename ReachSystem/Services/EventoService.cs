@@ -72,5 +72,17 @@ namespace ReachSystem.Services
             }
             return true;
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.Eventos.CountAsync();
+        }
+        public async Task<List<Evento>> GetProximosEventosAsync()
+        {
+            return await _context.Eventos
+                .OrderBy(e => e.Data)
+                .Take(5)
+                .ToListAsync();
+        }
     }
 }

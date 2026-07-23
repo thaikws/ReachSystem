@@ -4,6 +4,65 @@
     ViewData["Title"] = "Animais";
 }
 
+<div class="topo">
+    <h1 class="titulo">Animais Abrigados</h1>
+
+    <input type="text"
+           id="searchInput"
+           class="search-box"
+           placeholder="Pesquisar animais..." />
+
+</div>
+
+<div class="linha"></div>
+
+<div class="acoes">
+    <a asp-action="Create" class="btn-add">
+        + Adicionar
+    </a>
+</div>
+
+<div class="lista" id="listaAnimais">
+    @foreach (var item in Model)
+    {
+        <div class="card-animal item"
+             data-nome="@item.Nome.ToLower()">
+
+            @if (!string.IsNullOrEmpty(item.Foto))
+            {
+                <img src="@item.Foto"
+                     class="foto-animal" />
+            }
+            else
+            {
+                <img src="/images/sem-foto.png"
+                     class="foto-animal" />
+            }
+
+            <h3>@item.Nome</h3>
+
+            <p><strong>ID:</strong> @item.AnimalId</p>
+            <p><strong>Espécie:</strong> @item.Especie</p>
+            <p><strong>Idade:</strong> @item.Idade anos</p>
+
+            <a asp-action="Details"
+               asp-route-id="@item.AnimalId"
+               class="btn-detalhes">
+                Ver detalhes
+            </a>
+        </div>
+    }
+
+</div>
+
+<div id="emptyState"
+     class="empty-state"
+     style="display:none;">
+    <div class="icon">🔍</div>
+    <h2>Nenhum animal encontrado</h2>
+    <p>Tente pesquisar por outro nome.</p>
+</div>
+
 <style>
     body {
         margin: 0;
@@ -11,7 +70,7 @@
         background: #f4f7fb;
     }
 
-    .topbar {
+    .topo {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -22,6 +81,28 @@
         font-size: 24px;
         color: #2c5d7c;
         font-weight: bold;
+    }
+
+    .search-box {
+        flex: 1;
+        max-width: 700px;
+        padding: 14px 25px;
+        border-radius: 30px;
+        border: 2px solid #2c5d7c;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .linha {
+        width: 100%;
+        height: 2px;
+        background: #dcdcdc;
+    }
+
+    .acoes {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 60px;
     }
 
     .btn-add {
@@ -36,17 +117,19 @@
         padding: 0 30px 30px 30px;
     }
 
-    .grid {
+    .lista {
+        padding: 0 60px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
         gap: 20px;
     }
 
-    .card {
+    .card-animal {
         background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        padding: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        transition: 0.2s;
     }
 
     .nome {
@@ -55,56 +138,79 @@
         font-size: 18px;
     }
 
-    .info {
-        font-size: 14px;
-        color: #666;
-        margin-top: 5px;
+    .foto-animal {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
     }
 
-    .btn {
+    .card-animal h3 {
+        margin: 15px;
+        color: #2c5d7c;
+    }
+
+    .card-animal p {
+        margin: 8px 15px;
+        color: #555;
+    }
+
+    .btn-detalhes {
         display: inline-block;
-        padding: 6px 10px;
-        border-radius: 8px;
-        font-size: 12px;
-        text-decoration: none;
-        margin-top: 10px;
-        margin-right: 5px;
-    }
-
-    .btn-edit {
+        margin: 15px;
         background: #2c5d7c;
         color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s;
     }
 
-    .btn-delete {
-        background: #d9534f;
-        color: white;
+        .btn-detalhes:hover {
+            opacity: 0.9;
+        }
+
+    .item {
+        display: block;
     }
 
-    .btn-details {
-        background: #5bc0de;
-        color: white;
+    .empty-state {
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #666;
     }
+
+        .empty-state .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
 </style>
 
-<div class="topbar">
-    <div class="titulo">Animais</div>
-    <a asp-action="Create" class="btn-add">+ Novo</a>
-</div>
+<script>
+    const input = document.getElementById("searchInput");
+    const items = document.querySelectorAll(".item");
+    const emptyState = document.getElementById("emptyState");
 
-<div class="container">
-    <div class="grid">
-        @foreach (var item in Model)
-        {
-            <div class="card">
-                <div class="nome">@item.Nome</div>
-                <div class="info">@item.Especie - @item.Raca</div>
-                <div class="info">Idade: @item.Idade</div>
+    input.addEventListener("input", function () {
 
-                <a asp-action="Details" asp-route-id="@item.AnimalId" class="btn btn-details">Ver</a>
-                <a asp-action="Update" asp-route-id="@item.AnimalId" class="btn btn-edit">Editar</a>
-                <a asp-action="Delete" asp-route-id="@item.AnimalId" class="btn btn-delete">Excluir</a>
-            </div>
-        }
-    </div>
-</div>
+        const filtro = input.value.toLowerCase().trim();
+        let encontrou = false;
+
+        items.forEach(item => {
+
+            const nome = item.getAttribute("data-nome") || "";
+
+            if (nome.includes(filtro)) {
+                item.style.display = "";
+                encontrou = true;
+            } else {
+                item.style.display = "none";
+            }
+        });
+
+        emptyState.style.display = encontrou ? "none" : "block";
+    });
+</script>

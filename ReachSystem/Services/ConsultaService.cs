@@ -1,6 +1,7 @@
-﻿using ReachSystem.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using ReachSystem.Data;
-using Microsoft.EntityFrameworkCore;
+using ReachSystem.DTOs;
+using ReachSystem.Models;
 
 namespace ReachSystem.Services
 {
@@ -13,29 +14,52 @@ namespace ReachSystem.Services
             _context = context;
         }
 
-        // Método Get para retornar as consultas com o Animal incluído
-        public async Task<IEnumerable<Consulta>> GetAllConsultasAsync()
+        // LISTAR
+        public async Task<List<ConsultaDto>> GetAllConsultasAsync()
         {
             return await _context.Consultas
                 .Include(c => c.Animal)
+                .Select(c => new ConsultaDto
+                {
+                    ConsultaID = c.ConsultaID,
+                    AnimalId = c.AnimalId,
+                    AnimalNome = c.Animal.Nome,
+                    AnimalFoto = c.Animal.Foto, // 👈 NOVO
+                    Data = c.Data,
+                    Descricao = c.Descricao
+                })
                 .ToListAsync();
         }
 
-        // Método Get por Id
-        public async Task<Consulta?> GetConsultaByIdAsync(int id)
+        // GET POR ID
+        public async Task<ConsultaDto?> GetConsultaByIdAsync(int id)
         {
             return await _context.Consultas
                 .Include(c => c.Animal)
-                .FirstOrDefaultAsync(c => c.ConsultaID == id);
+                .Where(c => c.ConsultaID == id)
+                .Select(c => new ConsultaDto
+                {
+                    ConsultaID = c.ConsultaID,
+                    AnimalId = c.AnimalId,
+                    AnimalNome = c.Animal.Nome,
+                    AnimalFoto = c.Animal.Foto, // 👈 NOVO
+                    Data = c.Data,
+                    Descricao = c.Descricao
+                })
+                .FirstOrDefaultAsync();
         }
 
-        // Add
+        // ADD
         public async Task<Consulta> AddConsultaAsync(Consulta consulta)
         {
-            if (consulta.AnimalId <= 0 || string.IsNullOrWhiteSpace(consulta.Descricao))
-            {
-                throw new ArgumentException("Dados inválidos");
-            }
+            var exists = await _context.Consultas
+                .AnyAsync(c =>
+                    c.AnimalId == consulta.AnimalId &&
+                    c.Data == consulta.Data &&
+                    c.Descricao == consulta.Descricao);
+
+            if (exists)
+                return consulta;
 
             _context.Consultas.Add(consulta);
             await _context.SaveChangesAsync();
@@ -43,7 +67,7 @@ namespace ReachSystem.Services
             return consulta;
         }
 
-        // Update
+        // UPDATE
         public async Task<bool> UpdateConsultaAsync(Consulta consulta)
         {
             var existente = await _context.Consultas.FindAsync(consulta.ConsultaID);
@@ -59,7 +83,7 @@ namespace ReachSystem.Services
             return true;
         }
 
-        // Delete
+        // DELETE
         public async Task<bool> DeleteConsultaAsync(int id)
         {
             var consulta = await _context.Consultas.FindAsync(id);

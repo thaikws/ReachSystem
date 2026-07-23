@@ -1,17 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReachSystem.Models;
 using ReachSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ReachSystem.Controllers
 {
+    [Authorize]
     public class FichaSaudeController : Controller
     {
 
         private readonly FichaSaudeService _fichaSaudeService;
+        private readonly AnimalService _animalService;
 
-        public FichaSaudeController(FichaSaudeService fichaSaudeService)
+        public FichaSaudeController(FichaSaudeService fichaSaudeService, AnimalService animalService)
         {
             _fichaSaudeService = fichaSaudeService;
+            _animalService = animalService;
         }
 
         public async Task<IActionResult> Index()
@@ -22,30 +26,37 @@ namespace ReachSystem.Controllers
 
         // GET: FichaSaude/Create
         [HttpGet]
-        public IActionResult Create(int animalId)
+        [Authorize(Roles = "Admin,Funcionario")]
+        public async Task<IActionResult> Create(int? animalId)
         {
-            var ficha = new FichaSaude { AnimalId = animalId };
+            ViewBag.Animais = await _animalService.GetAllAnimalsAsync(); 
+            var ficha = new FichaSaude();
+
+            if (animalId.HasValue)
+            {
+                ficha.AnimalId = animalId.Value;
+            }
             return View(ficha);
         }
 
         // POST: FichaSaude/Create
         [HttpPost]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Create(FichaSaude fichaSaude)
         {
             if (ModelState.IsValid)
             {
-                if (fichaSaude.AnimalId <= 0)
-                {
-                    return BadRequest("Id do Animal inválido");
-                }
                 var novaFicha = await _fichaSaudeService.AddFichaSaudeAsync(fichaSaude);
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Animais = await _animalService.GetAllAnimalsAsync();
+
             return View(fichaSaude);
         }
 
         // GET: FichaSaude/Update/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Update(int id)
         {
             var fichaSaude = await _fichaSaudeService.GetFichaSaudeByIdAsync(id);
@@ -58,6 +69,7 @@ namespace ReachSystem.Controllers
 
         // POST: FichaSaude/Update/id
         [HttpPost]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Update(int id, FichaSaude fichaSaude)
         {
             if (id != fichaSaude.FichaSaudeId)
@@ -78,6 +90,7 @@ namespace ReachSystem.Controllers
 
         // GET: FichaSaude/Delete/id
         [HttpGet]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> Delete(int id)
         {
             var fichaSaude = await _fichaSaudeService.GetFichaSaudeByIdAsync(id);
@@ -90,6 +103,7 @@ namespace ReachSystem.Controllers
 
         // POST: FichaSaude/Delete/id
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sucesso = await _fichaSaudeService.DeleteFichaSaudeAsync(id);

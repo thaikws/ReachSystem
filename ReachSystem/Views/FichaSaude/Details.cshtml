@@ -1,22 +1,290 @@
 ﻿@model ReachSystem.Models.FichaSaude
 
-<h2>Ficha de Saúde</h2>
+<style>
+    body {
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
+    }
 
-<hr />
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
 
-<p><strong>ID:</strong> @Model.FichaSaudeId</p>
-<p><strong>Animal ID:</strong> @Model.AnimalId</p>
-<p><strong>Descrição:</strong> @Model.Descricao</p>
-<p><strong>Vacinas:</strong> @Model.Vacinas</p>
-<p><strong>Alergias:</strong> @Model.Alergias</p>
-<p><strong>Doenças:</strong> @Model.DoencasPreExistentes</p>
-<p><strong>Medicamentos:</strong> @Model.Medicamentos</p>
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
 
-<br />
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
 
-<a asp-controller="Animal"
-   asp-action="Details"
-   asp-route-id="@Model.AnimalId"
-   class="btn btn-secondary">
-    Voltar para o Animal
-</a>
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.6rem;
+        }
+
+    /* Card do Animal */
+
+    .animal-card {
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+        height: 100%;
+    }
+
+    .animal-img {
+        width: 150px;
+        height: 210px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 3px solid #E6EDF5;
+        background: #E6EDF5;
+        margin-bottom: 18px;
+    }
+
+    .animal-card h4 {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .animal-card small {
+        color: #6C7A89;
+    }
+
+    /* Informações */
+
+    .info-card {
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 14px;
+        padding: 18px;
+        height: 100%;
+    }
+
+        .info-card h6 {
+            color: #2C5D7C;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .info-card hr {
+            border-color: #E6EDF5;
+            margin: .7rem 0;
+        }
+
+        .info-card p {
+            color: #173746;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+    /* Botões */
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+    }
+
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: #FFFFFF;
+    }
+
+        .btn-outline-custom:hover {
+            background: #1B6EC2;
+            color: #FFFFFF;
+        }
+</style>
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h2 class="page-title">
+            Detalhes da Ficha de Saúde
+        </h2>
+
+        <small class="text-muted">
+            Visualização completa das informações médicas do animal.
+        </small>
+
+    </div>
+
+    <div class="card card-custom shadow-sm">
+
+        <div class="card-header card-header-custom">
+            <h2>Ficha de Saúde</h2>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="row g-4">
+
+                <!-- Animal -->
+
+                <div class="col-lg-3">
+
+                    <div class="animal-card">
+
+                        <img src="@Model.Animal?.Foto"
+                             class="animal-img"
+                             alt="@Model.Animal?.Nome"
+                             onerror="this.style.display='none'" />
+
+                        <h4>@Model.Animal?.Nome</h4>
+
+                        <small>
+                            Animal #@Model.AnimalId
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- Informações -->
+
+                <div class="col-lg-9">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <div class="info-card">
+
+                                <h6>Alergias</h6>
+
+                                <hr />
+
+                                <p>
+                                    @(string.IsNullOrWhiteSpace(Model.Alergias)
+                                        ? "Nenhuma informação cadastrada."
+                                        : Model.Alergias)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-card">
+
+                                <h6>Vacinas</h6>
+
+                                <hr />
+
+                                <p>
+                                    @(string.IsNullOrWhiteSpace(Model.Vacinas)
+                                        ? "Nenhuma informação cadastrada."
+                                        : Model.Vacinas)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-card">
+
+                                <h6>Doenças Pré-existentes</h6>
+
+                                <hr />
+
+                                <p>
+                                    @(string.IsNullOrWhiteSpace(Model.DoencasPreExistentes)
+                                        ? "Nenhuma informação cadastrada."
+                                        : Model.DoencasPreExistentes)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-card">
+
+                                <h6>Medicamentos</h6>
+
+                                <hr />
+
+                                <p>
+                                    @(string.IsNullOrWhiteSpace(Model.Medicamentos)
+                                        ? "Nenhuma informação cadastrada."
+                                        : Model.Medicamentos)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="info-card">
+
+                                <h6>Descrição</h6>
+
+                                <hr />
+
+                                <p>
+                                    @(string.IsNullOrWhiteSpace(Model.Descricao)
+                                        ? "Nenhuma descrição cadastrada."
+                                        : Model.Descricao)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Botões -->
+
+            <div class="d-flex gap-2 mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-primary-custom px-4">
+                    Ver Todas as Fichas
+                </a>
+
+                <a asp-controller="Animal"
+                   asp-action="Details"
+                   asp-route-id="@Model.AnimalId"
+                   class="btn btn-outline-custom px-4">
+                    Voltar para o Animal
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

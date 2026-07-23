@@ -1,1 +1,268 @@
-﻿<h1>Form Update Ficha Saude</h1>
+﻿@model ReachSystem.Models.FichaSaude
+
+<style>
+    body {
+        background: #F4F7FB;
+    font-family: 'Public Sans', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
+
+    .text-muted-custom {
+        color: #6C7A89;
+    }
+
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    /* Card do Animal */
+
+    .animal-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 18px;
+        margin-bottom: 30px;
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 2px solid #E6EDF5;
+        background: #E6EDF5;
+    }
+
+    .animal-info h5 {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .animal-info small {
+        color: #6C7A89;
+    }
+
+    /* Formulário */
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 1px solid #E6EDF5;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: #FFFFFF;
+    }
+
+        .form-control:focus {
+            border-color: #1B6EC2;
+            box-shadow: 0 0 0 .2rem rgba(27,110,194,.15);
+        }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* Botões */
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+    }
+
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: #FFFFFF;
+    }
+
+        .btn-outline-custom:hover {
+            background: #1B6EC2;
+            color: #FFFFFF;
+        }
+</style>
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <h2 class="page-title">
+            Editar Ficha de Saúde
+        </h2>
+
+        <small class="text-muted-custom">
+            Atualize as informações médicas do animal.
+        </small>
+
+    </div>
+
+    <div class="card card-custom shadow-sm">
+
+        <!-- Cabeçalho -->
+
+        <div class="card-header card-header-custom">
+            <h4>Ficha de Saúde</h4>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Update" method="post">
+
+                <input type="hidden" asp-for="FichaSaudeId" />
+                <input type="hidden" asp-for="AnimalId" />
+
+                <!-- Animal -->
+
+                <div class="animal-card">
+
+                    <img src="@Model.Animal?.Foto"
+                         class="animal-img"
+                         alt="@Model.Animal?.Nome"
+                         onerror="this.style.display='none'" />
+
+                    <div class="animal-info">
+
+                        <h5>
+                            @Model.Animal?.Nome
+                        </h5>
+
+                        <small>
+                            Animal #@Model.AnimalId
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- Descrição -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Descricao"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              rows="4"
+                              class="form-control"
+                              placeholder="Informe a descrição da ficha de saúde"></textarea>
+
+                </div>
+
+                <!-- Vacinas -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Vacinas"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Vacinas"
+                           class="form-control"
+                           placeholder="Ex.: V10, Antirrábica..." />
+
+                </div>
+
+                <!-- Alergias -->
+
+                <div class="mb-3">
+
+                    <label asp-for="Alergias"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Alergias"
+                           class="form-control"
+                           placeholder="Informe as alergias conhecidas" />
+
+                </div>
+
+                <!-- Doenças -->
+
+                <div class="mb-3">
+
+                    <label asp-for="DoencasPreExistentes"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="DoencasPreExistentes"
+                           class="form-control"
+                           placeholder="Informe doenças pré-existentes" />
+
+                </div>
+
+                <!-- Medicamentos -->
+
+                <div class="mb-4">
+
+                    <label asp-for="Medicamentos"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Medicamentos"
+                              rows="3"
+                              class="form-control"
+                              placeholder="Medicamentos utilizados"></textarea>
+
+                </div>
+
+                <!-- Botões -->
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary-custom px-4">
+                        Atualizar
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-custom px-4">
+                        Voltar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,231 @@
+﻿@model ReachSystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Criar Usuário";
+}
+
+<style>
+    body {
+        background: #F4F7FB;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+
+    .form-section {
+        margin-bottom: 22px;
+    }
+
+        .form-section label {
+            font-weight: 600;
+            color: #173746;
+            margin-bottom: 6px;
+        }
+
+    .form-control,
+    .form-select {
+        border-radius: 12px;
+        height: 48px;
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .card {
+        border-radius: 22px !important;
+        overflow: hidden;
+    }
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+
+    @@media (max-width: 768px) {
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .card-body {
+            padding: 25px !important;
+        }
+
+        .card-header {
+            padding: 18px 22px !important;
+        }
+
+            .card-header h4 {
+                font-size: 1.15rem;
+            }
+
+        .form-section {
+            margin-bottom: 18px;
+        }
+
+        .form-control,
+        .form-select {
+            height: 50px;
+            font-size: .95rem;
+        }
+
+        .form-section label {
+            font-size: .95rem;
+        }
+        /* Botões */
+
+        .mt-5 {
+            margin-top: 2rem !important;
+        }
+
+            .mt-5.d-flex {
+                flex-direction: column;
+                gap: 12px !important;
+            }
+
+            .mt-5 .btn {
+                width: 100%;
+                padding: 13px 18px !important;
+            }
+        /* Botão do olho */
+
+        .position-relative .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+    }
+</style>
+
+<div style="background:#F4F7FB; min-height:100vh; padding:30px 0;">
+
+    <div class="container" style="max-width:1100px;">
+
+        <div class="mb-4">
+            <h2 class="fw-bold" style="color:#173746;">
+                Criar Usuário
+            </h2>
+
+            <p style="color:#6C7A89;">
+                Preencha as informações para cadastrar um novo usuário.
+            </p>
+        </div>
+
+        <div class="card shadow border-0">
+
+            <div class="card-header text-white py-3"
+                 style="background:#2C5D7C;">
+
+                <h4 class="mb-0 fw-bold">
+                    Dados do Usuário
+                </h4>
+
+            </div>
+
+            <div class="card-body p-5">
+
+                <form asp-action="Create" autocomplete="off">
+
+                    <div class="form-section">
+                        <label>Nome</label>
+
+                        <input type="text"
+                               name="nome"
+                               class="form-control" />
+                    </div>
+
+                    <div class="form-section">
+                        <label>Email</label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control" 
+                               autocomplete="off"
+                               />
+                    </div>
+
+                    <div class="form-section">
+                        <label>Senha</label>
+
+                        <div class="position-relative">
+
+                            <input type="password"
+                                   id="senha"
+                                   name="senha"
+                                   class="form-control" 
+                                   autocomplete="new-password"
+                                   />
+
+                            <button type="button"
+                                    class="btn position-absolute end-0 top-50 translate-middle-y me-2"
+                                    onclick="mostrarSenha('senha')">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <label>Cargo</label>
+
+                        <select name="role" class="form-select">
+                            <option value="Administrador">Administrador</option>
+                            <option value="Funcionario">Funcionário</option>
+                            <option value="Voluntario">Voluntário</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-5 d-flex gap-3">
+
+                        <button type="submit"
+                                class="btn text-white px-5 py-2"
+                                style="background:#2C5D7C;">
+                            Criar
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-light border px-5 py-2">
+                            Voltar
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function mostrarSenha(id) {
+
+        var input = document.getElementById(id);
+
+        var icon = event.currentTarget.querySelector("i");
+
+
+        if (input.type === "password") {
+
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>

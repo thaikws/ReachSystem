@@ -1,1 +1,282 @@
-﻿<h1>Form Create Ficha saude</h1>
+﻿@model ReachSystem.Models.FichaSaude
+
+<style>
+    body {
+        background: #F4F7FB;
+     font-family: 'Public Sans', sans-serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
+
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .animal-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 18px;
+        margin-bottom: 25px;
+        border-radius: 16px;
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 14px;
+        background: #E6EDF5;
+        border: 2px solid #E6EDF5;
+    }
+
+    .animal-info h5 {
+        margin-bottom: 5px;
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .animal-info small {
+        color: #6C7A89;
+    }
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #E6EDF5;
+        background: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 14px;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #1B6EC2;
+            box-shadow: 0 0 0 .2rem rgba(27,110,194,.15);
+        }
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+    }
+
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: transparent;
+    }
+
+        .btn-outline-custom:hover {
+            background: #1B6EC2;
+            color: #FFFFFF;
+        }
+
+    .text-muted-custom {
+        color: #6C7A89;
+    }
+</style>
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="page-title">Nova Ficha de Saúde</h2>
+        <small class="text-muted-custom">
+            Cadastre as informações médicas do animal.
+        </small>
+    </div>
+
+    <div class="card card-custom shadow-sm">
+
+        <div class="card-header card-header-custom">
+            <h4>Ficha de Saúde</h4>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create" method="post">
+
+                <div class="animal-card">
+
+                    <img id="animalPreview"
+                         class="animal-img"
+                         src=""
+                         style="display:none;"
+                         alt="Foto do Animal" />
+
+                    <div class="animal-info">
+
+                        <h5 id="animalNome">
+                            Selecionar Animal
+                        </h5>
+
+                        <small id="animalTexto">
+                            Escolha um animal para visualizar sua foto.
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="AnimalId" class="form-label">
+                        Animal
+                    </label>
+
+                    <select asp-for="AnimalId"
+                            class="form-select"
+                            id="animalSelect">
+
+                        <option value="">Selecione um animal</option>
+
+                        @foreach (var animal in ViewBag.Animais)
+                        {
+                            <option value="@animal.AnimalId"
+                                    data-foto="@animal.Foto">
+                                @animal.Nome
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Descricao" class="form-label"></label>
+
+                    <textarea asp-for="Descricao"
+                              rows="4"
+                              class="form-control"
+                              placeholder="Informe a descrição da ficha de saúde"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Vacinas" class="form-label"></label>
+
+                    <input asp-for="Vacinas"
+                           class="form-control"
+                           placeholder="Ex.: V10, Antirrábica..." />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Alergias" class="form-label"></label>
+
+                    <input asp-for="Alergias"
+                           class="form-control"
+                           placeholder="Informe alergias conhecidas" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="DoencasPreExistentes" class="form-label"></label>
+
+                    <input asp-for="DoencasPreExistentes"
+                           class="form-control"
+                           placeholder="Informe doenças pré-existentes" />
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Medicamentos" class="form-label"></label>
+
+                    <textarea asp-for="Medicamentos"
+                              rows="3"
+                              class="form-control"
+                              placeholder="Medicamentos utilizados"></textarea>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary-custom px-4">
+                        Salvar
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-custom px-4">
+                        Voltar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const select = document.getElementById("animalSelect");
+    const preview = document.getElementById("animalPreview");
+    const animalNome = document.getElementById("animalNome");
+    const animalTexto = document.getElementById("animalTexto");
+
+    select.addEventListener("change", function () {
+
+        const option = this.options[this.selectedIndex];
+        const foto = option.getAttribute("data-foto");
+        const nome = option.text;
+
+        if (this.value && foto && foto.trim() !== "") {
+
+            preview.src = foto;
+            preview.style.display = "block";
+
+            animalNome.textContent = nome;
+            animalTexto.textContent = "Animal selecionado para esta ficha.";
+
+        } else {
+
+            preview.src = "";
+            preview.style.display = "none";
+
+            animalNome.textContent = "Selecionar Animal";
+            animalTexto.textContent = "Escolha um animal para visualizar sua foto.";
+
+        }
+
+    });
+</script>

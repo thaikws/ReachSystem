@@ -5,7 +5,7 @@ using ReachSystem.Enums;
 
 namespace ReachSystem.Data
 {
-    public class ReachSystemDbContext : IdentityDbContext
+    public class ReachSystemDbContext : IdentityDbContext<ApplicationUser>
     {
         public ReachSystemDbContext(DbContextOptions<ReachSystemDbContext> options)
             : base(options)
@@ -16,6 +16,7 @@ namespace ReachSystem.Data
         public DbSet<Animal> Animais { get; set; }
         public DbSet<FichaSaude> FichasSaude { get; set; }
         public DbSet<Evento> Eventos { get; set; }
+        public DbSet<Participacao> Participacoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +34,17 @@ namespace ReachSystem.Data
                 .WithOne(f => f.Animal)
                 .HasForeignKey<FichaSaude>(f => f.AnimalId);
 
+            // Relacionamento: Evento N - N Usuarios
+            modelBuilder.Entity<Participacao>()
+                .HasOne(p => p.Usuario)
+                .WithMany(u => u.Participacoes)
+                .HasForeignKey(p => p.UsuarioId);
+
+            modelBuilder.Entity<Participacao>()
+                .HasOne(p => p.Evento)
+                .WithMany(e => e.Participacoes)
+                .HasForeignKey(p => p.EventoId);
+
             // Enum -> int
             modelBuilder.Entity<Animal>()
                 .Property(a => a.SexoAnimal)
@@ -41,6 +53,15 @@ namespace ReachSystem.Data
             modelBuilder.Entity<Animal>()
                 .Property(a => a.StatusAnimal)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<Participacao>()
+                .Property(p => p.Status)
+                .HasConversion<int>();
+
+            //Impede participação duplicada
+            modelBuilder.Entity<Participacao>()
+                .HasIndex(p => new { p.UsuarioId, p.EventoId })
+                .IsUnique();
         }
     }
 }

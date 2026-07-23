@@ -1,14 +1,140 @@
-﻿@model ReachSystem.Models.Consulta
+﻿@model ReachSystem.DTOs.ConsultaDto
 
-<h2>Detalhes da Consulta</h2>
+<style>
+    body {
+        background: #f4f7fb;
+    }
 
-<hr />
+    .page-content {
+        padding-top: 90px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .animal-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 2px solid #e6edf5;
+    }
 
-<p><strong>ID Consulta:</strong> @Model.ConsultaID</p>
-<p><strong>ID Animal:</strong> @Model.AnimalId</p>
-<p><strong>Data:</strong> @Model.Data</p>
-<p><strong>Descrição:</strong> @Model.Descricao</p>
+    .animal-preview h5 {
+        margin-top: 15px;
+        color: #2C5D7C;
+        font-weight: bold;
+    }
 
-<hr />
+    .info-box {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid #e6edf5;
+    }
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    @@media (max-width: 600px) {
+
+        h2 {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        body {
+            padding: 10px;
+        }
+
+        .animal-img {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+
+<div class="page-content">
+<div class="card shadow border-0 rounded-4">
+
+    <!-- HEADER -->
+    <div class="card-header text-white"
+         style="background-color:#2C5D7C;">
+        <h2 class="mb-0">Detalhes da Consulta</h2>
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+
+            <!-- ESQUERDA -->
+            <div class="col-md-3">
+
+                <div class="animal-preview text-center">
+
+                    <img src="@Model.AnimalFoto"
+                         class="animal-img"
+                         onerror="this.style.display='none'" />
+
+                    <h5>@Model.AnimalNome</h5>
+
+                    <small class="text-muted">
+                        ID: @Model.AnimalId
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DIREITA -->
+            <div class="col-md-9">
+
+
+                <div class="info-box mb-3">
+
+                    <strong>Descrição</strong>
+
+                    <hr />
+
+                    <p class="mb-0">
+                        @Model.Descricao
+                    </p>
+
+                </div>
+
+
+
+                <div class="info-box">
+
+                    <strong>Data</strong>
+
+                    <hr />
+
+                    <p class="mb-0">
+                        @Model.Data.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BOTÃO -->
+        <div class="mt-4">
+
+            <a asp-action="Index"
+               class="btn text-white"
+               style="background-color:#2C5D7C;">
+                Voltar
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+</div>

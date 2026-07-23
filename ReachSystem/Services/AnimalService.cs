@@ -77,5 +77,18 @@ namespace ReachSystem.Services
             }
             return true;
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.Animais.CountAsync();
+        }
+
+        public async Task<List<Animal>> GetUltimosAnimaisAsync(int quantidade = 5)
+        {
+            return await _context.Animais
+                .OrderByDescending(a => a.DataDeEntrada)
+                .Take(quantidade)
+                .ToListAsync();
+        }
     }
 }

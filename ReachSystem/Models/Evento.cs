@@ -16,5 +16,8 @@ namespace ReachSystem.Models
         public string Descricao { get; set; } = string.Empty;
 
         //Relacionamento com outras entidades abaixo pra fazer dps!
+
+        public virtual ICollection<Participacao> Participacoes { get; set; }
+            = new List<Participacao>();
     }
 }
