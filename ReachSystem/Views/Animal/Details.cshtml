@@ -1,130 +1,347 @@
 ﻿@model ReachSystem.Models.Animal
 
-<div class="container">
+<div class="container py-4">
 
-    @if (!string.IsNullOrEmpty(Model.Foto))
-    {
-        <img src="@Model.Foto" class="foto-animal" />
-    }
-    else
-    {
-        <img src="/images/sem-foto.png" class="foto-animal" />
-    }
+    <div class="card card-custom shadow-sm">
 
-    <h2>@Model.Nome</h2>
+        <div class="card-header-custom">
+            <h2>Detalhes do Animal</h2>
+        </div>
 
-    <hr />
+        <div class="card-body p-4">
 
-    <p><strong>ID:</strong> @Model.AnimalId</p>
-    <p><strong>Espécie:</strong> @Model.Especie</p>
-    <p><strong>Raça:</strong> @Model.Raca</p>
-    <p><strong>Idade:</strong> @Model.Idade anos</p>
-    <p><strong>Porte:</strong> @Model.Porte</p>
-    <p><strong>Sexo:</strong> @Model.SexoAnimal</p>
-    <p><strong>Status:</strong> @Model.StatusAnimal</p>
-    <p><strong>Data de Entrada:</strong> @Model.DataDeEntrada.ToString("dd/MM/yyyy")</p>
+            <div class="row g-4">
 
-    <hr />
+                <!-- FOTO -->
+                <div class="col-lg-4">
 
-    <h3>Ficha de Saúde</h3>
+                    <div class="animal-card">
 
-    @if (Model.FichaSaude != null)
-    {
-        <p>
-            <strong>Descrição:</strong>
-            @Model.FichaSaude.Descricao
-        </p>
+                        @if (!string.IsNullOrEmpty(Model.Foto))
+                        {
+                            <img src="@Model.Foto" class="animal-img" />
+                        }
+                        else
+                        {
+                            <img src="/images/sem-foto.png" class="animal-img" />
+                        }
 
-        <a asp-controller="FichaSaude"
-           asp-action="Details"
-           asp-route-id="@Model.FichaSaude.FichaSaudeId"
-           class="btn btn-info">
-            Ver Ficha Completa
-        </a>
-    }
-    else
-    {
-        <p>Este animal não possui ficha de saúde cadastrada.</p>
+                        <h4>@Model.Nome</h4>
 
-        <a asp-controller="FichaSaude"
-           asp-action="Create"
-           asp-route-animalId="@Model.AnimalId"
-           class="btn btn-success">
-            Criar Ficha
-        </a>
-    }
+                        <small>
+                            @Model.Especie • @Model.Raca
+                        </small>
 
-    <hr />
+                    </div>
 
-    <a asp-action="Update"
-       asp-route-id="@Model.AnimalId"
-       class="btn btn-warning">
-        Editar Animal
-    </a>
+                </div>
 
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Voltar para Lista
-    </a>
+                <!-- DADOS -->
+                <div class="col-lg-8">
+
+                    <div class="info-card mb-4">
+
+                        <h6>Informações Gerais</h6>
+
+                        <hr />
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <strong>ID</strong><br />
+                                @Model.AnimalId
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <strong>Idade</strong><br />
+                                @Model.Idade anos
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <strong>Porte</strong><br />
+                                @Model.Porte
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <strong>Sexo</strong><br />
+                                @Model.SexoAnimal
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <strong>Status</strong><br />
+                                @Model.StatusAnimal
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <strong>Entrada</strong><br />
+                                @Model.DataDeEntrada.ToString("dd/MM/yyyy")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <h6>Ficha de Saúde</h6>
+
+                        <hr />
+
+                        @if (Model.FichaSaude != null)
+                        {
+                            <p class="mb-3">
+                                @Model.FichaSaude.Descricao
+                            </p>
+
+                            <a asp-controller="FichaSaude"
+                               asp-action="Details"
+                               asp-route-id="@Model.FichaSaude.FichaSaudeId"
+                               class="btn btn-primary-custom">
+
+                                Ver Ficha Completa
+
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-3">
+                                Este animal ainda não possui ficha de saúde cadastrada.
+                            </p>
+
+                            <a asp-controller="FichaSaude"
+                               asp-action="Create"
+                               asp-route-animalId="@Model.AnimalId"
+                               class="btn btn-primary-custom">
+
+                                Criar Ficha
+
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex justify-content-end gap-2">
+
+                <a asp-action="Index"
+                   class="btn btn-outline-custom">
+
+                    Voltar
+
+                </a>
+
+                <a asp-action="Update"
+                   asp-route-id="@Model.AnimalId"
+                   class="btn btn-primary-custom">
+
+                    Editar Animal
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-
 <style>
-    .container {
-        max-width: 700px;
-        margin: 40px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        font-family: Arial;
+    body {
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
     }
 
-    .foto-animal {
-        width: 100%;
-        height: 320px;
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
+
+    /* ===========================
+       CARD PRINCIPAL
+    ============================ */
+
+    .card-custom {
+        background: #FFF;
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0,0,0,.05);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFF;
+        padding: 18px 24px;
+    }
+
+    .card-header-custom h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    /* ===========================
+       CARD DO ANIMAL
+    ============================ */
+
+    .animal-card {
+        background: #FFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+        margin-bottom: 20px;
+    }
+
+    .animal-img {
+        width: 180px;
+        height: 230px;
         object-fit: cover;
-        border-radius: 12px;
+        border-radius: 16px;
+        border: 3px solid #E6EDF5;
+        background: #E6EDF5;
+        display: block;
+        margin: 0 auto 20px;
+    }
+
+    .animal-card h4 {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .animal-card small {
+        color: #6C7A89;
+    }
+
+    /* ===========================
+       INFORMAÇÕES
+    ============================ */
+
+    .info-card {
+        background: #FFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.04);
+    }
+
+    .info-card h6 {
+        color: #2C5D7C;
+        font-weight: 700;
         margin-bottom: 15px;
     }
 
-    h2 {
-        text-align: center;
-        margin-bottom: 10px;
+    .info-card hr {
+        border-color: #E6EDF5;
+        margin: 15px 0;
     }
 
-    p {
-        font-size: 16px;
-        margin: 6px 0;
+    .info-card strong {
+        display: block;
+        color: #173746;
+        margin-bottom: 4px;
+        font-weight: 600;
     }
 
-    hr {
-        margin: 20px 0;
+    .info-card .row > div {
+        color: #6C7A89;
+        margin-bottom: 18px;
     }
 
-    a.btn {
-        display: inline-block;
-        margin: 5px 5px 0 0;
-        padding: 8px 12px;
-        border-radius: 8px;
-        text-decoration: none;
-        color: white;
+    .info-card p {
+        color: #173746;
+        line-height: 1.6;
     }
 
-    .btn-info {
-        background: #17a2b8;
+    /* ===========================
+       BOTÕES
+    ============================ */
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFF;
+        border: none;
+        border-radius: 10px;
+        padding: .65rem 1.5rem;
+        font-weight: 600;
+        transition: .2s;
     }
 
-    .btn-success {
-        background: #28a745;
+    .btn-primary-custom:hover {
+        background: #234B64;
+        color: #FFF;
     }
 
-    .btn-warning {
-        background: #ffc107;
-        color: black;
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: #FFF;
+        border-radius: 10px;
+        padding: .65rem 1.5rem;
+        font-weight: 600;
+        transition: .2s;
     }
 
-    .btn-secondary {
-        background: #6c757d;
+    .btn-outline-custom:hover {
+        background: #1B6EC2;
+        color: #FFF;
+    }
+
+    /* ===========================
+       RESPONSIVO
+    ============================ */
+
+@@media (max-width: 992px) {
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .animal-card {
+            margin-bottom: 25px;
+        }
+
+        .animal-img {
+            width: 170px;
+            height: 220px;
+        }
+    }
+
+@@media (max-width: 768px) {
+
+        .card-body {
+            padding: 18px;
+        }
+
+        .animal-img {
+            width: 150px;
+            height: 200px;
+        }
+
+        .btn-primary-custom,
+        .btn-outline-custom {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .d-flex.justify-content-end {
+            flex-direction: column;
+        }
     }
 </style>

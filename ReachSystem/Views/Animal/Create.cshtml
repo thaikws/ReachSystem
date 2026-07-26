@@ -1,171 +1,374 @@
-﻿@using ReachSystem.Enums;
+﻿@using ReachSystem.Enums
 @model ReachSystem.Models.Animal
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
-<div class="box">
-    <h1>Cadastrar Animal</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
 
-    <form asp-action="Create" id="formAnimal" enctype="multipart/form-data">
+<div class="container py-4">
 
-        <label>Foto do Animal</label>
-        <input type="hidden" id="imagemCortada" name="imagemCortada" />
-        <input type="file" name="fotoArquivo" id="inputImagem" accept="image/*" />
-        <div class="crop-container">
-            <img id="preview" style="max-width:100%; margin-top:10px; visibility:hidden;" />
+    <h2 class="page-title mb-4">
+        Cadastrar Animal
+    </h2>
+
+    <div class="card card-custom shadow-sm">
+
+        <div class="card-header-custom">
+            <h4>Novo Animal</h4>
         </div>
 
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
+        <div class="card-body p-4">
 
-        <label asp-for="Especie"></label>
-        <input asp-for="Especie" />
+            <form asp-action="Create" id="formAnimal" enctype="multipart/form-data">
 
-        <label asp-for="Raca"></label>
-        <input asp-for="Raca" />
+                <input type="hidden" id="imagemCortada" name="imagemCortada" />
 
-        <label asp-for="Idade"></label>
-        <input asp-for="Idade" />
+                <div class="row g-4">
 
-        <label asp-for="Porte"></label>
-        <input asp-for="Porte" />
+                    <!-- FOTO -->
+                    <div class="col-lg-4">
 
-        <label asp-for="SexoAnimal"></label>
-        <select asp-for="SexoAnimal"
-                asp-items="Html.GetEnumSelectList<Sexo>()">
-        </select>
+                        <label class="form-label">Foto do Animal</label>
 
-        <label asp-for="StatusAnimal"></label>
-        <select asp-for="StatusAnimal"
-                asp-items="Html.GetEnumSelectList<Status>()">
-        </select>
+                        <div class="text-center">
 
-        <label asp-for="DataDeEntrada"></label>
-        <input asp-for="DataDeEntrada" />
+                            <img id="preview"
+                                 class="animal-preview mb-3"
+                                 style="visibility:hidden;" />
 
-        <button type="submit">Salvar</button>
-    </form>
+                            <input type="file"
+                                   class="form-control"
+                                   id="inputImagem"
+                                   name="fotoArquivo"
+                                   accept="image/*" />
 
-    <a asp-action="Index">Voltar</a>
+                        </div>
+
+                    </div>
+
+                    <!-- CAMPOS -->
+                    <div class="col-lg-8">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nome" class="form-label"></label>
+                                <input asp-for="Nome" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Especie" class="form-label"></label>
+                                <input asp-for="Especie" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Raca" class="form-label"></label>
+                                <input asp-for="Raca" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Idade" class="form-label"></label>
+                                <input asp-for="Idade" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Porte" class="form-label"></label>
+                                <input asp-for="Porte" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SexoAnimal" class="form-label"></label>
+                                <select asp-for="SexoAnimal"
+                                        asp-items="Html.GetEnumSelectList<Sexo>()"
+                                        class="form-select">
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StatusAnimal" class="form-label"></label>
+                                <select asp-for="StatusAnimal"
+                                        asp-items="Html.GetEnumSelectList<Status>()"
+                                        class="form-select">
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DataDeEntrada" class="form-label"></label>
+                                <input asp-for="DataDeEntrada"
+                                       class="form-control"
+                                       type="date" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-custom">
+                        Voltar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary-custom px-4">
+                        Salvar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
-
 <style>
     body {
-        font-family: Arial;
-        background-color: #f4f6f9;
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
     }
 
-    .box {
-        background: white;
-        padding: 25px;
-        margin: 40px auto;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
     }
 
-    h1 {
-        text-align: center;
+    .page-title {
+        color: #173746;
+        font-weight: 700;
     }
 
-    label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 15px;
-        padding: 10px;
+    .card-custom {
+        background: #FFFFFF;
         border: none;
-        border-radius: 6px;
-        background: #007bff;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-    a {
-        display: block;
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    .crop-container {
-        width: 300px;
-        height: 300px;
-        margin: 10px auto;
+        border-radius: 18px;
         overflow: hidden;
     }
 
-    #preview {
-        max-width: 100%;
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .animal-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 18px;
+        margin-bottom: 25px;
+        border-radius: 16px;
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .animal-img {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 14px;
+        background: #E6EDF5;
+        border: 2px solid #E6EDF5;
+    }
+
+    .animal-info h5 {
+        margin-bottom: 5px;
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .animal-info small {
+        color: #6C7A89;
+    }
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #E6EDF5;
+        background: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 14px;
+    }
+
+    .form-control\:focus,
+    .form-select\:focus {
+        border-color: #1B6EC2;
+        box-shadow: 0 0 0 .2rem rgba(27,110,194,.15);
+    }
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+    }
+
+    .btn-primary-custom\:hover {
+        background: #234B64;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: transparent;
+    }
+
+    .btn-outline-custom\:hover {
+        background: #1B6EC2;
+        color: #FFFFFF;
+    }
+
+    .text-muted-custom {
+        color: #6C7A89;
+    }
+
+    .animal-preview {
+        width: 260px;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 2px dashed #E6EDF5;
+        background: #F4F7FB;
         display: block;
+        margin: auto;
+    }
+
+    .cropper-container {
+        max-width: 100%;
+    }
+
+    .card-body {
+        overflow: hidden;
+    }
+
+    .btn-primary-custom,
+    .btn-outline-custom {
+        border-radius: 10px;
+        padding: .6rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .form-control,
+    .form-select {
+        height: 48px;
+    }
+
+    @@media (max-width:768px) {
+        .animal-preview
+
+    {
+        max-width: 220px;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
     }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
 <script>
-    let cropper;
+        let cropper;
 
     const input = document.getElementById("inputImagem");
     const preview = document.getElementById("preview");
     const form = document.getElementById("formAnimal");
 
-    input.addEventListener("change", function (e) {
+
+    input.addEventListener("change", function(e){
 
         const file = e.target.files[0];
-        if (!file) return;
+
+        if(!file) return;
+
 
         const reader = new FileReader();
 
-        reader.onload = function (event) {
+
+        reader.onload = function(event){
+
 
             preview.src = event.target.result;
-            preview.style.display = "block";
 
-            if (cropper) {
+            preview.style.visibility = "visible";
+
+
+            if(cropper){
+
                 cropper.destroy();
+
             }
 
+
             cropper = new Cropper(preview, {
+
                 aspectRatio: 1,
+
                 viewMode: 1,
+
                 autoCropArea: 1,
-                movable: true,
-                zoomable: true,
-                cropBoxResizable: true
+
+                responsive:true,
+
+                background:false,
+
+                movable:true,
+
+                zoomable:true,
+
+                cropBoxResizable:true
+
             });
+
+
         };
 
+
         reader.readAsDataURL(file);
+
+
     });
 
-    form.addEventListener("submit", function () {
 
-        if (cropper) {
+
+    form.addEventListener("submit", function(){
+
+
+        if(cropper){
+
 
             const canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500
+
+                width:500,
+
+                height:500
+
             });
+
 
             document.getElementById("imagemCortada").value =
                 canvas.toDataURL("image/jpeg");
+
+
         }
+
+
     });
 </script>

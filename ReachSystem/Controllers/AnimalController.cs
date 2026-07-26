@@ -39,16 +39,28 @@ namespace ReachSystem.Controllers
 
         // POST: Animal/Create
         [HttpPost]
-        public async Task<IActionResult> Create(Animal animal, IFormFile? fotoArquivo)
+        public async Task<IActionResult> Create(
+            Animal animal,
+            IFormFile? fotoArquivo,
+            string? imagemCortada)
         {
             if (!ModelState.IsValid)
-                return View(animal);
-
-            if (fotoArquivo != null)
             {
+                return View(animal);
+            }
+
+
+            // Caso tenha imagem cortada pelo Cropper
+            if (!string.IsNullOrEmpty(imagemCortada))
+            {
+                var base64 = imagemCortada.Split(',')[1];
+
+                byte[] bytes = Convert.FromBase64String(base64);
+
+
                 string nomeArquivo =
-                    Guid.NewGuid().ToString() +
-                    Path.GetExtension(fotoArquivo.FileName);
+                    Guid.NewGuid().ToString() + ".jpg";
+
 
                 string pasta = Path.Combine(
                     _webHostEnvironment.WebRootPath,
@@ -56,19 +68,60 @@ namespace ReachSystem.Controllers
                     "animais"
                 );
 
+
                 Directory.CreateDirectory(pasta);
 
-                string caminhoCompleto = Path.Combine(pasta, nomeArquivo);
 
-                using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-                {
-                    await fotoArquivo.CopyToAsync(stream);
-                }
+                string caminhoCompleto =
+                    Path.Combine(pasta, nomeArquivo);
+
+
+                await System.IO.File.WriteAllBytesAsync(
+                    caminhoCompleto,
+                    bytes
+                );
+
 
                 animal.Foto = "/images/animais/" + nomeArquivo;
             }
 
+
+            // Caso não use o cropper e envie arquivo normal
+            else if (fotoArquivo != null)
+            {
+                string nomeArquivo =
+                    Guid.NewGuid().ToString() +
+                    Path.GetExtension(fotoArquivo.FileName);
+
+
+                string pasta = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "images",
+                    "animais"
+                );
+
+
+                Directory.CreateDirectory(pasta);
+
+
+                string caminhoCompleto =
+                    Path.Combine(pasta, nomeArquivo);
+
+
+                using (var stream = new FileStream(
+                    caminhoCompleto,
+                    FileMode.Create))
+                {
+                    await fotoArquivo.CopyToAsync(stream);
+                }
+
+
+                animal.Foto = "/images/animais/" + nomeArquivo;
+            }
+
+
             await _animalService.AddAnimalAsync(animal);
+
 
             return RedirectToAction(nameof(Index));
         }

@@ -117,6 +117,61 @@
             background: #1B6EC2;
             color: #FFFFFF;
         }
+    /* ===========================
+           RESPONSIVO MOBILE
+        =========================== */
+
+    @@media (max-width:768px) {
+
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+
+        .card-custom {
+            border-radius: 16px;
+        }
+
+
+        .card-header-custom {
+            padding: 15px 18px;
+        }
+
+
+        .animal-card {
+            flex-direction: column;
+            text-align: center;
+            gap: 12px;
+            padding: 15px;
+        }
+
+
+        .animal-img {
+            width: 150px;
+            height: 200px;
+        }
+
+
+        .animal-info h5 {
+            font-size: 1.1rem;
+        }
+
+
+        .form-control {
+            padding: 10px 12px;
+        }
+
+
+        .d-flex.gap-2 {
+            flex-direction: column;
+        }
+
+
+            .d-flex.gap-2 .btn {
+                width: 100%;
+            }
+    }
 </style>
 
 <div class="container py-5">
