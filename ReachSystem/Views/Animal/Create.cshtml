@@ -203,8 +203,8 @@
         padding: 10px 14px;
     }
 
-    .form-control\:focus,
-    .form-select\:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: #1B6EC2;
         box-shadow: 0 0 0 .2rem rgba(27,110,194,.15);
     }
@@ -215,7 +215,7 @@
         border: none;
     }
 
-    .btn-primary-custom\:hover {
+    .btn-primary-custom:hover {
         background: #234B64;
         color: #FFFFFF;
     }
@@ -226,72 +226,11 @@
         background: transparent;
     }
 
-    .btn-outline-custom\:hover {
+    .btn-outline-custom:hover {
         background: #1B6EC2;
         color: #FFFFFF;
     }
 </style>
-
-<div class="box">
-    <h1>Cadastrar Animal</h1>
-
-    <form asp-action="Create">
-        <input asp-for="Nome" placeholder="Nome" />
-        <input asp-for="Especie" placeholder="Espécie" />
-        <input asp-for="Raca" placeholder="Raça" />
-        <input asp-for="Idade" type="number" placeholder="Idade" />
-        <input asp-for="Porte" placeholder="Porte" />
-
-    .text-muted-custom {
-        color: #6C7A89;
-    }
-
-    .animal-preview {
-        width: 260px;
-        height: 260px;
-        object-fit: cover;
-        border-radius: 16px;
-        border: 2px dashed #E6EDF5;
-        background: #F4F7FB;
-        display: block;
-        margin: auto;
-    }
-
-    .cropper-container {
-        max-width: 100%;
-    }
-
-    .card-body {
-        overflow: hidden;
-    }
-
-    .btn-primary-custom,
-    .btn-outline-custom {
-        border-radius: 10px;
-        padding: .6rem 1.5rem;
-        font-weight: 600;
-    }
-
-    .form-control,
-    .form-select {
-        height: 48px;
-    }
-
-    @@media (max-width:768px) {
-        .animal-preview
-
-    {
-        max-width: 220px;
-        margin-bottom: 20px;
-    }
-
-    .card-body {
-        padding: 1.5rem;
-    }
-
-    }
-</style>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
