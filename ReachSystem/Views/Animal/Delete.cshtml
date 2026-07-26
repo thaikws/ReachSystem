@@ -1,61 +1,247 @@
 ﻿@model ReachSystem.Models.Animal
 
-<div class="box">
-    <h1>Deletar</h1>
 
-    <p>Tem certeza que deseja deletar?</p>
-    <p><strong>@Model.Nome</strong></p>
+<div class="container py-5">
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="AnimalId" />
-        <button type="submit">Deletar</button>
-    </form>
 
-    <a asp-action="Index">Cancelar</a>
+    <div class="page-header">
+
+        <h2 class="page-title">
+            Excluir Animal
+        </h2>
+
+        <p class="page-subtitle">
+            Confirmação de exclusão do cadastro
+        </p>
+
+    </div>
+
+
+    <div class="card delete-card border-0 shadow-sm">
+
+
+        <div class="card-body">
+
+
+            <div class="delete-content">
+
+
+                <div class="warning-icon">
+
+                    <span>⚠</span>
+
+                </div>
+
+
+                <h3 class="delete-title">
+                    Tem certeza?
+                </h3>
+
+
+                <p class="delete-text">
+                    Você está prestes a excluir o animal:
+                </p>
+
+
+                <p class="delete-warning">
+                    @Model.Nome
+                </p>
+
+
+
+                <form asp-action="Delete">
+
+
+                    <input type="hidden"
+                           asp-for="AnimalId" />
+
+
+                    <div class="delete-actions">
+
+
+                        <button type="submit"
+                                class="btn btn-delete">
+
+                            Excluir
+
+                        </button>
+
+
+                        <a asp-action="Index"
+                           class="btn btn-cancel">
+
+                            Cancelar
+
+                        </a>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
 </div>
-
 <style>
     body {
-        font-family: Arial;
-        background-color: #f4f6f9;
+        background: #F4F7FB;
     }
 
-    .box {
-        background: white;
-        padding: 25px;
-        margin: 40px auto;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        text-align: center;
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+    /* =========================== Cabeçalho =========================== */
+
+    .page-header {
+        margin-bottom: 28px;
+        margin-top: 25px;
     }
 
-    h1 {
-        margin-bottom: 10px;
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 2px;
     }
 
-    p {
-        font-size: 18px;
+    .page-subtitle {
+        color: #6C7A89;
+        margin-bottom: 0;
+    }
+    /* =========================== Card =========================== */
+
+    .delete-card {
+        border-radius: 22px;
+        overflow: hidden;
     }
 
-    button {
-        width: 100%;
-        margin-top: 15px;
-        padding: 10px;
-        border: none;
-        border-radius: 6px;
-        background: red;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-        button:hover {
-            background: darkred;
+        .delete-card .card-body {
+            padding: 50px;
         }
 
-    a {
-        display: block;
-        margin-top: 10px;
+    .delete-content {
+        text-align: center;
+    }
+    /* =========================== Ícone =========================== */
+
+    .warning-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        background: #FDECEC;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .warning-icon i {
+            font-size: 42px;
+            color: #D9534F;
+        }
+    /* =========================== Texto =========================== */
+
+    .delete-title {
+        color: #173746;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .delete-text {
+        color: #6C7A89;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .delete-warning {
+        color: #D9534F;
+        font-weight: 600;
+        margin-bottom: 35px;
+    }
+    /* =========================== Botões =========================== */
+
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .btn-delete {
+        background: #D9534F;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 12px;
+        transition: .2s;
+    }
+
+        .btn-delete:hover {
+            background: #c6423f;
+            color: white;
+        }
+
+    .btn-cancel {
+        background: white;
+        border: 1px solid #DEE2E6;
+        color: #173746;
+        padding: 12px 28px;
+        border-radius: 12px;
+        transition: .2s;
+    }
+
+        .btn-cancel:hover {
+            background: #F8F9FA;
+            color: #173746;
+        }
+    /* =========================== RESPONSIVO =========================== */
+
+    @@media (max-width:768px) {
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .page-header {
+            margin-bottom: 22px;
+        }
+
+        .delete-card .card-body {
+            padding: 30px 22px;
+        }
+
+        .warning-icon {
+            width: 75px;
+            height: 75px;
+            margin-bottom: 18px;
+        }
+
+            .warning-icon span {
+                font-size: 42px;
+                color: #D9534F;
+            }
+
+        .delete-title {
+            font-size: 1.35rem;
+        }
+
+        .delete-text, .delete-warning {
+            font-size: .95rem;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+        }
+
+            .delete-actions .btn {
+                width: 100%;
+                padding: 13px;
+            }
     }
 </style>

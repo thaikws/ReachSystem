@@ -249,34 +249,63 @@
 </div>
 
 <script>
+
     const select = document.getElementById("animalSelect");
     const preview = document.getElementById("animalPreview");
     const animalNome = document.getElementById("animalNome");
     const animalTexto = document.getElementById("animalTexto");
 
-    select.addEventListener("change", function () {
 
-        const option = this.options[this.selectedIndex];
+    function atualizarAnimal() {
+
+        const option = select.options[select.selectedIndex];
+
         const foto = option.getAttribute("data-foto");
         const nome = option.text;
 
-        if (this.value && foto && foto.trim() !== "") {
+
+        if (select.value && foto && foto.trim() !== "") {
+
 
             preview.src = foto;
             preview.style.display = "block";
 
+
             animalNome.textContent = nome;
-            animalTexto.textContent = "Animal selecionado para esta ficha.";
+
+            animalTexto.textContent =
+                "Animal selecionado para esta ficha.";
+
 
         } else {
+
 
             preview.src = "";
             preview.style.display = "none";
 
-            animalNome.textContent = "Selecionar Animal";
-            animalTexto.textContent = "Escolha um animal para visualizar sua foto.";
+
+            animalNome.textContent =
+                "Selecionar Animal";
+
+
+            animalTexto.textContent =
+                "Escolha um animal para visualizar sua foto.";
 
         }
 
+    }
+
+
+    // Quando troca manualmente
+    select.addEventListener("change", atualizarAnimal);
+
+
+    // Quando abre a página já com animal selecionado
+    window.addEventListener("DOMContentLoaded", function(){
+
+        atualizarAnimal();
+
     });
+
+
 </script>
