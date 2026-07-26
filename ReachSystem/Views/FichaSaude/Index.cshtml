@@ -20,6 +20,52 @@
     .card-ficha:hover {
         transform: translateY(-4px);
     }
+    /* ===========================
+           RESPONSIVO MOBILE
+        =========================== */
+
+    @@media (max-width:768px) {
+
+        .container-fluid {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+        /* Cabeçalho */
+        .d-flex.justify-content-between.align-items-center.mb-4 {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 15px;
+        }
+
+            .d-flex.justify-content-between.align-items-center.mb-4 a {
+                width: 100%;
+                text-align: center;
+            }
+        /* Cards de resumo */
+        .card-body {
+            padding: 15px;
+        }
+        /* Cards das fichas */
+        .card-ficha {
+            border-radius: 16px !important;
+        }
+
+
+            .card-ficha .card-header {
+                padding: 12px !important;
+            }
+
+
+            .card-ficha .card-body {
+                padding: 15px !important;
+            }
+        /* Botões */
+        .d-grid .btn {
+            padding: 10px;
+            border-radius: 10px;
+        }
+    }
+
 </style>
         
 

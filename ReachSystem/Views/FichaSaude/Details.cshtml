@@ -71,26 +71,31 @@
     .info-card {
         background: #FFFFFF;
         border: 1px solid #E6EDF5;
-        border-radius: 14px;
-        padding: 18px;
-        height: 100%;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.04);
+        text-align: left;
     }
 
         .info-card h6 {
             color: #2C5D7C;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .info-card p {
+            color: #173746;
+            line-height: 1.6;
+            margin: 0;
+            white-space: pre-wrap;
+            text-align: left;
         }
 
         .info-card hr {
             border-color: #E6EDF5;
             margin: .7rem 0;
-        }
-
-        .info-card p {
-            color: #173746;
-            margin: 0;
-            white-space: pre-wrap;
         }
 
     /* Botões */
@@ -116,8 +121,73 @@
             background: #1B6EC2;
             color: #FFFFFF;
         }
-</style>
 
+    @@media (max-width:768px) {
+
+        body {
+            overflow-x: hidden;
+        }
+        /* Card principal */
+
+        .card-body {
+            padding: 18px !important;
+        }
+        /* Header */
+
+        .card-header-custom {
+            padding: 15px 18px;
+        }
+
+            .card-header-custom h2 {
+                font-size: 1.3rem;
+            }
+        /* Animal */
+
+        .animal-card {
+            padding: 18px 12px;
+            margin-bottom: 20px;
+        }
+
+        .animal-img {
+            width: 150px;
+            height: 200px;
+        }
+
+
+        .animal-card h4 {
+            font-size: 1.2rem;
+        }
+        /* Informações */
+
+        .info-card {
+            padding: 15px;
+            text-align: left;
+        }
+
+            .info-card h6 {
+                font-size: .95rem;
+            }
+
+            .info-card p {
+                font-size: .9rem;
+                text-align: left;
+                word-break: break-word;
+            }
+        /* Botões igual Animal Details */
+
+        .d-flex.gap-2.mt-4 {
+            flex-direction: column;
+            gap: 10px !important;
+        }
+
+
+        .btn-primary-custom,
+        .btn-outline-custom {
+            width: 100%;
+            padding: .65rem 1rem;
+        }
+    }
+</style>
 <div class="container py-5">
 
     <div class="mb-4">
@@ -270,14 +340,14 @@
             <div class="d-flex gap-2 mt-4">
 
                 <a asp-action="Index"
-                   class="btn btn-primary-custom px-4">
+                   class="btn btn-primary-custom">
                     Ver Todas as Fichas
                 </a>
 
                 <a asp-controller="Animal"
                    asp-action="Details"
                    asp-route-id="@Model.AnimalId"
-                   class="btn btn-outline-custom px-4">
+                   class="btn btn-outline-custom">
                     Voltar para o Animal
                 </a>
 

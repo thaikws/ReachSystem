@@ -107,6 +107,78 @@
     .text-muted-custom {
         color: #6C7A89;
     }
+    /* =========================
+       Responsivo Mobile
+    ========================= */
+
+    @@media (max-width: 768px) {
+        .card-custom
+
+    {
+        border-radius: 14px;
+    }
+
+    .card-header-custom {
+        padding: 15px 18px;
+    }
+
+        .card-header-custom h4 {
+            font-size: 1.1rem;
+        }
+
+
+    .animal-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+
+    .animal-img {
+        width: 130px;
+        height: 180px;
+    }
+
+
+    .animal-info h5 {
+        font-size: 1rem;
+    }
+
+
+    .animal-info small {
+        font-size: .85rem;
+    }
+
+
+    .card-body {
+        padding: 1.2rem !important;
+    }
+
+
+    .form-control,
+    .form-select {
+        font-size: .95rem;
+        padding: 10px;
+    }
+
+
+    .btn-primary-custom,
+    .btn-outline-custom {
+        width: 100%;
+        text-align: center;
+    }
+
+
+    .d-flex {
+        flex-direction: column;
+    }
+
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    }
 </style>
 
 <div class="container py-4">
@@ -249,34 +321,63 @@
 </div>
 
 <script>
+
     const select = document.getElementById("animalSelect");
     const preview = document.getElementById("animalPreview");
     const animalNome = document.getElementById("animalNome");
     const animalTexto = document.getElementById("animalTexto");
 
-    select.addEventListener("change", function () {
 
-        const option = this.options[this.selectedIndex];
+    function atualizarAnimal() {
+
+        const option = select.options[select.selectedIndex];
+
         const foto = option.getAttribute("data-foto");
         const nome = option.text;
 
-        if (this.value && foto && foto.trim() !== "") {
+
+        if (select.value && foto && foto.trim() !== "") {
+
 
             preview.src = foto;
             preview.style.display = "block";
 
+
             animalNome.textContent = nome;
-            animalTexto.textContent = "Animal selecionado para esta ficha.";
+
+            animalTexto.textContent =
+                "Animal selecionado para esta ficha.";
+
 
         } else {
+
 
             preview.src = "";
             preview.style.display = "none";
 
-            animalNome.textContent = "Selecionar Animal";
-            animalTexto.textContent = "Escolha um animal para visualizar sua foto.";
+
+            animalNome.textContent =
+                "Selecionar Animal";
+
+
+            animalTexto.textContent =
+                "Escolha um animal para visualizar sua foto.";
 
         }
 
+    }
+
+
+    // Quando troca manualmente
+    select.addEventListener("change", atualizarAnimal);
+
+
+    // Quando abre a página já com animal selecionado
+    window.addEventListener("DOMContentLoaded", function(){
+
+        atualizarAnimal();
+
     });
+
+
 </script>

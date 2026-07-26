@@ -1,170 +1,385 @@
 ﻿@using ReachSystem.Enums
 @model ReachSystem.Models.Animal
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
 
-<div class="box">
-    <h1>Editar Animal</h1>
+<div class="container py-4">
 
-    <form asp-action="Update" id="formAnimal" enctype="multipart/form-data">
+    <div class="card card-custom shadow-sm">
 
-        <input type="hidden" asp-for="AnimalId" />
-        <input type="hidden" asp-for="Foto" />
-
-        <!-- controles backend -->
-        <input type="hidden" id="imagemCortada" name="imagemCortada" />
-        <input type="hidden" id="removerFoto" name="removerFoto" value="false" />
-
-        <!-- FOTO ATUAL -->
-        @if (!string.IsNullOrEmpty(Model.Foto))
-        {
-            <img src="@Model.Foto" class="foto-preview" id="fotoAtual" />
-        }
-        else
-        {
-            <img class="foto-preview" id="fotoAtual" style="display:none;" />
-        }
-
-        <!-- LABEL -->
-        <label>Nova Foto</label>
-
-        <!-- BOTÕES (APENAS VISUAIS + JS) -->
-        <div id="areaBotoesFoto" style="margin-bottom:10px; display:@(string.IsNullOrEmpty(Model.Foto) ? "none" : "block");">
-
-            <button type="button" id="btnEditarFoto">
-                Editar foto
-            </button>
-
-            <button type="button" id="btnRemoverFoto">
-                Remover foto
-            </button>
-            <button type="button" id="btnEscolherArquivo">
-                Trocar foto
-            </button>
-
-            <span id="textoArquivo" style="margin-left:10px; font-size:12px;">
-                Nenhum arquivo selecionado
-            </span>
+        <div class="card-header-custom">
+            <h4>Editar Animal</h4>
         </div>
 
-        <!-- INPUT ESCONDIDO -->
-        <input type="file"
-               name="fotoArquivo"
-               id="inputImagem"
-               accept="image/*"
-               style="display:none;" />
+        <div class="card-body">
 
-        <!-- CROP -->
-        <div class="crop-container">
-            <img id="preview"
-                 style="max-width:100%; margin-top:10px; visibility:hidden;" />
+            <form asp-action="Update"
+                  id="formAnimal"
+                  enctype="multipart/form-data">
+
+                <!-- Backend -->
+                <input type="hidden" asp-for="AnimalId" />
+                <input type="hidden" asp-for="Foto" />
+                <input type="hidden" id="imagemCortada" name="imagemCortada" />
+                <input type="hidden" id="removerFoto" name="removerFoto" value="false" />
+
+                <div class="row g-4">
+
+                    <!-- FOTO -->
+                    <div class="col-lg-4">
+
+                        <div class="animal-card">
+
+                            @if (!string.IsNullOrEmpty(Model.Foto))
+                            {
+                                <img src="@Model.Foto"
+                                     id="fotoAtual"
+                                     class="animal-img" />
+                            }
+                            else
+                            {
+                                <img id="fotoAtual"
+                                     class="animal-img"
+                                     style="display:none;" />
+                            }
+
+                            <label class="form-label mt-3">
+                                Foto do Animal
+                            </label>
+
+                            <div class="d-grid gap-2 mt-2"
+                                 id="areaBotoesFoto"
+                                 style="display:@(string.IsNullOrEmpty(Model.Foto) ? "none" : "block")">
+
+                                <button type="button"
+                                        id="btnEditarFoto"
+                                        class="btn btn-outline-custom">
+
+                                    Editar Foto
+
+                                </button>
+
+                                <button type="button"
+                                        id="btnRemoverFoto"
+                                        class="btn btn-outline-danger">
+
+                                    Remover Foto
+
+                                </button>
+
+                                <button type="button"
+                                        id="btnEscolherArquivo"
+                                        class="btn btn-primary-custom">
+
+                                    Trocar Foto
+
+                                </button>
+
+                            </div>
+
+                            <span id="textoArquivo"
+                                  class="text-muted-custom d-block mt-3">
+
+                                Nenhum arquivo selecionado
+
+                            </span>
+
+                            <input type="file"
+                                   id="inputImagem"
+                                   name="fotoArquivo"
+                                   accept="image/*"
+                                   hidden />
+
+                            <div class="crop-container mt-4">
+
+                                <img id="preview"
+                                     class="img-fluid rounded"
+                                     style="visibility:hidden;" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- FORM -->
+                    <div class="col-lg-8">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nome" class="form-label"></label>
+                                <input asp-for="Nome" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Especie" class="form-label"></label>
+                                <input asp-for="Especie" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Raca" class="form-label"></label>
+                                <input asp-for="Raca" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Idade" class="form-label"></label>
+                                <input asp-for="Idade" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Porte" class="form-label"></label>
+                                <input asp-for="Porte" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SexoAnimal" class="form-label"></label>
+
+                                <select asp-for="SexoAnimal"
+                                        asp-items="Html.GetEnumSelectList<Sexo>()"
+                                        class="form-select">
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StatusAnimal" class="form-label"></label>
+
+                                <select asp-for="StatusAnimal"
+                                        asp-items="Html.GetEnumSelectList<Status>()"
+                                        class="form-select">
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DataDeEntrada"
+                                       class="form-label"></label>
+
+                                <input asp-for="DataDeEntrada"
+                                       type="date"
+                                       class="form-control" />
+                            </div>
+
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-custom">
+
+                                Voltar
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary-custom">
+
+                                Salvar Alterações
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
         </div>
 
-        <!-- CAMPOS -->
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
-        <input asp-for="Especie" />
-        <input asp-for="Raca" />
-        <input asp-for="Idade" type="number" />
-        <input asp-for="Porte" />
-
-        <label asp-for="SexoAnimal"></label>
-        <select asp-for="SexoAnimal"
-                asp-items="Html.GetEnumSelectList<Sexo>()">
-        </select>
-
-        <label asp-for="StatusAnimal"></label>
-        <select asp-for="StatusAnimal"
-                asp-items="Html.GetEnumSelectList<Status>()">
-        </select>
-
-        <label asp-for="DataDeEntrada"></label>
-        <input asp-for="DataDeEntrada" type="date" />
-
-        <button type="submit">
-            Salvar Alterações
-        </button>
-
-    </form>
-
-    <a asp-action="Index">Voltar</a>
+    </div>
 
 </div>
 
 <style>
+
     body {
-        font-family: Arial;
-        background-color: #f4f6f9;
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
     }
 
-    .box {
-        background: white;
-        padding: 25px;
-        margin: 40px auto;
-        width: 380px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
     }
 
-    h1 {
-        text-align: center;
-    }
+    /* ===========================
+       CARD PRINCIPAL
+    =========================== */
 
-    label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    .foto-preview {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 15px;
-        padding: 10px;
+    .card-custom {
+        background: #FFFFFF;
         border: none;
-        border-radius: 6px;
-        background: green;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,.05);
     }
 
-        button:hover {
-            background: darkgreen;
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
         }
 
-    a {
-        display: block;
+    /* ===========================
+       CARD DA FOTO
+    =========================== */
+
+    .animal-card {
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 16px;
+        padding: 20px;
         text-align: center;
-        margin-top: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .animal-img {
+        width: 220px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 3px solid #E6EDF5;
+        background: #E6EDF5;
+        display: block;
+        margin: 0 auto;
     }
 
     .crop-container {
-        width: 300px;
-        height: 300px;
-        margin: 10px auto;
-        overflow: hidden;
+        margin-top: 20px;
     }
 
     #preview {
         max-width: 100%;
-        display: block;
+        border-radius: 14px;
+    }
+
+    /* ===========================
+       FORMULÁRIO
+    =========================== */
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #E6EDF5;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: #FFFFFF;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #1B6EC2;
+            box-shadow: 0 0 0 .2rem rgba(27,110,194,.15);
+        }
+
+    .text-muted-custom {
+        color: #6C7A89;
+        font-size: .9rem;
+    }
+
+    /* ===========================
+       BOTÕES
+    =========================== */
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        padding: .65rem 1.5rem;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-custom {
+        border: 1px solid #1B6EC2;
+        color: #1B6EC2;
+        background: #FFFFFF;
+        border-radius: 10px;
+        padding: .65rem 1.5rem;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+        .btn-outline-custom:hover {
+            background: #1B6EC2;
+            color: #FFFFFF;
+        }
+
+    .btn-outline-danger {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    /* ===========================
+       ÁREA DOS BOTÕES DA FOTO
+    =========================== */
+
+    #areaBotoesFoto {
+        margin-top: 20px;
+    }
+
+        #areaBotoesFoto .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+    /* ===========================
+       RESPONSIVO
+    =========================== */
+
+    @@media (max-width: 991px) {
+        .animal-card
+
+    {
+        margin-bottom: 25px;
+    }
+
+    .animal-img {
+        width: 180px;
+        height: 180px;
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .card-body
+
+    {
+        padding: 20px;
+    }
+
+    .animal-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .d-flex.justify-content-end {
+        flex-direction: column;
+    }
+
+        .d-flex.justify-content-end .btn {
+            width: 100%;
+        }
+
     }
 </style>
 
