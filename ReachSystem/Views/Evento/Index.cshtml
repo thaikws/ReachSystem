@@ -156,6 +156,108 @@
         background: #d9534f;
         color: white;
     }
+
+    /* Permite quebrar a linha quando faltar espaço */
+    .container-grid {
+        flex-wrap: wrap;
+    }
+
+    /* ===========================
+       TABLET
+    =========================== */
+
+    @@media (max-width:900px) {
+
+        .container-grid {
+            flex-direction: column;
+        }
+
+        .lista {
+            width: 100%;
+        }
+
+        .calendario-box {
+            width: 100%;
+        }
+    }
+
+    /* ===========================
+       MOBILE
+    =========================== */
+
+    @@media (max-width:600px) {
+
+        .topbar {
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .titulo {
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .btn-add {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .container-grid {
+            padding: 0 20px 20px;
+            gap: 20px;
+        }
+
+        .lista {
+            width: 100%;
+        }
+
+        .card {
+            padding: 15px;
+            border-radius: 18px;
+        }
+
+        .header-cal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dias-semana {
+            font-size: 12px;
+        }
+
+        .grid-calendario {
+            gap: 4px;
+        }
+
+        .dia {
+            height: 70px;
+            padding: 4px;
+            font-size: 12px;
+        }
+
+            .dia.tem-evento::after {
+                font-size: 18px;
+                right: 6px;
+                bottom: 4px;
+            }
+
+        .evento-item {
+            padding: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            margin: 6px 0 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    }
 </style>
 
 <div class="topbar">
@@ -278,6 +380,11 @@
                             <a class="btn btn-delete"
                                href="/Evento/Delete/${e.EventoId}">
                                Excluir
+                            </a>
+
+                            <a class="btn btn-edit"
+                               href="/Evento/Details/${e.EventoId}">
+                               Detalhes
                             </a>
                         </div>
                     </div>

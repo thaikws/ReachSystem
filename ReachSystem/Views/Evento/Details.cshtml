@@ -6,62 +6,246 @@
     var participantes = ViewBag.Participantes as IEnumerable<ReachSystem.Models.ApplicationUser>;
 }
 
-<h2>Detalhes do Evento</h2>
+<style>
+    body {
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
+    }
 
-<hr />
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
 
-<p>
-    <strong>Nome:</strong>
-    @Model.Nome
-</p>
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
 
-<p>
-    <strong>Data:</strong>
-    @Model.Data.ToString("dd/MM/yyyy")
-</p>
+    .evento-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: .2s;
+        background: #FFF;
+    }
 
-<p>
-    <strong>Local:</strong>
-    @Model.Local
-</p>
-
-<p>
-    <strong>Descrição:</strong><br />
-    @Model.Descricao
-</p>
-
-<hr />
-
-<form asp-action="Participar" method="post">
-    <input type="hidden" name="eventoId" value="@Model.EventoId" />
-    <button type="submit">
-        Participar
-    </button>
-</form>
-
-<br />
-
-<form asp-action="CancelarParticipacao" method="post">
-    <input type="hidden" name="eventoId" value="@Model.EventoId" />
-    <button type="submit">
-        Cancelar Participação
-    </button>
-</form>
-
-<hr />
-
-<h3>Participantes</h3>
-
-@if (participantes != null && participantes.Any())
-{
-        <ul>
-        @foreach (var participante in participantes)
-        {
-                    <li>@participante.Nome</li>
+        .evento-card:hover {
+            transform: translateY(-3px);
         }
-        </ul>
-}
-else
-{
-        <p>Nenhum participante inscrito.</p>
-}
+
+    .evento-header {
+        background: linear-gradient(135deg,#2C5D7C,#3D7397);
+        color: white;
+        padding: 22px;
+    }
+
+    .evento-body {
+        padding: 28px;
+    }
+
+    .info-item {
+        margin-bottom: 18px;
+    }
+
+    .info-label {
+        font-weight: 700;
+        color: #2C5D7C;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #495057;
+    }
+
+    .btn-evento {
+        border-radius: 12px;
+        padding: 10px;
+        font-weight: 600;
+    }
+
+    .participantes-card {
+        border: none;
+        border-radius: 20px;
+    }
+
+    .participante-item {
+        padding: 12px 18px;
+        border-bottom: 1px solid #ECECEC;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .participante-item:last-child {
+            border-bottom: none;
+        }
+
+    .participante-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #2C5D7C;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    @@media (max-width:768px) {
+
+        .container {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .evento-body {
+            padding: 20px;
+        }
+
+        .d-flex.gap-3 {
+            flex-direction: column;
+        }
+
+            .d-flex.gap-3 form {
+                width: 100%;
+            }
+
+            .d-flex.gap-3 .btn {
+                width: 100%;
+            }
+
+        .evento-header {
+            padding: 18px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    }
+
+</style>
+
+<div class="container py-4">
+
+    <h2 class="page-title mb-4">
+        Detalhes do Evento
+    </h2>
+
+    <div class="card shadow-sm evento-card">
+
+        <div class="evento-header">
+            <h3 class="mb-1">@Model.Nome</h3>
+
+            <small>
+                Eventos da ONG
+            </small>
+        </div>
+
+        <div class="evento-body">
+
+            <div class="info-item">
+                <span class="info-label">
+                    Data
+                </span>
+
+                <span class="badge bg-primary fs-6">
+                    @Model.Data.ToString("dd/MM/yyyy")
+                </span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    Local
+                </span>
+
+                <div class="info-value">
+                    @Model.Local
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">
+                    Descrição
+                </span>
+
+                <div class="info-value">
+                    @Model.Descricao
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex gap-3">
+
+                <form asp-action="Participar" method="post" class="flex-fill">
+
+                    <input type="hidden"
+                           name="eventoId"
+                           value="@Model.EventoId" />
+
+                    <button class="btn btn-success btn-evento w-100">
+                        Participar
+                    </button>
+
+                </form>
+
+                <form asp-action="CancelarParticipacao" method="post" class="flex-fill">
+
+                    <input type="hidden"
+                           name="eventoId"
+                           value="@Model.EventoId" />
+
+                    <button class="btn btn-outline-danger btn-evento w-100">
+                        Cancelar Participação
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm participantes-card mt-4">
+
+        <div class="card-header bg-white py-3">
+            <h4 class="mb-0">
+                Participantes
+            </h4>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (participantes != null && participantes.Any())
+            {
+                @foreach (var participante in participantes)
+                {
+                    <div class="participante-item">
+
+                        <div class="participante-avatar">
+                            @participante.Nome.Substring(0, 1).ToUpper()
+                        </div>
+
+                        <div>
+                            @participante.Nome
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5 text-muted">
+                    Nenhum participante inscrito.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
