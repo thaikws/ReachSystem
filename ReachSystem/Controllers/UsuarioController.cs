@@ -29,7 +29,7 @@ namespace ReachSystem.Controllers
             return View();
         }
 
-        //Post create
+        //post create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string nome, string email, string senha, string role)
@@ -43,7 +43,33 @@ namespace ReachSystem.Controllers
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error.Description);
+                var mensagem = error.Code switch
+                {
+                    "PasswordRequiresNonAlphanumeric" =>
+                        "A senha deve conter pelo menos um caractere especial (ex: @, #, !).",
+
+                    "PasswordRequiresDigit" =>
+                        "A senha deve conter pelo menos um número.",
+
+                    "PasswordRequiresLower" =>
+                        "A senha deve conter pelo menos uma letra minúscula.",
+
+                    "PasswordRequiresUpper" =>
+                        "A senha deve conter pelo menos uma letra maiúscula.",
+
+                    "PasswordTooShort" =>
+                        "A senha deve ter pelo menos 6 caracteres.",
+
+                    "DuplicateUserName" =>
+                        "Este e-mail já está cadastrado.",
+
+                    "DuplicateEmail" =>
+                        "Este e-mail já está cadastrado.",
+
+                    _ => "Não foi possível criar o usuário. Verifique os dados informados."
+                };
+
+                ModelState.AddModelError("", mensagem);
             }
 
             return View();

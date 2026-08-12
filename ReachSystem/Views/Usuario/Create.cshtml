@@ -124,8 +124,16 @@
             </div>
 
             <div class="card-body p-5">
-
-                <form asp-action="Create" autocomplete="off">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
+                <form asp-action="Create" method="post" autocomplete="off">
 
                     <div class="form-section">
                         <label>Nome</label>
@@ -172,7 +180,7 @@
                         <label>Cargo</label>
 
                         <select name="role" class="form-select">
-                            <option value="Administrador">Administrador</option>
+                            <option value="Admin">Administrador</option>
                             <option value="Funcionario">Funcionário</option>
                             <option value="Voluntario">Voluntário</option>
                         </select>
