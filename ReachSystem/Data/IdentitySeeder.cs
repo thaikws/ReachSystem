@@ -26,19 +26,25 @@ namespace ReachSystem.Data
 
             if (adminUser == null)
             {
-                var user = new ApplicationUser
+                adminUser = new ApplicationUser
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
                     Nome = "Administrador"
                 };
 
-                var result = await userManager.CreateAsync(user, "Admin123@");
+                var result = await userManager.CreateAsync(adminUser, "Admin123@");
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Admin");
+                    return;
                 }
+            }
+
+            // Garante que o usuário Admin tenha a Role Admin
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
     }
