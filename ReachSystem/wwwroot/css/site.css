@@ -1,207 +1,536 @@
-html {
-    font-size: 14px;
+/* =========================================================
+   REACH SYSTEM
+   NAVBAR DESKTOP + MOBILE
+========================================================= */
+
+
+/* =========================================================
+   DESKTOP NAVBAR
+========================================================= */
+
+.desktop-navbar-wrapper {
+    display: block;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
+.desktop-navbar {
     position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-}
-
-.site-navbar,
-.site-navbar a,
-.site-navbar .nav-link,
-.site-navbar .navbar-brand {
-    color: #ffffff !important;
-}
-
-@media (max-width: 576px) {
-    .card {
-        padding: 20px;
-        max-width: 360px;
-    }
-}
-
-/* ===========================
-                   Navbar
-                =========================== */
-body {
-    font-family: "Public Sans", sans-serif;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Sora", sans-serif;
-}
-
-
-.navbar,
-.navbar * {
-    font-family: "Sora", sans-serif !important;
-}
-
-.navbar {
-    background: linear-gradient(135deg, #2C5D7C, #356E91);
-    padding: .45rem 1rem;
+    z-index: 1000;
     min-height: 58px;
-    box-shadow: 0 8px 24px rgba(44,93,124,.18);
+    padding: .45rem 1rem;
+    background: linear-gradient(135deg, #2C5D7C, #356E91);
+    box-shadow: 0 8px 24px rgba(44, 93, 124, .18);
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
-    transition: .25s;
+    overflow: visible !important;
 }
 
+    .desktop-navbar .container-fluid {
+        overflow: visible !important;
+    }
 
-/* Marca */
 
-.navbar-brand {
-    color: #fff !important;
-    font-size: 1rem;
-    font-weight: 700;
-    white-space: nowrap;
-}
+    /* =========================================================
+   LINKS DESKTOP
+========================================================= */
 
-.navbar form {
-    display: flex;
-    align-items: center;
-    margin: 0;
-}
-/* Links */
+    .desktop-navbar .navbar-collapse {
+        display: flex !important;
+        align-items: center;
+        overflow: visible !important;
+    }
 
-.navbar-nav {
-    gap: .45rem;
-}
+    .desktop-navbar .navbar-nav {
+        display: flex;
+        gap: .45rem;
+        margin-bottom: 0;
+    }
 
-.navbar .nav-link {
+    .desktop-navbar .nav-link {
+        position: relative;
+        padding: .5rem .75rem;
+        color: #FFFFFF !important;
+        font-family: "Sora", sans-serif !important;
+        border-radius: 10px;
+        transition: background .25s ease, transform .25s ease;
+    }
+
+        .desktop-navbar .nav-link:hover {
+            background: rgba(255, 255, 255, .12);
+            transform: translateY(-2px);
+        }
+
+
+        /* Linha abaixo do link */
+
+        .desktop-navbar .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 15%;
+            bottom: 5px;
+            width: 0;
+            height: 2px;
+            background: #FFFFFF;
+            border-radius: 20px;
+            transition: width .25s ease;
+        }
+
+        .desktop-navbar .nav-link:hover::after {
+            width: 70%;
+        }
+
+
+    /* =========================================================
+   LOGO DESKTOP
+========================================================= */
+
+    .desktop-navbar .navbar-brand {
+        margin-right: 1.5rem;
+        color: #FFFFFF !important;
+        font-family: "Sora", sans-serif !important;
+        font-size: 1rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+/* =========================================================
+   PERFIL DESKTOP
+========================================================= */
+
+.profile-preview {
     position: relative;
-    color: #fff !important;
-    border-radius: 10px;
-    transition: .25s;
-}
-
-    .navbar .nav-link:hover {
-        background: rgba(255,255,255,.12);
-        transform: translateY(-2px);
-    }
-
-    .navbar .nav-link::after {
-        content: "";
-        position: absolute;
-        left: 15%;
-        bottom: 6px;
-        width: 0;
-        height: 2px;
-        background: #fff;
-        border-radius: 20px;
-        transition: .25s;
-    }
-
-    .navbar .nav-link:hover::after {
-        width: 70%;
-    }
-/* Botão sair */
-
-.logout-btn {
     display: flex;
     align-items: center;
-    gap: .35rem;
-    color: #fff !important;
-    font-size: .9rem;
-    line-height: 1.2;
-    padding: .45rem .75rem !important;
-    margin: 0;
-    border: 0;
-    background: transparent;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: .25s;
+    margin-left: .75rem;
+    z-index: 5000;
 }
 
-    .logout-btn:hover {
-        color: #E6F0F7 !important;
-        background: rgba(255,255,255,.10);
-        transform: translateY(-2px);
+
+/* =========================================================
+   AVATAR / BOLINHA
+========================================================= */
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, .75);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .16);
+    color: #FFFFFF !important;
+    font-family: "Sora", sans-serif !important;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+    .profile-avatar:hover {
+        background: rgba(255, 255, 255, .25);
+        border-color: #FFFFFF;
+        transform: translateY(-1px);
     }
 
-/* Ícones */
 
-.navbar .bi {
-    font-size: 1rem;
+/* =========================================================
+   POPOVER DO PERFIL
+========================================================= */
+
+.profile-popover {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 290px;
+    padding: 16px;
+    background: #FFFFFF !important;
+    color: #2C5D7C !important;
+    border: 1px solid #E6EDF5;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(23, 55, 70, .16);
+    z-index: 6000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+
+
+/* Abre ao passar o mouse */
+
+.profile-preview:hover .profile-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   CABEÇALHO DO POPOVER
+========================================================= */
+
+.profile-popover-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   AVATAR PEQUENO
+========================================================= */
+
+.profile-avatar-sm {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    background: #E6EDF5 !important;
+    color: #2C5D7C !important;
+    border: none;
+    cursor: default;
+    transform: none !important;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES DO USUÁRIO
+========================================================= */
+
+.profile-user-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+    .profile-user-info strong {
+        display: block;
+        color: #173746 !important;
+        font-family: "Sora", sans-serif !important;
+        font-size: .9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .profile-user-info small {
+        display: block;
+        color: #2C5D7C !important;
+        font-family: "Sora", sans-serif !important;
+        font-size: .75rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+/* =========================================================
+   FUNÇÃO DO USUÁRIO
+========================================================= */
+
+.profile-role {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 13px;
+    border-top: 1px solid #E6EDF5;
+    color: #2C5D7C !important;
+    font-family: "Sora", sans-serif !important;
+    font-size: .8rem;
+}
+
+    .profile-role i {
+        color: #2C5D7C !important;
+        font-family: "bootstrap-icons" !important;
+        font-size: .9rem;
+        line-height: 1;
+    }
+
+
+/* =========================================================
+   LINKS DO POPOVER
+========================================================= */
+
+.profile-popover-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 8px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    background: transparent;
+    color: #2C5D7C !important;
+    text-decoration: none;
+    font-family: "Sora", sans-serif !important;
+    font-size: .85rem;
+    transition: background .2s ease, color .2s ease;
+}
+
+    .profile-popover-link i {
+        color: #2C5D7C !important;
+        font-family: "bootstrap-icons" !important;
+        font-size: 1rem;
+    }
+
+    .profile-popover-link:hover {
+        background: #F4F7FB !important;
+        color: #173746 !important;
+    }
+
+        .profile-popover-link:hover i {
+            color: #173746 !important;
+        }
+
+
+/* =========================================================
+   DIVISOR
+========================================================= */
+
+.profile-divider {
+    height: 1px;
+    margin: 8px 0;
+    background: #E6EDF5;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.profile-popover form {
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+
+.profile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    border: none;
+    border-radius: 9px;
+    background: transparent !important;
+    color: #2C5D7C !important;
+    font-family: "Sora", sans-serif !important;
+    font-size: .85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+    .profile-logout i {
+        color: #2C5D7C !important;
+        font-family: "bootstrap-icons" !important;
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .profile-logout:hover {
+        background: #F4F7FB !important;
+        color: #173746 !important;
+    }
+
+        .profile-logout:hover i {
+            color: #173746 !important;
+        }
+
+
+/* =========================================================
+   BOOTSTRAP ICONS
+========================================================= */
+
+.desktop-navbar .bi,
+.profile-popover .bi,
+.mobile-bottom-navbar .bi {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal;
+    font-weight: normal;
     line-height: 1;
 }
 
-/* Botão hamburguer */
 
-.navbar-toggler {
-    border: 1px solid rgba(255,255,255,.35);
-    padding: .35rem .5rem;
-}
-    .navbar-toggler:focus {
-        box-shadow: none;
-    }
+/* =========================================================
+   LOGO MOBILE
+========================================================= */
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+/* Fica escondida no desktop */
+
+.mobile-brand {
+    display: none;
 }
 
-/* ===========================
-                   Mobile
-                =========================== */
+
+/* =========================================================
+   NAVBAR MOBILE
+========================================================= */
+
+/* Fica escondida no desktop */
+
+.mobile-bottom-navbar {
+    display: none;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 991.98px) {
 
-    .navbar {
-        padding: .5rem .75rem;
+
+    /* =====================================================
+       ESCONDE NAVBAR DESKTOP
+    ===================================================== */
+
+    .desktop-navbar-wrapper {
+        display: none !important;
     }
 
-    .navbar-collapse {
-        margin-top: .75rem;
-    }
 
-    .navbar-nav {
-        gap: .15rem;
-    }
+    /* =====================================================
+       LOGO MOBILE
+    ===================================================== */
 
-    .navbar .nav-link,
-    .logout-btn {
-        width: 100%;
-        padding: .7rem 1rem !important;
-    }
-
-    .logout-btn {
-        justify-content: flex-start;
-    }
-
-    .navbar form {
-        width: 100%;
-        margin: 0;
-    }
-
-    .navbar .nav-link::after {
-        display: none;
-    }
-
-    .navbar form {
-        width: 100%;
-    }
-
-    .logout-btn {
-        width: 100%;
+    .mobile-brand {
         display: flex;
-        justify-content: center;
         align-items: center;
-        gap: 8px;
+        height: 54px;
+        padding: 0 1rem;
+        background: #2C5D7C;
+        border-bottom: 1px solid #E6EDF5;
+        box-shadow: 0 2px 10px rgba(23, 55, 70, .05);
+        position: relative;
+        z-index: 100;
     }
+
+        .mobile-brand a {
+            color: #FFFFFF !important;
+            text-decoration: none;
+            font-family: "Sora", sans-serif !important;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+
+    /* =====================================================
+       ESPAÇO PARA NAVBAR INFERIOR
+    ===================================================== */
+
+    body {
+        padding-bottom: 75px;
+    }
+
+
+    /* =====================================================
+       NAVBAR INFERIOR
+    ===================================================== */
+
+    .mobile-bottom-navbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 68px;
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        background: #FFFFFF;
+        border-top: 1px solid #E6EDF5;
+        box-shadow: 0 -5px 20px rgba(23, 55, 70, .10);
+        z-index: 9999;
+        padding: 5px 2px calc(5px + env(safe-area-inset-bottom));
+        overflow: hidden;
+    }
+
+
+    /* =====================================================
+       ITEM MOBILE
+    ===================================================== */
+
+    .mobile-nav-item {
+        /*
+           Divide igualmente o espaço entre os 6 itens.
+        */
+
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        border: none;
+        background: transparent;
+        color: #2C5D7C !important;
+        text-decoration: none;
+        font-family: "Sora", sans-serif !important;
+        font-size: .58rem;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: background .2s ease, color .2s ease;
+    }
+
+
+        /* =====================================================
+       ÍCONE MOBILE
+    ===================================================== */
+
+        .mobile-nav-item i {
+            font-family: "bootstrap-icons" !important;
+            font-size: 1.15rem;
+            line-height: 1;
+            color: #2C5D7C !important;
+        }
+
+
+        /* =====================================================
+       HOVER
+    ===================================================== */
+
+        .mobile-nav-item:hover {
+            background: #F4F7FB;
+            color: #173746 !important;
+        }
+
+            .mobile-nav-item:hover i {
+                color: #173746 !important;
+            }
+
+
+        /* =====================================================
+       ITEM ATIVO
+    ===================================================== */
+
+        .mobile-nav-item.active {
+            color: #173746 !important;
+        }
+
+            .mobile-nav-item.active i {
+                color: #173746 !important;
+            }
 }
 
+
+/* =========================================================
+   TELAS MUITO PEQUENAS
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .mobile-nav-item {
+        font-size: .52rem;
+        gap: 3px;
+    }
+
+        .mobile-nav-item i {
+            font-size: 1.05rem;
+        }
+}

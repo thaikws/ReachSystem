@@ -1,152 +1,463 @@
-﻿﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-<link rel="stylesheet" href="~/ReachSystem.styles.css" asp-append-version="true" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+﻿@using Microsoft.AspNetCore.Identity
+@using ReachSystem.Models
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - ReachSystem</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/ReachSystem.styles.css"
+          asp-append-version="true" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
 </head>
 
-<header>
-    <nav class="navbar navbar-expand-lg">
 
-        <div class="container-fluid">
+@{
+        ApplicationUser? usuarioLogado = null;
 
-            <a class="navbar-brand" asp-controller="Dashboard" asp-action="Index">
-                ReachSystem
-            </a>
+        if (User.Identity?.IsAuthenticated == true)
+        {
+                usuarioLogado = await UserManager.GetUserAsync(User);
+        }
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarMain"
-                    aria-controls="navbarMain"
-                    aria-expanded="false"
-                    aria-label="Alternar navegação">
+        var nomeUsuario = usuarioLogado?.Nome ?? "Usuário";
 
-                <span class="navbar-toggler-icon"></span>
+        var emailUsuario = usuarioLogado?.Email ?? "";
 
-            </button>
+        var inicialUsuario =
+                !string.IsNullOrWhiteSpace(nomeUsuario)
+                        ? nomeUsuario.Trim()[0].ToString().ToUpper()
+                        : "?";
 
-
-            <div class="collapse navbar-collapse" id="navbarMain">
-
-                <ul class="navbar-nav me-auto">
-
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Dashboard"
-                               asp-action="Index">
-                                Dashboard
-                            </a>
-                        </li>
+        var funcaoUsuario =
+                User.IsInRole("Admin")
+                        ? "Administrador"
+                        : User.IsInRole("Funcionario")
+                                ? "Funcionário"
+                                : "Voluntário";
+}
 
 
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Animal"
-                               asp-action="Index">
-                                Animais
-                            </a>
-                        </li>
+<body>
+
+    <div class="mobile-brand">
+
+        <a asp-controller="Dashboard"
+           asp-action="Index">
+
+            ReachSystem
+
+        </a>
+
+    </div>
+    <!-- =====================================================
+         NAVBAR DESKTOP
+    ====================================================== -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <header class="desktop-navbar-wrapper">
+
+            <nav class="navbar navbar-expand-lg desktop-navbar">
+
+                <div class="container-fluid">
+
+                    <!-- LOGO -->
+
+                    <a class="navbar-brand"
+                       asp-controller="Dashboard"
+                       asp-action="Index">
+
+                        ReachSystem
+
+                    </a>
 
 
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Evento"
-                               asp-action="Index">
-                                Eventos
-                            </a>
-                        </li>
+                    <!-- LINKS -->
+
+                    <div class="navbar-collapse">
+
+                        <ul class="navbar-nav me-auto">
 
 
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Consulta"
-                               asp-action="Index">
-                                Consultas
-                            </a>
-                        </li>
+                            <!-- DASHBOARD -->
 
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="FichaSaude"
-                               asp-action="Index">
-                                Ficha de Saúde
-                            </a>
-                        </li>
-
-
-                        @if (User.IsInRole("Admin"))
-                        {
                             <li class="nav-item">
+
                                 <a class="nav-link"
-                                   asp-controller="Usuario"
+                                   asp-controller="Dashboard"
                                    asp-action="Index">
-                                    Usuários
+
+                                    Dashboard
+
                                 </a>
+
                             </li>
-                        }
-
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Account"
-                               asp-action="Login">
-                                Login
-                            </a>
-                        </li>
-                    }
-
-                </ul>
 
 
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <form asp-controller="Account"
-                          asp-action="Logout"
-                          method="post">
+                            <!-- ANIMAIS -->
 
-                        @Html.AntiForgeryToken()
+                            <li class="nav-item">
 
-                        <button type="submit"
-                                class="btn btn-link nav-link logout-btn">
+                                <a class="nav-link"
+                                   asp-controller="Animal"
+                                   asp-action="Index">
 
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Sair</span>
+                                    Animais
 
-                        </button>
+                                </a>
 
-                    </form>
-                }
+                            </li>
 
 
-            </div>
+                            <!-- EVENTOS -->
 
-        </div>
+                            <li class="nav-item">
 
-    </nav>
-</header>
+                                <a class="nav-link"
+                                   asp-controller="Evento"
+                                   asp-action="Index">
+
+                                    Eventos
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- CONSULTAS -->
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Consulta"
+                                   asp-action="Index">
+
+                                    Consultas
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- FICHA -->
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="FichaSaude"
+                                   asp-action="Index">
+
+                                    Ficha de Saúde
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- USUÁRIOS -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+
+                                    <a class="nav-link"
+                                       asp-controller="Usuario"
+                                       asp-action="Index">
+
+                                        Usuários
+
+                                    </a>
+
+                                </li>
+                            }
+
+                        </ul>
+
+
+                        <!-- =================================================
+                             PERFIL DESKTOP
+                        ================================================== -->
+
+                        <div class="profile-preview">
+
+
+                            <!-- BOLINHA -->
+
+                            <button type="button"
+                                    class="profile-avatar"
+                                    aria-label="Abrir perfil">
+
+                                @inicialUsuario
+
+                            </button>
+
+
+                            <!-- POPOVER -->
+                            <!-- =================================================
+                                 POPOVER DO PERFIL
+                            ================================================= -->
+
+                            <div class="profile-popover">
+
+                                <!-- CABEÇALHO -->
+
+                                <div class="profile-popover-header">
+
+                                    <div class="profile-avatar profile-avatar-sm">
+                                        @inicialUsuario
+                                    </div>
+
+                                    <div class="profile-user-info">
+
+                                        <strong>
+                                            @nomeUsuario
+                                        </strong>
+
+                                        <small>
+                                            @emailUsuario
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- FUNÇÃO -->
+
+                                <div class="profile-role">
+
+                                    <i class="bi bi-person-badge"></i>
+
+                                    <span>
+                                        @funcaoUsuario
+                                    </span>
+
+                                </div>
+
+
+                                <!-- MEU PERFIL -->
+
+                                <a asp-controller="Perfil"
+                                   asp-action="Index"
+                                   class="profile-popover-link">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <span>
+                                        Meu perfil
+                                    </span>
+
+                                </a>
+
+
+                                <!-- USUÁRIOS - SOMENTE ADMIN -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Usuario"
+                                       asp-action="Index"
+                                       class="profile-popover-link">
+
+                                        <i class="bi bi-people"></i>
+
+                                        <span>
+                                            Usuários
+                                        </span>
+
+                                    </a>
+                                }
+
+
+                                <!-- DIVISOR -->
+
+                                <div class="profile-divider"></div>
+
+
+                                <!-- SAIR -->
+
+                                <form asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="profile-logout">
+
+                                        <i class="bi bi-box-arrow-right"></i>
+
+                                        <span>
+                                            Sair
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </nav>
+
+        </header>
+    }
+
+
+    <!-- =====================================================
+         CONTEÚDO
+    ====================================================== -->
 
     <div class="container">
 
-        <main role="main" class="pb-3">
+        <main role="main"
+              class="pb-3">
+
             @RenderBody()
+
         </main>
 
     </div>
 
+
+    <!-- =====================================================
+         NAVBAR MOBILE
+    ====================================================== -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <nav class="mobile-bottom-navbar">
+
+            <!-- DASHBOARD -->
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- ANIMAIS -->
+            <a asp-controller="Animal"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-heart"></i>
+
+                <span>
+                    Animais
+                </span>
+
+            </a>
+
+
+            <!-- EVENTOS -->
+            <a asp-controller="Evento"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <span>
+                    Eventos
+                </span>
+
+            </a>
+
+
+            <!-- CONSULTAS -->
+            <a asp-controller="Consulta"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-clipboard2-pulse"></i>
+
+                <span>
+                    Consultas
+                </span>
+
+            </a>
+
+
+            <!-- FICHA DE SAÚDE -->
+            <a asp-controller="FichaSaude"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-file-medical"></i>
+
+                <span>
+                    Ficha
+                </span>
+
+            </a>
+
+
+            <!-- PERFIL -->
+            <a asp-controller="Perfil"
+               asp-action="Index"
+               class="mobile-nav-item">
+
+                <i class="bi bi-person"></i>
+
+                <span>
+                    Perfil
+                </span>
+
+            </a>
+
+        </nav>
+    }
+
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

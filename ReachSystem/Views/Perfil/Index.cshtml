@@ -4,84 +4,174 @@
     ViewData["Title"] = "Meu Perfil";
 }
 
-<div class="container">
+<div class="profile-page">
 
-    <div class="mb-4">
-        <h2 class="page-title">Meu Perfil</h2>
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
 
-        <p class="text-muted">
-            Visualize suas informações e seu histórico de participação.
-        </p>
-    </div>
+    <div class="container">
 
-    <div class="card shadow-sm mb-4">
+        <div class="mb-4">
 
-        <div class="card-header">
-            <strong>Informações da conta</strong>
+            <h2 class="profile-title">
+                Meu Perfil
+            </h2>
+
+            <p class="profile-subtitle">
+                Visualize suas informações e seu histórico de participação.
+            </p>
+
         </div>
 
-        <div class="card-body">
 
-            <div class="row g-3">
+        <div class="profile-card">
 
-                <div class="col-md-6">
-                    <small class="text-muted">Nome</small>
-                    <div class="fw-semibold">
-                        @Model.Nome
+            <div class="profile-card-header">
+                <strong>Informações da conta</strong>
+            </div>
+
+            <div class="profile-card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <div class="profile-info">
+
+                            <small>Nome</small>
+
+                            <strong>
+                                @Model.Nome
+                            </strong>
+
+                        </div>
+
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <small class="text-muted">E-mail</small>
-                    <div class="fw-semibold">
-                        @Model.Email
-                    </div>
-                </div>
 
-                <div class="col-md-6">
-                    <small class="text-muted">Função</small>
-                    <div class="fw-semibold">
-                        @ViewBag.Role
+                    <div class="col-md-6">
+
+                        <div class="profile-info">
+
+                            <small>E-mail</small>
+
+                            <strong>
+                                @Model.Email
+                            </strong>
+
+                        </div>
+
                     </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="profile-info">
+
+                            <small>Função</small>
+
+                            <strong>
+                                @ViewBag.Role
+                            </strong>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
 
+
+            <div class="profile-mobile-actions">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Usuario"
+                       asp-action="Index"
+                       class="profile-action">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        <span>
+                            Gerenciar usuários
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </a>
+                }
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="profile-logout-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="profile-action profile-action-logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        <span>
+                            Sair
+                        </span>
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
         </div>
-    </div>
 
 
-    <div class="card shadow-sm">
+    <!-- =====================================================
+         HISTÓRICO DE PARTICIPAÇÃO
+    ====================================================== -->
 
-        <div class="card-header">
+    <div class="card shadow-sm profile-card">
+
+        <div class="card-header profile-card-header">
             <strong>Histórico de participação</strong>
         </div>
 
-        <div class="card-body">
+        <div class="card-body profile-card-body">
 
             @if (Model.Participacoes.Any())
             {
-                <div class="mb-3">
-                    <span class="text-muted">
+                <div class="profile-total">
+
+                    <span>
                         Total de eventos participados:
                     </span>
 
                     <strong>
                         @Model.Participacoes.Count
                     </strong>
+
                 </div>
+
 
                 <div class="table-responsive">
 
-                    <table class="table align-middle">
+                    <table class="table align-middle profile-table">
 
                         <thead>
+
                             <tr>
+
                                 <th>Evento</th>
                                 <th>Data</th>
                                 <th>Local</th>
                                 <th>Status</th>
+
                             </tr>
+
                         </thead>
 
                         <tbody>
@@ -117,11 +207,11 @@
             }
             else
             {
-                <div class="text-center py-4">
+                <div class="profile-empty">
 
-                    <i class="bi bi-calendar-x fs-2 text-muted"></i>
+                    <i class="bi bi-calendar-x"></i>
 
-                    <p class="text-muted mt-2 mb-0">
+                    <p>
                         Você ainda não participou de nenhum evento.
                     </p>
 
@@ -133,3 +223,386 @@
     </div>
 
 </div>
+<style>
+
+    /* =========================================================
+           PERFIL
+        ========================================================= */
+
+    body {
+        background: #F4F7FB;
+        color: #173746;
+    }
+
+
+    /* =========================================================
+           CABEÇALHO
+        ========================================================= */
+
+    .profile-title {
+        font-weight: 700;
+        color: #173746;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        margin-top: 40px;
+        margin-bottom: 4px;
+    }
+
+    .profile-subtitle {
+        color: #6c7b88;
+        margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+           CARDS
+        ========================================================= */
+
+    .profile-card {
+        background: #FFFFFF;
+        border: 1px solid #E6EDF5;
+        border-radius: 18px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+
+    /* =========================================================
+           CABEÇALHO DOS CARDS
+        ========================================================= */
+
+    .profile-card-header {
+        background: #2C5D7C;
+        padding: 16px 20px;
+    }
+
+
+        .profile-card-header strong {
+            color: #FFFFFF;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+
+    /* =========================================================
+           CORPO DOS CARDS
+        ========================================================= */
+
+    .profile-card-body {
+        padding: 20px;
+    }
+
+
+    /* =========================================================
+           INFORMAÇÕES DA CONTA
+        ========================================================= */
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+
+        .profile-info small {
+            color: #6c7b88;
+            font-size: .8rem;
+        }
+
+
+        .profile-info strong {
+            color: #173746;
+            font-size: .95rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+
+    /* =========================================================
+           HISTÓRICO - TOTAL
+        ========================================================= */
+
+    .profile-total {
+        color: #6c7b88;
+        margin-bottom: 18px;
+    }
+
+
+        .profile-total strong {
+            color: #173746;
+            font-weight: 700;
+        }
+
+
+    /* =========================================================
+           TABELA
+        ========================================================= */
+
+    .profile-table {
+        margin-bottom: 0;
+    }
+
+
+        .profile-table thead th {
+            color: #2C5D7C;
+            font-family: "Sora", sans-serif;
+            font-size: .8rem;
+            font-weight: 600;
+            border-bottom: 1px solid #E6EDF5;
+            padding: 12px 10px;
+            white-space: nowrap;
+        }
+
+
+        .profile-table tbody td {
+            color: #173746;
+            font-size: .85rem;
+            padding: 13px 10px;
+            border-bottom: 1px solid #E6EDF5;
+            vertical-align: middle;
+        }
+
+
+        .profile-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+    /* =========================================================
+           STATUS
+        ========================================================= */
+
+    .profile-status {
+        color: #2C5D7C;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+           ESTADO VAZIO
+        ========================================================= */
+
+    .profile-empty {
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+
+        .profile-empty i {
+            color: #2C5D7C;
+            font-size: 2rem;
+        }
+
+
+        .profile-empty p {
+            color: #6c7b88;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+
+    /* =========================================================
+           AÇÕES DO PERFIL
+           Escondidas no desktop
+        ========================================================= */
+
+    .profile-mobile-actions {
+        display: none;
+    }
+
+
+    /* =========================================================
+           AÇÃO
+        ========================================================= */
+
+    .profile-action {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 15px;
+        margin-top: 8px;
+        border: 1px solid #E6EDF5;
+        border-radius: 12px;
+        background: #FFFFFF;
+        color: #173746 !important;
+        text-decoration: none;
+        font-family: "Sora", sans-serif;
+        font-size: .85rem;
+        font-weight: 500;
+        text-align: left;
+        transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+
+        /* Ícone principal */
+
+        .profile-action > i:first-child {
+            color: #2C5D7C !important;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+
+        /* Texto */
+
+        .profile-action span {
+            color: #173746;
+            font-weight: 500;
+        }
+
+
+        /* Seta */
+
+        .profile-action > i:last-child {
+            margin-left: auto;
+            color: #6c7b88 !important;
+            font-size: .8rem;
+            flex-shrink: 0;
+        }
+
+
+        /* Hover */
+
+        .profile-action:hover {
+            background: #F4F7FB;
+            border-color: #C9D9E5;
+            transform: translateX(2px);
+        }
+
+
+            .profile-action:hover > i:first-child {
+                color: #173746 !important;
+            }
+
+
+            .profile-action:hover > i:last-child {
+                color: #2C5D7C !important;
+            }
+
+
+    /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+    .profile-logout-form {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    .profile-action-logout {
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        font-family: "Sora", sans-serif;
+    }
+
+
+    /* =========================================================
+           MOBILE
+        ========================================================= */
+
+    @@media (max-width: 991.98px) {
+
+        .profile-title {
+            margin-top: 25px;
+        }
+
+
+        .profile-mobile-actions {
+            display: block;
+            padding: 0 20px 20px;
+        }
+
+
+        .profile-card-body {
+            padding: 18px;
+        }
+        /* Mantém as informações organizadas */
+
+        .profile-info {
+            gap: 3px;
+        }
+        /* Tabela pode rolar horizontalmente */
+
+        .profile-table {
+            min-width: 600px;
+        }
+
+
+            .profile-table thead th,
+            .profile-table tbody td {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+    }
+
+
+    /* =========================================================
+           TELAS PEQUENAS
+        ========================================================= */
+
+    @@media (max-width: 576px) {
+
+        .profile-title {
+            font-size: 1.4rem;
+            margin-top: 20px;
+        }
+
+
+        .profile-subtitle {
+            font-size: .85rem;
+        }
+
+
+        .profile-card {
+            border-radius: 15px;
+            margin-bottom: 16px;
+        }
+
+
+        .profile-card-header {
+            padding: 14px 16px;
+        }
+
+
+            .profile-card-header strong {
+                font-size: .95rem;
+            }
+
+
+        .profile-card-body {
+            padding: 16px;
+        }
+
+
+        .profile-mobile-actions {
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-bottom: 16px;
+        }
+
+
+        .profile-action {
+            padding: 12px 13px;
+            font-size: .82rem;
+        }
+
+
+        .profile-info strong {
+            font-size: .9rem;
+        }
+
+
+        .profile-table {
+            min-width: 580px;
+        }
+
+
+        .profile-empty {
+            padding: 25px 15px;
+        }
+    }
+
+</style>

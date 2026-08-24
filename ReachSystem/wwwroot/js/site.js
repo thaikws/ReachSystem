@@ -1,4 +1,45 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", function () {
 
-// Write your JavaScript code.
+    const profile = document.querySelector(".profile-preview");
+    const profileButton = document.querySelector(".profile-avatar");
+
+    if (!profile || !profileButton) {
+        return;
+    }
+
+    profileButton.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        profile.classList.toggle("is-open");
+
+    });
+
+
+    /*
+       Impede que clicar dentro do mini perfil
+       feche ele imediatamente.
+    */
+
+    const popover = profile.querySelector(".profile-popover");
+
+    if (popover) {
+
+        popover.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+    }
+
+
+    /*
+       Clicar fora do perfil fecha o mini perfil.
+    */
+
+    document.addEventListener("click", function () {
+
+        profile.classList.remove("is-open");
+
+    });
+
+});
