@@ -15,6 +15,7 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ParticipacaoService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<PerfilService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
