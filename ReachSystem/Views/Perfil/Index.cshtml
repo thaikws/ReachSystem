@@ -1,0 +1,135 @@
+﻿@model ReachSystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Meu Perfil";
+}
+
+<div class="container">
+
+    <div class="mb-4">
+        <h2 class="page-title">Meu Perfil</h2>
+
+        <p class="text-muted">
+            Visualize suas informações e seu histórico de participação.
+        </p>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Informações da conta</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <small class="text-muted">Nome</small>
+                    <div class="fw-semibold">
+                        @Model.Nome
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">E-mail</small>
+                    <div class="fw-semibold">
+                        @Model.Email
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Função</small>
+                    <div class="fw-semibold">
+                        @ViewBag.Role
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <strong>Histórico de participação</strong>
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.Participacoes.Any())
+            {
+                <div class="mb-3">
+                    <span class="text-muted">
+                        Total de eventos participados:
+                    </span>
+
+                    <strong>
+                        @Model.Participacoes.Count
+                    </strong>
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var participacao in Model.Participacoes.OrderByDescending(p => p.Evento.Data))
+                            {
+                                <tr>
+
+                                    <td>
+                                        @participacao.Evento.Nome
+                                    </td>
+
+                                    <td>
+                                        @participacao.Evento.Data.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td>
+                                        @participacao.Evento.Local
+                                    </td>
+
+                                    <td>
+                                        @participacao.Status
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+
+                    <i class="bi bi-calendar-x fs-2 text-muted"></i>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Você ainda não participou de nenhum evento.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
