@@ -69,44 +69,69 @@
 
 <body>
 
+    <!-- =====================================================
+         LOGO MOBILE
+    ====================================================== -->
+    <!-- =====================================================
+         LOGO MOBILE
+    ====================================================== -->
+
     <div class="mobile-brand">
 
-        <a asp-controller="Dashboard"
-           asp-action="Index">
+        <a asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
+           asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
             ReachSystem
 
         </a>
 
+
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <a asp-controller="Account"
+               asp-action="Login"
+               class="mobile-login-link">
+
+                Login
+
+            </a>
+        }
+
     </div>
+
+
     <!-- =====================================================
          NAVBAR DESKTOP
     ====================================================== -->
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <header class="desktop-navbar-wrapper">
 
-            <nav class="navbar navbar-expand-lg desktop-navbar">
+    <header class="desktop-navbar-wrapper">
 
-                <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg desktop-navbar">
 
-                    <!-- LOGO -->
+            <div class="container-fluid">
 
-                    <a class="navbar-brand"
-                       asp-controller="Dashboard"
-                       asp-action="Index">
+                <!-- =================================================
+                     LOGO
+                ================================================== -->
 
-                        ReachSystem
+                <a class="navbar-brand"
+                   asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
+                   asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
-                    </a>
+                    ReachSystem
+
+                </a>
 
 
-                    <!-- LINKS -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <!-- =================================================
+                         LINKS DO USUÁRIO LOGADO
+                    ================================================== -->
 
                     <div class="navbar-collapse">
 
                         <ul class="navbar-nav me-auto">
-
 
                             <!-- DASHBOARD -->
 
@@ -168,7 +193,7 @@
                             </li>
 
 
-                            <!-- FICHA -->
+                            <!-- FICHA DE SAÚDE -->
 
                             <li class="nav-item">
 
@@ -203,13 +228,10 @@
 
 
                         <!-- =================================================
-                             PERFIL DESKTOP
+                             PERFIL
                         ================================================== -->
 
                         <div class="profile-preview">
-
-
-                            <!-- BOLINHA -->
 
                             <button type="button"
                                     class="profile-avatar"
@@ -221,18 +243,15 @@
 
 
                             <!-- POPOVER -->
-                            <!-- =================================================
-                                 POPOVER DO PERFIL
-                            ================================================= -->
 
                             <div class="profile-popover">
-
-                                <!-- CABEÇALHO -->
 
                                 <div class="profile-popover-header">
 
                                     <div class="profile-avatar profile-avatar-sm">
+
                                         @inicialUsuario
+
                                     </div>
 
                                     <div class="profile-user-info">
@@ -278,7 +297,7 @@
                                 </a>
 
 
-                                <!-- USUÁRIOS - SOMENTE ADMIN -->
+                                <!-- USUÁRIOS -->
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <a asp-controller="Usuario"
@@ -294,8 +313,6 @@
                                     </a>
                                 }
 
-
-                                <!-- DIVISOR -->
 
                                 <div class="profile-divider"></div>
 
@@ -326,13 +343,39 @@
                         </div>
 
                     </div>
+                }
+                else
+                {
+                    <!-- =================================================
+                         USUÁRIO DESLOGADO
+                    ================================================== -->
 
-                </div>
+                    <div class="navbar-collapse">
 
-            </nav>
+                        <ul class="navbar-nav ms-auto">
 
-        </header>
-    }
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Account"
+                                   asp-action="Login">
+
+                                    Login
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+                }
+
+            </div>
+
+        </nav>
+
+    </header>
 
 
     <!-- =====================================================
@@ -359,6 +402,7 @@
         <nav class="mobile-bottom-navbar">
 
             <!-- DASHBOARD -->
+
             <a asp-controller="Dashboard"
                asp-action="Index"
                class="mobile-nav-item">
@@ -373,6 +417,7 @@
 
 
             <!-- ANIMAIS -->
+
             <a asp-controller="Animal"
                asp-action="Index"
                class="mobile-nav-item">
@@ -387,6 +432,7 @@
 
 
             <!-- EVENTOS -->
+
             <a asp-controller="Evento"
                asp-action="Index"
                class="mobile-nav-item">
@@ -401,6 +447,7 @@
 
 
             <!-- CONSULTAS -->
+
             <a asp-controller="Consulta"
                asp-action="Index"
                class="mobile-nav-item">
@@ -414,7 +461,8 @@
             </a>
 
 
-            <!-- FICHA DE SAÚDE -->
+            <!-- FICHA -->
+
             <a asp-controller="FichaSaude"
                asp-action="Index"
                class="mobile-nav-item">
@@ -429,6 +477,7 @@
 
 
             <!-- PERFIL -->
+
             <a asp-controller="Perfil"
                asp-action="Index"
                class="mobile-nav-item">

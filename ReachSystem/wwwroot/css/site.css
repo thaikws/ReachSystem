@@ -534,3 +534,34 @@
             font-size: 1.05rem;
         }
 }
+/* =========================================================
+   LOGIN NA NAVBAR MOBILE — USUÁRIO DESLOGADO
+========================================================= */
+
+.mobile-login-link {
+    display: none;
+}
+
+
+@media (max-width: 991.98px) {
+
+    .mobile-brand {
+        justify-content: space-between;
+    }
+
+    .mobile-login-link {
+        display: block;
+        color: #FFFFFF !important;
+        text-decoration: none;
+        font-family: "Sora", sans-serif !important;
+        font-size: .85rem;
+        font-weight: 500;
+        padding: .45rem .7rem;
+        border-radius: 9px;
+        transition: background .2s ease;
+    }
+
+        .mobile-login-link:hover {
+            background: rgba(255, 255, 255, .12);
+        }
+}
