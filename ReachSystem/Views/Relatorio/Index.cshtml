@@ -263,6 +263,19 @@ var especies = ViewBag.Especies as List<string> ?? new List<string>();
 
                         </button>
 
+                        <a asp-controller="Relatorio"
+                           asp-action="ExportarExcel"
+                           asp-route-pesquisar="@pesquisar"
+                           asp-route-especie="@especieSelecionada"
+                           asp-route-sexo="@sexoSelecionado"
+                           asp-route-status="@statusSelecionado"
+                           asp-route-dataInicio="@dataInicio"
+                           asp-route-dataFim="@dataFim"
+                           class="report-excel-button">
+                            <i class="bi bi-file-earmark-excel"></i>
+                            Exportar Excel
+                        </a>
+
                     </div>
 
                 </form>
@@ -799,6 +812,31 @@ var especies = ViewBag.Especies as List<string> ?? new List<string>();
         margin-bottom: 0;
     }
 
+    .report-excel-button {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border: 1px solid #2C5D7C;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: #2C5D7C;
+        text-decoration: none;
+        font-family: "Sora", sans-serif;
+        font-size: .8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+        .report-excel-button:hover {
+            background-color: #2C5D7C;
+            color: #FFFFFF;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
 
     /* =========================================================
            MOBILE
