@@ -275,6 +275,18 @@ var especies = ViewBag.Especies as List<string> ?? new List<string>();
                             <i class="bi bi-file-earmark-excel"></i>
                             Exportar Excel
                         </a>
+                        <a asp-controller="Relatorio"
+                           asp-action="ExportarPdf"
+                           asp-route-pesquisar="@pesquisar"
+                           asp-route-especie="@especieSelecionada"
+                           asp-route-sexo="@sexoSelecionado"
+                           asp-route-status="@statusSelecionado"
+                           asp-route-dataInicio="@dataInicio"
+                           asp-route-dataFim="@dataFim"
+                           class="report-pdf-button">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                            Exportar PDF
+                        </a>
 
                     </div>
 
@@ -838,6 +850,31 @@ var especies = ViewBag.Especies as List<string> ?? new List<string>();
             transform: translateY(-1px);
         }
 
+    .report-pdf-button {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border: 1px solid #D9534F;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: #D9534F;
+        text-decoration: none;
+        font-family: "Sora", sans-serif;
+        font-size: .8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+        .report-pdf-button:hover {
+            background-color: #D9534F;
+            color: #FFFFFF;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
     /* =========================================================
            MOBILE
         ========================================================= */
