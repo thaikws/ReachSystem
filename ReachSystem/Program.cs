@@ -18,6 +18,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<PerfilService>();
 builder.Services.AddScoped<RelatorioAnimalService>();
 builder.Services.AddScoped<RelatorioEventoService>();
+builder.Services.AddScoped<RelatorioParticipacaoService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
