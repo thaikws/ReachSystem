@@ -21,12 +21,14 @@ namespace ReachSystem.Controllers
         private readonly AnimalService _animalService;
         private readonly RelatorioAnimalService _relatorioAnimalService;
         private readonly RelatorioEventoService _relatorioEventoService;
+        private readonly RelatorioParticipacaoService _relatorioParticipacaoService;
 
-        public RelatorioController(AnimalService animalService, RelatorioAnimalService relatorioAnimalService, RelatorioEventoService relatorioEventoService)
+        public RelatorioController(AnimalService animalService, RelatorioAnimalService relatorioAnimalService, RelatorioEventoService relatorioEventoService, RelatorioParticipacaoService relatorioParticipacaoService)
         {
             _animalService = animalService;
             _relatorioAnimalService = relatorioAnimalService;
             _relatorioEventoService = relatorioEventoService;
+            _relatorioParticipacaoService = relatorioParticipacaoService;
         }
 
         [HttpGet]
@@ -460,6 +462,249 @@ namespace ReachSystem.Controllers
                 pdf,
                 "application/pdf",
                 "Relatorio_Eventos.pdf");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Participacoes(string? pesquisar, string? evento, StatusParticipacao? status, DateTime? dataInicio, DateTime? dataFim)
+        {
+            var filtro = new RelatorioParticipacao
+            {
+                Pesquisar = pesquisar,
+                Evento = evento,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var participacoes =
+                await _relatorioParticipacaoService.FiltrarAsync(filtro);
+
+            ViewBag.Eventos =
+                await _relatorioParticipacaoService.GetEventosAsync();
+
+            ViewBag.Pesquisar = pesquisar;
+            ViewBag.Evento = evento;
+            ViewBag.Status = status;
+            ViewBag.DataInicio = dataInicio?.ToString("yyyy-MM-dd");
+            ViewBag.DataFim = dataFim?.ToString("yyyy-MM-dd");
+
+            return View(participacoes);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ExportarExcelParticipacoes(
+    string? pesquisar,
+    string? evento,
+    StatusParticipacao? status,
+    DateTime? dataInicio,
+    DateTime? dataFim)
+        {
+            var filtro = new RelatorioParticipacao
+            {
+                Pesquisar = pesquisar,
+                Evento = evento,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var participacoes =
+                await _relatorioParticipacaoService.FiltrarAsync(filtro);
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Participações");
+
+            worksheet.Cell(1, 1).Value = "Relatório de Participações";
+
+            worksheet.Cell(3, 1).Value = "Participante";
+            worksheet.Cell(3, 2).Value = "E-mail";
+            worksheet.Cell(3, 3).Value = "Evento";
+            worksheet.Cell(3, 4).Value = "Data";
+            worksheet.Cell(3, 5).Value = "Local";
+            worksheet.Cell(3, 6).Value = "Status";
+
+            var linha = 4;
+
+            foreach (var participacao in participacoes)
+            {
+                worksheet.Cell(linha, 1).Value = participacao.Usuario.Nome;
+                worksheet.Cell(linha, 2).Value = participacao.Usuario.Email;
+                worksheet.Cell(linha, 3).Value = participacao.Evento.Nome;
+
+                worksheet.Cell(linha, 4).Value = participacao.Evento.Data;
+                worksheet.Cell(linha, 4).Style.DateFormat.Format = "dd/MM/yyyy HH:mm";
+
+                worksheet.Cell(linha, 5).Value = participacao.Evento.Local;
+                worksheet.Cell(linha, 6).Value = participacao.Status.ToString();
+
+                linha++;
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+
+            var arquivo = stream.ToArray();
+
+            return File(
+                arquivo,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Relatorio_Participacoes.xlsx");
+        }
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdfParticipacoes(
+    string? pesquisar,
+    string? evento,
+    StatusParticipacao? status,
+    DateTime? dataInicio,
+    DateTime? dataFim)
+        {
+            var filtro = new RelatorioParticipacao
+            {
+                Pesquisar = pesquisar,
+                Evento = evento,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var participacoes =
+                await _relatorioParticipacaoService.FiltrarAsync(filtro);
+
+            var documento = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(30);
+
+                    page.Header()
+                        .Text("Relatório de Participações")
+                        .FontSize(20)
+                        .Bold()
+                        .FontColor("#173746");
+
+                    page.Content()
+                        .PaddingTop(20)
+                        .Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(2.0f); // Participante
+                                columns.RelativeColumn(2.5f); // E-mail
+                                columns.RelativeColumn(2.0f); // Evento
+                                columns.RelativeColumn(1.5f); // Data
+                                columns.RelativeColumn(1.8f); // Local
+                                columns.RelativeColumn(1.3f); // Status
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Participante")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("E-mail")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Evento")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .AlignCenter()
+                                    .Text("Data")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Local")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Status")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+                            });
+
+                            foreach (var participacao in participacoes)
+                            {
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(participacao.Usuario.Nome)
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(participacao.Usuario.Email ?? "")
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(participacao.Evento.Nome)
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .AlignCenter()
+                                    .Text(participacao.Evento.Data.ToString("dd/MM/yyyy HH:mm"))
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(participacao.Evento.Local)
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(participacao.Status.ToString())
+                                    .FontSize(8);
+                            }
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(text =>
+                        {
+                            text.Span("ReachSystem • Relatório de Participações");
+                        });
+                });
+            });
+
+            var pdf = documento.GeneratePdf();
+
+            return File(
+                pdf,
+                "application/pdf",
+                "Relatorio_Participacoes.pdf");
         }
     }
 }
