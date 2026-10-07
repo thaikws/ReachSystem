@@ -340,5 +340,126 @@ namespace ReachSystem.Controllers
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "Relatorio_Eventos.xlsx");
         }
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdfEventos(
+    string? pesquisar,
+    DateTime? dataInicio,
+    DateTime? dataFim)
+        {
+            var filtro = new RelatorioEvento
+            {
+                Pesquisar = pesquisar,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var eventos = await _relatorioEventoService.FiltrarAsync(filtro);
+
+            var documento = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(30);
+
+                    page.Header()
+                        .Text("Relatório de Eventos")
+                        .FontSize(20)
+                        .Bold()
+                        .FontColor("#173746");
+
+                    page.Content()
+                        .PaddingTop(20)
+                        .Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(2.0f);
+                                columns.RelativeColumn(1.4f);
+                                columns.RelativeColumn(1.8f);
+                                columns.RelativeColumn(3.0f);
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Nome")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .AlignCenter()
+                                    .Text("Data")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Local")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+
+                                header.Cell()
+                                    .Background("#2C5D7C")
+                                    .Padding(6)
+                                    .Text("Descrição")
+                                    .FontColor("#FFFFFF")
+                                    .Bold();
+                            });
+
+                            foreach (var evento in eventos)
+                            {
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(evento.Nome)
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .AlignCenter()
+                                    .Text(evento.Data.ToString("dd/MM/yyyy HH:mm"))
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(evento.Local)
+                                    .FontSize(8);
+
+                                table.Cell()
+                                    .Border(1)
+                                    .BorderColor("#E6EDF5")
+                                    .Padding(4)
+                                    .Text(evento.Descricao)
+                                    .FontSize(8);
+                            }
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(text =>
+                        {
+                            text.Span("ReachSystem • Relatório de Eventos");
+                        });
+                });
+            });
+
+            var pdf = documento.GeneratePdf();
+
+            return File(
+                pdf,
+                "application/pdf",
+                "Relatorio_Eventos.pdf");
+        }
     }
 }
