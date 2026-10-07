@@ -15,7 +15,7 @@
                 <!-- FOTO -->
                 <div class="col-lg-4">
 
-                    <div class="animal-card">
+                    <div class="animal-card h-100">
 
                         @if (!string.IsNullOrEmpty(Model.Foto))
                         {
@@ -36,10 +36,10 @@
 
                 </div>
 
-                <!-- DADOS -->
+                <!-- INFORMAÇÕES GERAIS -->
                 <div class="col-lg-8">
 
-                    <div class="info-card mb-4">
+                    <div class="info-card h-100">
 
                         <h6>Informações Gerais</h6>
 
@@ -47,39 +47,44 @@
 
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
-                                <strong>ID</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>ID</strong>
                                 @Model.AnimalId
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <strong>Idade</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>Idade</strong>
                                 @Model.Idade anos
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <strong>Porte</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>Porte</strong>
                                 @Model.Porte
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <strong>Sexo</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>Sexo</strong>
                                 @Model.SexoAnimal
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <strong>Status</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>Status</strong>
                                 @Model.StatusAnimal
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <strong>Entrada</strong><br />
+                            <div class="col-md-6 info-item">
+                                <strong>Entrada</strong>
                                 @Model.DataDeEntrada.ToString("dd/MM/yyyy")
                             </div>
 
                         </div>
 
                     </div>
+
+                </div>
+
+                <!-- FICHA DE SAÚDE (largura total) -->
+                <div class="col-12">
 
                     <div class="info-card">
 
@@ -89,7 +94,7 @@
 
                         @if (Model.FichaSaude != null)
                         {
-                            <p class="mb-3">
+                            <p class="ficha-descricao mb-3">
                                 @Model.FichaSaude.Descricao
                             </p>
 
@@ -204,7 +209,7 @@
         padding: 25px;
         text-align: center;
         box-shadow: 0 3px 10px rgba(0,0,0,.05);
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .animal-img {
@@ -237,7 +242,7 @@
         border: 1px solid #E6EDF5;
         border-radius: 16px;
         padding: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
         box-shadow: 0 3px 10px rgba(0,0,0,.04);
     }
 
@@ -255,18 +260,26 @@
     .info-card strong {
         display: block;
         color: #173746;
-        margin-bottom: 4px;
+        margin-bottom: 1px;
         font-weight: 600;
     }
-
-    .info-card .row > div {
+    
+    .info-card .info-item {
         color: #6C7A89;
-        margin-bottom: 18px;
+        margin-bottom: 12px;
     }
 
     .info-card p {
         color: #173746;
         line-height: 1.6;
+    }
+
+    .ficha-descricao {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
     }
 
     /* ===========================
@@ -311,10 +324,6 @@
 
         .card-body {
             padding: 22px;
-        }
-
-        .animal-card {
-            margin-bottom: 25px;
         }
 
         .animal-img {

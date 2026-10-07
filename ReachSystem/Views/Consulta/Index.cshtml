@@ -101,26 +101,26 @@
         position: relative;
         transition: 0.2s;
     }
+    
+    .dia:hover {
+        background: #f0f6ff;
+        ransform: scale(1.02);
+    }
 
-        .dia:hover {
-            background: #f0f6ff;
-            transform: scale(1.02);
-        }
-
-        .dia.hoje {
-            border: 2px solid #2c5d7c;
-            background: #eaf3fb;
-            font-weight: bold;
-        }
-
-        .dia.tem-consulta::after {
-            content: "•";
-            color: #2c5d7c;
-            font-size: 30px;
-            position: absolute;
-            bottom: 5px;
-            right: 10px;
-        }
+    dia.hoje {
+        border: 2px solid #2c5d7c;
+        background: #eaf3fb;
+        font-weight: bold;
+    }
+    
+    .dia.tem-consulta::after {
+        content: "•";
+        color: #2c5d7c;
+        font-size: 30px;
+        position: absolute;
+        bottom: 5px;
+        right: 10px;
+    }
 
     .consulta-item {
         padding: 12px;
@@ -135,6 +135,16 @@
     .desc {
         font-size: 13px;
         color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+    }
+
+    .consulta-info {
+        min-width: 0;
+        flex: 1;
     }
 
     /* BOTÕES */
@@ -210,6 +220,7 @@
         border-radius: 30px;
         vertical-align: middle;
         margin-right: 10px;
+        flex-shrink: 0;
     }
 </style>
 
@@ -327,7 +338,7 @@
                  class="animal-img-sm"
                  onerror="this.style.display='none'" />
 
-            <div>
+            <div class="consulta-info">
                 <div class="animal">${c.AnimalNome}</div>
                 <div class="desc">${c.Descricao}</div>
 
