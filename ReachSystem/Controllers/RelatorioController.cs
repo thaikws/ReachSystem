@@ -20,11 +20,13 @@ namespace ReachSystem.Controllers
 
         private readonly AnimalService _animalService;
         private readonly RelatorioAnimalService _relatorioAnimalService;
+        private readonly RelatorioEventoService _relatorioEventoService;
 
-        public RelatorioController(AnimalService animalService, RelatorioAnimalService relatorioAnimalService)
+        public RelatorioController(AnimalService animalService, RelatorioAnimalService relatorioAnimalService, RelatorioEventoService relatorioEventoService)
         {
             _animalService = animalService;
             _relatorioAnimalService = relatorioAnimalService;
+            _relatorioEventoService = relatorioEventoService;
         }
 
         [HttpGet]
@@ -267,6 +269,76 @@ namespace ReachSystem.Controllers
                 pdf,
                 "application/pdf",
                 "Relatorio_Animais.pdf");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Eventos(string? pesquisar, DateTime? dataInicio, DateTime? dataFim)
+        {
+            var filtro = new RelatorioEvento
+            {
+                Pesquisar = pesquisar,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var eventos = await _relatorioEventoService.FiltrarAsync(filtro);
+
+            ViewBag.Pesquisar = pesquisar;
+            ViewBag.DataInicio = dataInicio?.ToString("yyyy-MM-dd");
+            ViewBag.DataFim = dataFim?.ToString("yyyy-MM-dd");
+
+            return View(eventos);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ExportarExcelEventos(
+    string? pesquisar,
+    DateTime? dataInicio,
+    DateTime? dataFim)
+        {
+            var filtro = new RelatorioEvento
+            {
+                Pesquisar = pesquisar,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
+
+            var eventos = await _relatorioEventoService.FiltrarAsync(filtro);
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Eventos");
+
+            worksheet.Cell(1, 1).Value = "Relatório de Eventos";
+
+            worksheet.Cell(3, 1).Value = "Nome";
+            worksheet.Cell(3, 2).Value = "Data";
+            worksheet.Cell(3, 3).Value = "Local";
+            worksheet.Cell(3, 4).Value = "Descrição";
+
+            var linha = 4;
+
+            foreach (var evento in eventos)
+            {
+                worksheet.Cell(linha, 1).Value = evento.Nome;
+
+                worksheet.Cell(linha, 2).Value = evento.Data;
+                worksheet.Cell(linha, 2).Style.DateFormat.Format = "dd/MM/yyyy HH:mm";
+
+                worksheet.Cell(linha, 3).Value = evento.Local;
+                worksheet.Cell(linha, 4).Value = evento.Descricao;
+
+                linha++;
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+
+            var arquivo = stream.ToArray();
+
+            return File(
+                arquivo,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Relatorio_Eventos.xlsx");
         }
     }
 }

@@ -1,18 +1,13 @@
-﻿@model IEnumerable<ReachSystem.Models.Animal>
+﻿@model IEnumerable<ReachSystem.Models.Evento>
 
 @{
     ViewData["Title"] = "Relatórios";
 
-    var especies = ViewBag.Especies as List<string> ?? new List<string>();
-
     var pesquisar = ViewBag.Pesquisar as string;
-    var especieSelecionada = ViewBag.Especie as string;
-    var sexoSelecionado = ViewBag.Sexo as ReachSystem.Enums.Sexo?;
-    var statusSelecionado = ViewBag.Status as ReachSystem.Enums.Status?;
     var dataInicio = ViewBag.DataInicio as string;
     var dataFim = ViewBag.DataFim as string;
 
-    var resultados = Model?.ToList() ?? new List<ReachSystem.Models.Animal>();
+    var resultados = Model?.ToList() ?? new List<ReachSystem.Models.Evento>();
 }
 
 <div class="report-page">
@@ -43,19 +38,23 @@
         <div class="report-type-card">
 
             <div class="report-type-label">
+
                 <i class="bi bi-bar-chart-line-fill"></i>
 
                 <span>
                     Tipo de relatório
                 </span>
+
             </div>
 
 
             <div class="report-type-options">
 
+                <!-- ANIMAIS -->
+
                 <a asp-controller="Relatorio"
                    asp-action="Index"
-                   class="report-type-button active">
+                   class="report-type-button">
 
                     <i class="bi bi-heart-fill"></i>
 
@@ -64,9 +63,11 @@
                 </a>
 
 
+                <!-- EVENTOS -->
+
                 <a asp-controller="Relatorio"
                    asp-action="Eventos"
-                   class="report-type-button">
+                   class="report-type-button active">
 
                     <i class="bi bi-calendar-event-fill"></i>
 
@@ -74,6 +75,8 @@
 
                 </a>
 
+
+                <!-- PARTICIPAÇÕES -->
 
                 <span class="report-type-button disabled"
                       title="Relatório de participações em desenvolvimento">
@@ -100,12 +103,14 @@
                 <div class="report-header-content">
 
                     <div class="report-header-icon">
-                        <i class="bi bi-bar-chart-line-fill"></i>
+                        <i class="bi bi-calendar-event-fill"></i>
                     </div>
 
                     <div>
 
-                        <strong>Relatório de Animais</strong>
+                        <strong>
+                            Relatório de Eventos
+                        </strong>
 
                         <small>
                             Utilize os filtros para definir os dados que deseja visualizar.
@@ -121,16 +126,22 @@
             <div class="report-card-body">
 
                 <form asp-controller="Relatorio"
-                      asp-action="Index"
+                      asp-action="Eventos"
                       method="get">
 
-                    <!-- PESQUISA -->
+                    <!-- =================================================
+                         PESQUISA
+                    ================================================== -->
 
                     <div class="mb-4">
 
-                        <label for="pesquisar" class="report-label">
+                        <label for="pesquisar"
+                               class="report-label">
+
                             Pesquisar
+
                         </label>
+
 
                         <div class="report-input-wrapper">
 
@@ -141,134 +152,28 @@
                                    name="pesquisar"
                                    value="@pesquisar"
                                    class="form-control report-input"
-                                   placeholder="Nome ou raça do animal..." />
+                                   placeholder="Nome ou local do evento..." />
 
                         </div>
 
                     </div>
 
 
-                    <!-- FILTROS -->
+                    <!-- =================================================
+                         FILTROS DE DATA
+                    ================================================== -->
 
                     <div class="row g-3">
-
-                        <!-- ESPÉCIE -->
-
-                        <div class="col-md-4">
-
-                            <label for="especie" class="report-label">
-                                Espécie
-                            </label>
-
-                            <select id="especie"
-                                    name="especie"
-                                    class="form-select report-select">
-
-                                <option value="">
-                                    Todas as espécies
-                                </option>
-
-                                @foreach (var item in especies)
-                                {
-                                    if (especieSelecionada == item)
-                                    {
-                                        <option value="@item" selected>
-                                            @item
-                                        </option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item">
-                                            @item
-                                        </option>
-                                    }
-                                }
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- SEXO -->
-
-                        <div class="col-md-4">
-
-                            <label for="sexo" class="report-label">
-                                Sexo
-                            </label>
-
-                            <select id="sexo"
-                                    name="sexo"
-                                    class="form-select report-select">
-
-                                <option value="">
-                                    Todos os sexos
-                                </option>
-
-                                @foreach (var sexo in Enum.GetValues<ReachSystem.Enums.Sexo>())
-                                {
-                                    if (sexoSelecionado == sexo)
-                                    {
-                                        <option value="@sexo" selected>
-                                            @sexo
-                                        </option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@sexo">
-                                            @sexo
-                                        </option>
-                                    }
-                                }
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- STATUS -->
-
-                        <div class="col-md-4">
-
-                            <label for="status" class="report-label">
-                                Status
-                            </label>
-
-                            <select id="status"
-                                    name="status"
-                                    class="form-select report-select">
-
-                                <option value="">
-                                    Todos os status
-                                </option>
-
-                                @foreach (var status in Enum.GetValues<ReachSystem.Enums.Status>())
-                                {
-                                    if (statusSelecionado == status)
-                                    {
-                                        <option value="@status" selected>
-                                            @status
-                                        </option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@status">
-                                            @status
-                                        </option>
-                                    }
-                                }
-
-                            </select>
-
-                        </div>
-
 
                         <!-- DATA INICIAL -->
 
                         <div class="col-md-6">
 
-                            <label for="dataInicio" class="report-label">
-                                Data de entrada inicial
+                            <label for="dataInicio"
+                                   class="report-label">
+
+                                Data inicial
+
                             </label>
 
                             <input type="date"
@@ -284,8 +189,11 @@
 
                         <div class="col-md-6">
 
-                            <label for="dataFim" class="report-label">
-                                Data de entrada final
+                            <label for="dataFim"
+                                   class="report-label">
+
+                                Data final
+
                             </label>
 
                             <input type="date"
@@ -299,12 +207,16 @@
                     </div>
 
 
-                    <!-- BOTÕES -->
+                    <!-- =================================================
+                         BOTÕES
+                    ================================================== -->
 
                     <div class="report-form-actions">
 
+                        <!-- LIMPAR -->
+
                         <a asp-controller="Relatorio"
-                           asp-action="Index"
+                           asp-action="Eventos"
                            class="report-clear-button">
 
                             <i class="bi bi-arrow-counterclockwise"></i>
@@ -313,6 +225,8 @@
 
                         </a>
 
+
+                        <!-- GERAR -->
 
                         <button type="submit"
                                 class="report-submit-button">
@@ -324,12 +238,11 @@
                         </button>
 
 
+                        <!-- EXCEL -->
+
                         <a asp-controller="Relatorio"
-                           asp-action="ExportarExcel"
+                           asp-action="ExportarExcelEventos"
                            asp-route-pesquisar="@pesquisar"
-                           asp-route-especie="@especieSelecionada"
-                           asp-route-sexo="@sexoSelecionado"
-                           asp-route-status="@statusSelecionado"
                            asp-route-dataInicio="@dataInicio"
                            asp-route-dataFim="@dataFim"
                            class="report-excel-button">
@@ -341,12 +254,11 @@
                         </a>
 
 
+                        <!-- PDF -->
+
                         <a asp-controller="Relatorio"
-                           asp-action="ExportarPdf"
+                           asp-action="ExportarPdfEventos"
                            asp-route-pesquisar="@pesquisar"
-                           asp-route-especie="@especieSelecionada"
-                           asp-route-sexo="@sexoSelecionado"
-                           asp-route-status="@statusSelecionado"
                            asp-route-dataInicio="@dataInicio"
                            asp-route-dataFim="@dataFim"
                            class="report-pdf-button">
@@ -382,7 +294,9 @@
 
                     <div>
 
-                        <strong>Pré-visualização</strong>
+                        <strong>
+                            Pré-visualização
+                        </strong>
 
                         <small>
                             Dados encontrados de acordo com os filtros selecionados.
@@ -396,7 +310,10 @@
                 <span class="report-result-count">
 
                     @resultados.Count
-                    @(resultados.Count == 1 ? "resultado" : "resultados")
+
+                    @(resultados.Count == 1
+                                        ? "resultado"
+                                        : "resultados")
 
                 </span>
 
@@ -415,14 +332,21 @@
 
                                 <tr>
 
-                                    <th>Animal</th>
-                                    <th>Espécie</th>
-                                    <th>Raça</th>
-                                    <th>Idade</th>
-                                    <th>Porte</th>
-                                    <th>Sexo</th>
-                                    <th>Status</th>
-                                    <th>Entrada</th>
+                                    <th>
+                                        Evento
+                                    </th>
+
+                                    <th>
+                                        Data
+                                    </th>
+
+                                    <th>
+                                        Local
+                                    </th>
+
+                                    <th>
+                                        Descrição
+                                    </th>
 
                                 </tr>
 
@@ -431,46 +355,37 @@
 
                             <tbody>
 
-                                @foreach (var animal in resultados)
+                                @foreach (var evento in resultados)
                                 {
                                     <tr>
 
                                         <td>
-                                            <strong class="report-animal-name">
-                                                @animal.Nome
+
+                                            <strong class="report-event-name">
+                                                @evento.Nome
                                             </strong>
-                                        </td>
-
-                                        <td>
-                                            @animal.Especie
-                                        </td>
-
-                                        <td>
-                                            @animal.Raca
-                                        </td>
-
-                                        <td>
-                                            @animal.Idade
-                                        </td>
-
-                                        <td>
-                                            @animal.Porte
-                                        </td>
-
-                                        <td>
-                                            @animal.SexoAnimal
-                                        </td>
-
-                                        <td>
-
-                                            <span class="report-status">
-                                                @animal.StatusAnimal
-                                            </span>
 
                                         </td>
 
+
                                         <td>
-                                            @animal.DataDeEntrada.ToString("dd/MM/yyyy")
+
+                                            @evento.Data.ToString("dd/MM/yyyy HH:mm")
+
+                                        </td>
+
+
+                                        <td>
+
+                                            @evento.Local
+
+                                        </td>
+
+
+                                        <td class="report-description">
+
+                                            @evento.Descricao
+
                                         </td>
 
                                     </tr>
@@ -487,15 +402,19 @@
                     <div class="report-empty">
 
                         <div class="report-empty-icon">
-                            <i class="bi bi-file-earmark-x"></i>
+
+                            <i class="bi bi-calendar-x"></i>
+
                         </div>
 
+
                         <h5>
-                            Nenhum animal encontrado
+                            Nenhum evento encontrado
                         </h5>
 
+
                         <p>
-                            Não existem animais que correspondam aos filtros selecionados.
+                            Não existem eventos que correspondam aos filtros selecionados.
                         </p>
 
                     </div>
@@ -512,15 +431,15 @@
 
 <style>
 
+    /* =========================================================
+           PÁGINA
+        ========================================================= */
+
     body {
         background: #F4F7FB;
         color: #173746;
     }
 
-
-    /* =========================================================
-           PÁGINA
-        ========================================================= */
 
     .report-page {
         min-height: calc(100vh - 100px);
@@ -640,7 +559,7 @@
 
 
     /* =========================================================
-           CARD
+           CARDS
         ========================================================= */
 
     .report-card {
@@ -658,7 +577,7 @@
 
 
     /* =========================================================
-           CABEÇALHO
+           CABEÇALHOS
         ========================================================= */
 
     .report-card-header {
@@ -735,15 +654,7 @@
            INPUTS
         ========================================================= */
 
-    .report-input {
-        min-height: 44px;
-        border: 1px solid #DCE6EE;
-        border-radius: 10px;
-        color: #173746;
-        font-size: .85rem;
-        background-color: #FFFFFF;
-        box-shadow: none !important;
-    }
+    .report-input,
     .report-select {
         min-height: 44px;
         border: 1px solid #DCE6EE;
@@ -765,16 +676,11 @@
     }
 
 
-    .report-input:focus {
-        border-color: #2C5D7C;
-        box-shadow: 0 0 0 3px rgba(44, 93, 124, .10) !important;
-    }
-
-
-    .report-select:focus {
-        border-color: #2C5D7C;
-        box-shadow: 0 0 0 3px rgba(44, 93, 124, .10) !important;
-    }
+        .report-input:focus,
+        .report-select:focus {
+            border-color: #2C5D7C;
+            box-shadow: 0 0 0 3px rgba(44, 93, 124, .10) !important;
+        }
 
 
     .report-input-wrapper {
@@ -813,21 +719,10 @@
     }
 
 
-    .report-clear-button {
-        min-height: 42px;
-        padding: 9px 16px;
-        border-radius: 10px;
-        font-family: "Sora", sans-serif;
-        font-size: .8rem;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: .2s ease;
-    }
-    .report-submit-button {
+    .report-clear-button,
+    .report-submit-button,
+    .report-excel-button,
+    .report-pdf-button {
         min-height: 42px;
         padding: 9px 16px;
         border-radius: 10px;
@@ -854,6 +749,7 @@
             background: #F4F7FB;
             border-color: #C9D9E5;
             color: #173746;
+            text-decoration: none;
         }
 
 
@@ -868,6 +764,36 @@
         .report-submit-button:hover {
             background: #173746;
             border-color: #173746;
+            transform: translateY(-1px);
+        }
+
+
+    .report-excel-button {
+        border: 1px solid #2C5D7C;
+        background: #FFFFFF;
+        color: #2C5D7C;
+    }
+
+
+        .report-excel-button:hover {
+            background: #2C5D7C;
+            color: #FFFFFF;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+
+    .report-pdf-button {
+        border: 1px solid #D9534F;
+        background: #FFFFFF;
+        color: #D9534F;
+    }
+
+
+        .report-pdf-button:hover {
+            background: #D9534F;
+            color: #FFFFFF;
+            text-decoration: none;
             transform: translateY(-1px);
         }
 
@@ -899,7 +825,7 @@
 
     .report-table {
         margin-bottom: 0;
-        min-width: 850px;
+        min-width: 700px;
     }
 
 
@@ -920,7 +846,6 @@
             padding: 13px 10px;
             border-bottom: 1px solid #E6EDF5;
             vertical-align: middle;
-            white-space: nowrap;
         }
 
 
@@ -934,25 +859,17 @@
         }
 
 
-    .report-animal-name {
+    .report-event-name {
         color: #173746;
         font-weight: 600;
     }
 
 
-    /* =========================================================
-           STATUS
-        ========================================================= */
-
-    .report-status {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 9px;
-        border-radius: 20px;
-        background: #EEF5F8;
-        color: #2C5D7C;
-        font-size: .72rem;
-        font-weight: 600;
+    .report-description {
+        max-width: 350px;
+        min-width: 200px;
+        white-space: normal !important;
+        line-height: 1.45;
     }
 
 
@@ -996,70 +913,6 @@
 
 
     /* =========================================================
-           EXCEL
-        ========================================================= */
-
-    .report-excel-button {
-        min-height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 9px 16px;
-        border: 1px solid #2C5D7C;
-        border-radius: 10px;
-        background-color: #FFFFFF;
-        color: #2C5D7C;
-        text-decoration: none;
-        font-family: "Sora", sans-serif;
-        font-size: .8rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: .2s ease;
-    }
-
-
-        .report-excel-button:hover {
-            background-color: #2C5D7C;
-            color: #FFFFFF;
-            text-decoration: none;
-            transform: translateY(-1px);
-        }
-
-
-    /* =========================================================
-           PDF
-        ========================================================= */
-
-    .report-pdf-button {
-        min-height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 9px 16px;
-        border: 1px solid #D9534F;
-        border-radius: 10px;
-        background-color: #FFFFFF;
-        color: #D9534F;
-        text-decoration: none;
-        font-family: "Sora", sans-serif;
-        font-size: .8rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: .2s ease;
-    }
-
-
-        .report-pdf-button:hover {
-            background-color: #D9534F;
-            color: #FFFFFF;
-            text-decoration: none;
-            transform: translateY(-1px);
-        }
-
-
-    /* =========================================================
            TABLET
         ========================================================= */
 
@@ -1069,26 +922,32 @@
             margin-top: 25px;
         }
 
+
         .report-card-body {
             padding: 18px;
         }
 
+
         .report-preview-body {
             padding: 16px;
         }
+
 
         .report-type-card {
             align-items: stretch;
             flex-direction: column;
         }
 
+
         .report-type-label {
             justify-content: center;
         }
 
+
         .report-type-options {
             width: 100%;
         }
+
 
         .report-type-button {
             flex: 1;
@@ -1116,7 +975,7 @@
         .report-subtitle {
             font-size: .85rem;
         }
-
+        /* TIPO DE RELATÓRIO */
 
         .report-type-card {
             padding: 10px;
@@ -1149,7 +1008,7 @@
             .report-type-button i {
                 font-size: .75rem;
             }
-
+        /* CARD */
 
         .report-card {
             border-radius: 15px;
@@ -1191,7 +1050,7 @@
             font-size: .68rem;
             padding: 4px 8px;
         }
-
+        /* CORPO */
 
         .report-card-body {
             padding: 16px;
@@ -1201,7 +1060,7 @@
         .report-preview-body {
             padding: 12px;
         }
-
+        /* BOTÕES */
 
         .report-form-actions {
             flex-direction: column-reverse;
@@ -1215,12 +1074,17 @@
         .report-pdf-button {
             width: 100%;
         }
-
+        /* TABELA */
 
         .report-table {
-            min-width: 850px;
+            min-width: 700px;
         }
 
+
+        .report-description {
+            max-width: 250px;
+        }
+        /* ESTADO VAZIO */
 
         .report-empty {
             padding: 35px 15px;
