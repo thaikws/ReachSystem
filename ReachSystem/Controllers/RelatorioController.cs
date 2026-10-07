@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReachSystem.Enums;
-using ReachSystem.Services;
-using ClosedXML.Excel;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using ReachSystem.Enums;
+using ReachSystem.Models;
+using ReachSystem.Services;
 
 namespace ReachSystem.Controllers
 {
@@ -18,30 +19,30 @@ namespace ReachSystem.Controllers
         }
 
         private readonly AnimalService _animalService;
+        private readonly RelatorioAnimalService _relatorioAnimalService;
 
-        public RelatorioController(AnimalService animalService)
+        public RelatorioController(AnimalService animalService, RelatorioAnimalService relatorioAnimalService)
         {
             _animalService = animalService;
+            _relatorioAnimalService = relatorioAnimalService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(
-            string? pesquisar,
-            string? especie,
-            Sexo? sexo,
-            Status? status,
-            DateTime? dataInicio,
-            DateTime? dataFim)
+        public async Task<IActionResult> Index(string? pesquisar, string? especie, Sexo? sexo, Status? status, DateTime? dataInicio, DateTime? dataFim)
         {
-            var todosAnimais = await _animalService.GetAllAnimalsAsync();
+            var filtro = new RelatorioAnimal
+            {
+                Pesquisar = pesquisar,
+                Especie = especie,
+                Sexo = sexo,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
 
-            // Opções dos filtros
-            ViewBag.Especies = todosAnimais
-                .Select(a => a.Especie)
-                .Where(e => !string.IsNullOrWhiteSpace(e))
-                .Distinct()
-                .OrderBy(e => e)
-                .ToList();
+            var animais = await _relatorioAnimalService.FiltrarAsync(filtro);
+
+            ViewBag.Especies = await _relatorioAnimalService.GetEspeciesAsync();
 
             ViewBag.Pesquisar = pesquisar;
             ViewBag.Especie = especie;
@@ -50,98 +51,22 @@ namespace ReachSystem.Controllers
             ViewBag.DataInicio = dataInicio?.ToString("yyyy-MM-dd");
             ViewBag.DataFim = dataFim?.ToString("yyyy-MM-dd");
 
-            // Filtro por nome ou raça
-            if (!string.IsNullOrWhiteSpace(pesquisar))
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.Nome.Contains(pesquisar, StringComparison.OrdinalIgnoreCase) ||
-                    a.Raca.Contains(pesquisar, StringComparison.OrdinalIgnoreCase));
-            }
-
-            // Filtro por espécie
-            if (!string.IsNullOrWhiteSpace(especie))
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.Especie.Equals(especie, StringComparison.OrdinalIgnoreCase));
-            }
-
-            // Filtro por sexo
-            if (sexo.HasValue)
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.SexoAnimal == sexo.Value);
-            }
-
-            // Filtro por status
-            if (status.HasValue)
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.StatusAnimal == status.Value);
-            }
-
-            // Filtro por data inicial
-            if (dataInicio.HasValue)
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.DataDeEntrada.Date >= dataInicio.Value.Date);
-            }
-
-            // Filtro por data final
-            if (dataFim.HasValue)
-            {
-                todosAnimais = todosAnimais.Where(a =>
-                    a.DataDeEntrada.Date <= dataFim.Value.Date);
-            }
-
-            return View(todosAnimais.OrderBy(a => a.Nome));
+            return View(animais);
         }
         [HttpGet]
-        public async Task<IActionResult> ExportarExcel(
-    string? pesquisar,
-    string? especie,
-    Sexo? sexo,
-    Status? status,
-    DateTime? dataInicio,
-    DateTime? dataFim)
+        public async Task<IActionResult> ExportarExcel(string? pesquisar, string? especie, Sexo? sexo, Status? status, DateTime? dataInicio, DateTime? dataFim)
         {
-            var animais = await _animalService.GetAllAnimalsAsync();
-
-            if (!string.IsNullOrWhiteSpace(pesquisar))
+            var filtro = new RelatorioAnimal
             {
-                animais = animais.Where(a =>
-                    a.Nome.Contains(pesquisar, StringComparison.OrdinalIgnoreCase) ||
-                    a.Raca.Contains(pesquisar, StringComparison.OrdinalIgnoreCase));
-            }
+                Pesquisar = pesquisar,
+                Especie = especie,
+                Sexo = sexo,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
 
-            if (!string.IsNullOrWhiteSpace(especie))
-            {
-                animais = animais.Where(a =>
-                    a.Especie.Equals(especie, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (sexo.HasValue)
-            {
-                animais = animais.Where(a => a.SexoAnimal == sexo.Value);
-            }
-
-            if (status.HasValue)
-            {
-                animais = animais.Where(a => a.StatusAnimal == status.Value);
-            }
-
-            if (dataInicio.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.DataDeEntrada.Date >= dataInicio.Value.Date);
-            }
-
-            if (dataFim.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.DataDeEntrada.Date <= dataFim.Value.Date);
-            }
-
-            animais = animais.OrderBy(a => a.Nome);
+            var animais = await _relatorioAnimalService.FiltrarAsync(filtro);
 
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Animais");
@@ -195,48 +120,17 @@ namespace ReachSystem.Controllers
     DateTime? dataInicio,
     DateTime? dataFim)
         {
-            var animais = await _animalService.GetAllAnimalsAsync();
-
-            if (!string.IsNullOrWhiteSpace(pesquisar))
+            var filtro = new RelatorioAnimal
             {
-                animais = animais.Where(a =>
-                    a.Nome.Contains(pesquisar, StringComparison.OrdinalIgnoreCase) ||
-                    a.Raca.Contains(pesquisar, StringComparison.OrdinalIgnoreCase));
-            }
+                Pesquisar = pesquisar,
+                Especie = especie,
+                Sexo = sexo,
+                Status = status,
+                DataInicio = dataInicio,
+                DataFim = dataFim
+            };
 
-            if (!string.IsNullOrWhiteSpace(especie))
-            {
-                animais = animais.Where(a =>
-                    a.Especie.Equals(especie, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (sexo.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.SexoAnimal == sexo.Value);
-            }
-
-            if (status.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.StatusAnimal == status.Value);
-            }
-
-            if (dataInicio.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.DataDeEntrada.Date >= dataInicio.Value.Date);
-            }
-
-            if (dataFim.HasValue)
-            {
-                animais = animais.Where(a =>
-                    a.DataDeEntrada.Date <= dataFim.Value.Date);
-            }
-
-            var listaAnimais = animais
-                .OrderBy(a => a.Nome)
-                .ToList();
+            var animais = await _relatorioAnimalService.FiltrarAsync(filtro);
 
             var documento = Document.Create(container =>
             {
@@ -257,14 +151,14 @@ namespace ReachSystem.Controllers
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.RelativeColumn(2.0f);  // Nome
-                                columns.RelativeColumn(1.4f);  // Espécie
-                                columns.RelativeColumn(1.5f);  // Raça
-                                columns.ConstantColumn(35);    // Idade
-                                columns.RelativeColumn(1.1f);  // Porte
-                                columns.RelativeColumn(1.1f);  // Sexo
-                                columns.RelativeColumn(1.4f);  // Status
-                                columns.RelativeColumn(1.5f);  // Entrada
+                                columns.RelativeColumn(2.0f);
+                                columns.RelativeColumn(1.4f);
+                                columns.RelativeColumn(1.5f);
+                                columns.ConstantColumn(35);
+                                columns.RelativeColumn(1.1f);
+                                columns.RelativeColumn(1.1f);
+                                columns.RelativeColumn(1.4f);
+                                columns.RelativeColumn(1.5f);
                             });
 
                             table.Header(header =>
@@ -296,7 +190,7 @@ namespace ReachSystem.Controllers
                                     .Text("Entrada").FontColor("#FFFFFF").Bold();
                             });
 
-                            foreach (var animal in listaAnimais)
+                            foreach (var animal in animais)
                             {
                                 table.Cell()
                                     .Border(1)
