@@ -20,6 +20,48 @@
     .card-ficha:hover {
         transform: translateY(-4px);
     }
+
+    .btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .btn-add {
+        background: #2C5D7C;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 400;
+        border: none;
+    }
+
+        .btn-add:hover,
+        .btn-add:focus,
+        .btn-add:active {
+            background: #2C5D7C;
+            color: white;
+            opacity: 0.9;
+        }
+
+    .card-resumo {
+        background: #FFFFFF;
+        border-radius: 20px !important;
+    }
+
+    .card-resumo .card-body {
+        padding: 1.1rem 1.25rem;
+    }
+
+    .card-resumo small {
+        color: #6C7A89;
+        font-size: .85rem;
+    }
+
+    .card-resumo h3 {
+        margin: 4px 0 0;
+        color: #173746;
+    }
+
     /* ===========================
            RESPONSIVO MOBILE
         =========================== */
@@ -37,33 +79,34 @@
             gap: 15px;
         }
 
-            .d-flex.justify-content-between.align-items-center.mb-4 a {
-                width: 100%;
-                text-align: center;
-            }
+        .d-flex.justify-content-between.align-items-center.mb-4 a {
+            width: 100%;
+            text-align: center;
+        }
+
         /* Cards de resumo */
         .card-body {
             padding: 15px;
         }
+
         /* Cards das fichas */
         .card-ficha {
             border-radius: 16px !important;
         }
+        
+        .card-ficha .card-header {
+            padding: 12px !important;
+        }
+        
+        .card-ficha .card-body {
+            padding: 15px !important;
+        }
 
-
-            .card-ficha .card-header {
-                padding: 12px !important;
-            }
-
-
-            .card-ficha .card-body {
-                padding: 15px !important;
-            }
-        /* Botões */
         .d-grid .btn {
             padding: 10px;
             border-radius: 10px;
         }
+
     }
 
 </style>
@@ -82,18 +125,17 @@
             </small>
         </div>
 
-        <a asp-action="Create"
-           class="btn text-white shadow-sm"
-           style="background:#2C5D7C;">
+        <a asp-action="Create" class="btn btn-add">
             + Nova Ficha
         </a>
+
     </div>
 
     <!-- Cards Resumo -->
     <div class="row g-3 mb-4">
 
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card card-resumo border-0 shadow-sm">
                 <div class="card-body">
                     <small>Total de Fichas</small>
                     <h3 class="fw-bold">
@@ -104,7 +146,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card card-resumo border-0 shadow-sm">
                 <div class="card-body">
                     <small>Último ID</small>
 

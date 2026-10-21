@@ -19,9 +19,7 @@
             </small>
         </div>
 
-        <a asp-action="Create"
-           class="btn text-white shadow-sm"
-           style="background:#2C5D7C;">
+        <a asp-action="Create" class="btn btn-add">
             + Novo Animal
         </a>
 
@@ -278,6 +276,23 @@
     .btn {
         border-radius: .375rem;
     }
+
+    .btn-add {
+        background: #2C5D7C;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 400;
+        border: none;
+    }
+
+        .btn-add:hover,
+        .btn-add:focus,
+        .btn-add:active {
+            background: #2C5D7C;
+            color: white;
+            opacity: 0.9;
+        }
 
     .btn-sm {
         font-size: .875rem;

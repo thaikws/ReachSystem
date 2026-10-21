@@ -4,97 +4,162 @@
     ViewData["Title"] = "Novo Evento";
 }
 
-<style>
+<div class="container py-4 form-narrow">
 
-    body { 
-        margin:0; 
-        font-family: Arial; 
-        background:#f4f7fb; 
-    }
+    <h2 class="page-title mb-4">
+        Cadastrar Evento
+    </h2>
 
-    .page-container { 
-        display:flex; 
-        align-items:center; 
-        justify-content:center; 
-        min-height:calc(100vh - 160px); 
-        padding:40px; 
-        box-sizing:border-box; 
-    }
+    <div class="card card-custom shadow-sm">
 
-    .card { 
-        background:#fff; 
-        padding:30px; 
-        border-radius:16px; 
-        box-shadow:0 4px 12px rgba(0,0,0,0.06); 
-        width:100%; 
-        max-width:420px; 
-    }
+        <div class="card-header-custom">
+            <h4>Novo Evento</h4>
+        </div>
 
-    h2 { 
-        color:#2c5d7c; 
-        margin-bottom:20px; 
-    }
+        <div class="card-body p-4">
 
-    .form-group { 
-        margin-bottom:15px; 
-    }
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
 
-    label { 
-        font-weight:700; 
-        color:#2c5d7c; 
-    }
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label">Nome</label>
+                    <input asp-for="Nome" class="form-control" />
+                </div>
 
-    .btn-save { 
-        background:#2c5d7c; 
-        color:#fff; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        border:none; 
-    }
+                <div class="mb-3">
+                    <label asp-for="Data" class="form-label">Data</label>
+                    <input asp-for="Data" type="datetime-local" class="form-control" />
+                </div>
 
-    .btn-back { 
-        background:#ccc; 
-        color:#000; 
-        border-radius:8px; 
-        padding:8px 14px; 
-        margin-left:10px; 
-        text-decoration:none; 
-        display:inline-block; 
-    }
+                <div class="mb-3">
+                    <label asp-for="Local" class="form-label">Local</label>
+                    <input asp-for="Local" class="form-control" />
+                </div>
 
-</style>
+                <div class="mb-3">
+                    <label asp-for="Descricao" class="form-label">Descrição</label>
+                    <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
+                </div>
 
-<div class="page-container">
-    <div class="card">
-        <h2>Novo Evento</h2>
+                <hr class="my-4" />
 
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
+                <div class="d-flex justify-content-end gap-2">
 
-            <div class="form-group">
-                <label>Nome</label>
-                <input asp-for="Nome" class="form-control" />
-            </div>
+                    <a asp-action="Index"
+                       class="btn btn-back-custom">
+                        Voltar
+                    </a>
 
-            <div class="form-group">
-                <label>Data</label>
-                <input asp-for="Data" type="datetime-local" class="form-control" />
-            </div>
+                    <button type="submit"
+                            class="btn btn-primary-custom px-4">
+                        Salvar
+                    </button>
 
-            <div class="form-group">
-                <label>Local</label>
-                <input asp-for="Local" class="form-control" />
-            </div>
+                </div>
 
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
-            </div>
+            </form>
 
-            <div class="d-flex justify-content-end">
-                <a asp-action="Index" class="btn-back">Voltar</a>
-                <button type="submit" class="btn-save ms-2">Salvar</button>
-            </div>
-        </form>
+        </div>
+
     </div>
+
 </div>
+
+<style>
+    body {
+        background: #F4F7FB;
+        font-family: 'Public Sans', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
+    }
+
+    .form-narrow {
+        max-width: 760px;
+    }
+
+    .page-title {
+        color: #173746;
+        font-weight: 700;
+    }
+
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .card-body {
+        overflow: hidden;
+    }
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 1px solid #E6EDF5;
+        background: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 14px;
+        height: 48px;
+    }
+
+        .form-control:focus {
+            border-color: #2C5D7C;
+            box-shadow: 0 0 0 .2rem rgba(44,93,124,.15);
+        }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .btn-primary-custom,
+    .btn-back-custom {
+        border-radius: 10px;
+        padding: .6rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-primary-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        border: none;
+    }
+
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
+        }
+
+    .btn-back-custom {
+        background: #ECEFF3;
+        color: #173746;
+        border: none;
+    }
+
+        .btn-back-custom:hover {
+            background: #DDE5EE;
+            color: #173746;
+        }
+
+    @@media (max-width:768px) {
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>

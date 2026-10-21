@@ -3,78 +3,170 @@
 @{
     ViewData["Title"] = "Nova Consulta";
 }
+
+<div class="container py-4 form-narrow">
+
+    <h2 class="page-title mb-4">
+        Cadastrar Consulta
+    </h2>
+
+    <div class="card card-custom shadow-sm">
+
+        <div class="card-header-custom">
+            <h4>Nova Consulta</h4>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="AnimalId" class="form-label"></label>
+
+                    <select asp-for="AnimalId" id="animalSelect" class="form-select">
+                        <option value="">Selecione um animal</option>
+
+                        @foreach (var animal in ViewBag.Animais)
+                        {
+                            <option value="@animal.AnimalId"
+                                    data-foto="@animal.Foto"
+                                    data-nome="@animal.Nome">
+                                @animal.Nome
+                            </option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="AnimalId" class="text-danger"></span>
+                </div>
+
+                <div class="animal-preview mb-3">
+                    <img id="animalPreview"
+                         src="/images/no-image.png"
+                         alt="Animal" />
+
+                    <div>
+                        <h5 id="animalNome">Selecione um animal</h5>
+                        <small>Pré-visualização</small>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Data" class="form-label"></label>
+
+                    <input asp-for="Data"
+                           type="datetime-local"
+                           class="form-control" />
+
+                    <span asp-validation-for="Data" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descricao" class="form-label"></label>
+
+                    <textarea asp-for="Descricao"
+                              rows="5"
+                              class="form-control"></textarea>
+
+                    <span asp-validation-for="Descricao"
+                          class="text-danger"></span>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2 buttons">
+
+                    <a asp-action="Index"
+                       class="btn btn-back-custom">
+                        Voltar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary-custom px-4">
+                        Salvar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
 <style>
     body {
-        margin: 0;
         background: #F4F7FB;
-        font-family: "Public Sans", sans-serif;
+        font-family: 'Public Sans', sans-serif;
     }
 
-    .page-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: calc(100vh - 80px);
-        padding: 30px 16px;
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Sora', sans-serif;
     }
 
-    .card-consulta {
-        width: 100%;
-        max-width: 620px;
-        background: #fff;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    .form-narrow {
+        max-width: 760px;
     }
 
-        .card-consulta h2 {
-            margin: 0 0 28px;
-            text-align: center;
-            color: #2C5D7C;
-            font-family: "Sora", sans-serif;
-            font-weight: 700;
-        }
-
-    .form-group {
-        margin-bottom: 20px;
+    .page-title {
+        color: #173746;
+        font-weight: 700;
     }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
+    .card-custom {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2C5D7C;
+        color: #FFFFFF;
+        padding: 18px 24px;
+    }
+
+        .card-header-custom h4 {
+            margin: 0;
             font-weight: 600;
-            color: #2C5D7C;
         }
+
+    .card-body {
+        overflow: hidden;
+    }
+
+    .form-label {
+        color: #173746;
+        font-weight: 600;
+    }
 
     .form-control,
-    .form-select,
-    textarea {
-        width: 100%;
-        padding: 10px 14px;
-        border: 1px solid #D7DEE8;
+    .form-select {
+        border: 1px solid #E6EDF5;
+        background-color: #FFFFFF;
         border-radius: 10px;
-        box-sizing: border-box;
-        transition: .2s;
+        padding: 10px 14px;
+        height: 48px;
     }
 
         .form-control:focus,
-        .form-select:focus,
-        textarea:focus {
+        .form-select:focus {
             border-color: #2C5D7C;
-            box-shadow: 0 0 0 .15rem rgba(44,93,124,.15);
-            outline: none;
+            box-shadow: 0 0 0 .2rem rgba(44,93,124,.15);
         }
 
-    textarea {
-        resize: vertical;
+    textarea.form-control {
+        height: auto;
         min-height: 120px;
+        resize: vertical;
     }
 
     .animal-preview {
         display: flex;
         align-items: center;
         gap: 18px;
-        margin: 25px 0;
         padding: 16px;
         background: #F8FAFC;
         border: 1px solid #E6EDF5;
@@ -92,69 +184,48 @@
 
         .animal-preview h5 {
             margin: 0;
-            color: #2C5D7C;
-            font-family: "Sora", sans-serif;
+            color: #173746;
+            font-weight: 600;
         }
 
         .animal-preview small {
-            color: #6B7280;
+            color: #6C7A89;
         }
 
-    .buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 28px;
-    }
-
-    .btn-save,
-    .btn-back {
-        padding: 10px 24px;
+    .btn-primary-custom,
+    .btn-back-custom {
         border-radius: 10px;
+        padding: .6rem 1.5rem;
         font-weight: 600;
-        text-decoration: none;
-        transition: .2s;
-        text-align: center;
     }
 
-    .btn-save {
-        border: none;
+    .btn-primary-custom {
         background: #2C5D7C;
-        color: white;
+        color: #FFFFFF;
+        border: none;
     }
 
-        .btn-save:hover {
-            background: #244C66;
+        .btn-primary-custom:hover {
+            background: #234B64;
+            color: #FFFFFF;
         }
 
-    .btn-back {
+    .btn-back-custom {
         background: #ECEFF3;
-        color: #2C5D7C;
+        color: #173746;
+        border: none;
     }
 
-        .btn-back:hover {
+        .btn-back-custom:hover {
             background: #DDE5EE;
+            color: #173746;
         }
 
     @@media (max-width:768px) {
 
-        .page-container {
-            padding: 20px;
-            align-items: flex-start;
+        .card-body {
+            padding: 1.5rem;
         }
-
-        .card-consulta {
-            width: 100%;
-            max-width: 430px;
-            padding: 22px;
-            border-radius: 18px;
-            margin: 0 auto;
-        }
-
-            .card-consulta h2 {
-                font-size: 1.5rem;
-                margin-bottom: 20px;
-            }
 
         .animal-preview {
             flex-direction: column;
@@ -163,123 +234,15 @@
             padding: 14px;
         }
 
-            .animal-preview img {
-                width: 85px;
-                height: 85px;
-            }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
         .buttons {
             flex-direction: column-reverse;
-            gap: 10px;
-            margin-top: 20px;
         }
 
-        .btn-save,
-        .btn-back {
-            width: 100%;
-        }
-    }
-
-    @@media (max-width:480px) {
-
-        .page-container {
-            padding: 16px;
-        }
-
-        .card-consulta {
-            max-width: 360px;
-            padding: 18px;
-        }
-
-            .card-consulta h2 {
-                font-size: 1.35rem;
+            .buttons .btn {
+                width: 100%;
             }
-
-        .animal-preview img {
-            width: 75px;
-            height: 75px;
-        }
     }
-
 </style>
-
-<div class="page-container">
-    <div class="card-consulta">
-
-        <h2>Nova Consulta</h2>
-
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
-
-            <div class="form-group">
-                <label asp-for="AnimalId"></label>
-
-                <select asp-for="AnimalId" id="animalSelect" class="form-select">
-                    <option value="">Selecione um animal</option>
-
-                    @foreach (var animal in ViewBag.Animais)
-                    {
-                        <option value="@animal.AnimalId"
-                                data-foto="@animal.Foto"
-                                data-nome="@animal.Nome">
-                            @animal.Nome
-                        </option>
-                    }
-                </select>
-
-                <span asp-validation-for="AnimalId" class="text-danger"></span>
-            </div>
-
-            <div class="animal-preview">
-                <img id="animalPreview"
-                     src="/images/no-image.png"
-                     alt="Animal" />
-
-                <div>
-                    <h5 id="animalNome">Selecione um animal</h5>
-                    <small>Pré-visualização</small>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Data"></label>
-
-                <input asp-for="Data"
-                       type="datetime-local"
-                       class="form-control" />
-
-                <span asp-validation-for="Data" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Descricao"></label>
-
-                <textarea asp-for="Descricao"
-                          rows="5"
-                          class="form-control"></textarea>
-
-                <span asp-validation-for="Descricao"
-                      class="text-danger"></span>
-            </div>
-
-            <div class="buttons">
-                <a asp-action="Index" class="btn-back">
-                    Voltar
-                </a>
-
-                <button type="submit" class="btn-save">
-                    Salvar
-                </button>
-            </div>
-
-        </form>
-
-    </div>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -265,6 +265,31 @@
     .form-select {
         height: 48px;
     }
+    
+    .form-control[type="file"] {
+        padding: 5px;
+        color: #6C7A89;
+        cursor: pointer;
+    }
+
+    .form-control[type="file"]::file-selector-button,
+    .form-control[type="file"]:hover:not(:disabled):not([readonly])::file-selector-button {
+        height: 36px;
+        margin: 0 12px 0 0;
+        padding: 0 18px;
+        border: 1px solid #2C5D7C;
+        border-radius: 8px;
+        background-color: #2C5D7C;
+        color: #FFFFFF;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color .2s ease;
+    }
+    
+    form-control[type="file"]:hover:not(:disabled):not([readonly])::file-selector-button {
+        background-color: #234B64;
+        border-color: #234B64;
+    }
 
     @@media (max-width:768px) {
         .animal-preview
