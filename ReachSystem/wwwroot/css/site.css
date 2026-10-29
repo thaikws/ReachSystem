@@ -155,17 +155,29 @@
     visibility: hidden;
     pointer-events: none;
     transform: translateY(-8px);
-    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    transition: opacity .2s ease .35s, transform .2s ease .35s, visibility 0s linear .55s;
+}
+
+.profile-popover::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 0;
+    right: 0;
+    height: 14px;
 }
 
 
 /* Abre ao passar o mouse */
 
-.profile-preview:hover .profile-popover {
+.profile-preview:hover .profile-popover,
+.profile-preview.is-open .profile-popover {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0);
+    transition-delay: 0s;
+    transition-delay: 0s;
 }
 
 
