@@ -12,7 +12,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - Reach+ </title>
+    <title>@ViewData["Title"] - Reach+</title>
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -40,7 +40,6 @@
 
 </head>
 
-
 @{
         ApplicationUser? usuarioLogado = null;
 
@@ -50,7 +49,6 @@
         }
 
         var nomeUsuario = usuarioLogado?.Nome ?? "Usuário";
-
         var emailUsuario = usuarioLogado?.Email ?? "";
 
         var inicialUsuario =
@@ -66,25 +64,25 @@
                                 : "Voluntário";
 }
 
-
 <body>
 
-    <!-- =====================================================
-         LOGO MOBILE
-    ====================================================== -->
     <!-- =====================================================
          LOGO MOBILE
     ====================================================== -->
 
     <div class="mobile-brand">
 
-        <a asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
+        <a class="mobile-brand-link"
+           asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
            asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
-            Reach+
+            <img src="~/images/logo.png"
+                 asp-append-version="true"
+                 alt="">
+
+            <span>Reach+</span>
 
         </a>
-
 
         @if (User.Identity?.IsAuthenticated != true)
         {
@@ -110,24 +108,26 @@
 
             <div class="container-fluid">
 
-                <!-- =================================================
-                     LOGO
-                ================================================== -->
+                <!-- LOGO -->
 
                 <a class="navbar-brand"
                    asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
                    asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
-                    Reach+
+                    <img src="~/images/logo.png"
+                         asp-append-version="true"
+                         alt="">
+
+                    <span>Reach+</span>
 
                 </a>
 
 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <!-- =================================================
+                    <!-- =========================================
                          LINKS DO USUÁRIO LOGADO
-                    ================================================== -->
+                    ========================================== -->
 
                     <div class="navbar-collapse">
 
@@ -192,6 +192,7 @@
 
                             </li>
 
+
                             <!-- RELATÓRIOS -->
 
                             <li class="nav-item">
@@ -205,6 +206,7 @@
                                 </a>
 
                             </li>
+
 
                             <!-- FICHA DE SAÚDE -->
 
@@ -240,9 +242,9 @@
                         </ul>
 
 
-                        <!-- =================================================
+                        <!-- =====================================
                              PERFIL
-                        ================================================== -->
+                        ====================================== -->
 
                         <div class="profile-preview">
 
@@ -309,14 +311,21 @@
 
                                 </a>
 
+
+                                <!-- RELATÓRIOS -->
+
                                 <a asp-controller="Relatorio"
                                    asp-action="Index"
                                    class="profile-popover-link">
 
                                     <i class="bi bi-bar-chart-line"></i>
-                                    <span>Relatórios</span>
+
+                                    <span>
+                                        Relatórios
+                                    </span>
 
                                 </a>
+
 
                                 <!-- USUÁRIOS -->
                                 @if (User.IsInRole("Admin"))
@@ -367,9 +376,9 @@
                 }
                 else
                 {
-                    <!-- =================================================
+                    <!-- =========================================
                          USUÁRIO DESLOGADO
-                    ================================================== -->
+                    ========================================== -->
 
                     <div class="navbar-collapse">
 

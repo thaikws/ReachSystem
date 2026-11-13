@@ -16,7 +16,7 @@
     position: relative;
     z-index: 1000;
     min-height: 58px;
-    padding: .45rem 1rem;
+    padding: .35rem 1rem;
     background: linear-gradient(135deg, #2C5D7C, #356E91);
     box-shadow: 0 8px 24px rgba(44, 93, 124, .18);
     border-bottom-left-radius: 14px;
@@ -27,6 +27,35 @@
     .desktop-navbar .container-fluid {
         overflow: visible !important;
     }
+
+
+    /* =========================================================
+   LOGO DESKTOP
+========================================================= */
+
+    .desktop-navbar .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 1.5rem;
+        padding: 0;
+        color: #FFFFFF !important;
+        font-family: "Sora", sans-serif !important;
+        font-size: 1rem;
+        font-weight: 700;
+        white-space: nowrap;
+        text-decoration: none;
+        line-height: 1;
+    }
+
+        .desktop-navbar .navbar-brand img {
+            display: block;
+            width: auto;
+            height: 38px;
+            max-width: 120px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
 
 
     /* =========================================================
@@ -41,6 +70,7 @@
 
     .desktop-navbar .navbar-nav {
         display: flex;
+        align-items: center;
         gap: .45rem;
         margin-bottom: 0;
     }
@@ -59,7 +89,6 @@
             transform: translateY(-2px);
         }
 
-
         /* Linha abaixo do link */
 
         .desktop-navbar .nav-link::after {
@@ -77,20 +106,6 @@
         .desktop-navbar .nav-link:hover::after {
             width: 70%;
         }
-
-
-    /* =========================================================
-   LOGO DESKTOP
-========================================================= */
-
-    .desktop-navbar .navbar-brand {
-        margin-right: 1.5rem;
-        color: #FFFFFF !important;
-        font-family: "Sora", sans-serif !important;
-        font-size: 1rem;
-        font-weight: 700;
-        white-space: nowrap;
-    }
 
 
 /* =========================================================
@@ -158,15 +173,14 @@
     transition: opacity .2s ease .35s, transform .2s ease .35s, visibility 0s linear .55s;
 }
 
-.profile-popover::before {
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 0;
-    right: 0;
-    height: 14px;
-}
-
+    .profile-popover::before {
+        content: "";
+        position: absolute;
+        top: -14px;
+        left: 0;
+        right: 0;
+        height: 14px;
+    }
 
 /* Abre ao passar o mouse */
 
@@ -176,7 +190,6 @@
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0);
-    transition-delay: 0s;
     transition-delay: 0s;
 }
 
@@ -370,23 +383,15 @@
 
 
 /* =========================================================
-   LOGO MOBILE
+   ELEMENTOS MOBILE — ESCONDIDOS NO DESKTOP
 ========================================================= */
 
-/* Fica escondida no desktop */
-
-.mobile-brand {
+.mobile-brand,
+.mobile-bottom-navbar {
     display: none;
 }
 
-
-/* =========================================================
-   NAVBAR MOBILE
-========================================================= */
-
-/* Fica escondida no desktop */
-
-.mobile-bottom-navbar {
+.mobile-login-link {
     display: none;
 }
 
@@ -397,10 +402,7 @@
 
 @media (max-width: 991.98px) {
 
-
-    /* =====================================================
-       ESCONDE NAVBAR DESKTOP
-    ===================================================== */
+    /* Esconde navbar desktop */
 
     .desktop-navbar-wrapper {
         display: none !important;
@@ -408,12 +410,13 @@
 
 
     /* =====================================================
-       LOGO MOBILE
+       CABEÇALHO MOBILE
     ===================================================== */
 
     .mobile-brand {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         height: 54px;
         padding: 0 1rem;
         background: #2C5D7C;
@@ -423,12 +426,47 @@
         z-index: 100;
     }
 
-        .mobile-brand a {
-            color: #FFFFFF !important;
-            text-decoration: none;
-            font-family: "Sora", sans-serif !important;
-            font-size: 1.1rem;
-            font-weight: 700;
+    /* Logo + texto */
+
+    .mobile-brand-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 100%;
+        color: #FFFFFF !important;
+        text-decoration: none;
+        font-family: "Sora", sans-serif !important;
+        font-size: 1.1rem;
+        font-weight: 700;
+        white-space: nowrap;
+        line-height: 1;
+    }
+
+        .mobile-brand-link img {
+            display: block;
+            width: auto;
+            height: 36px;
+            max-width: 120px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+    /* Login */
+
+    .mobile-login-link {
+        display: block;
+        color: #FFFFFF !important;
+        text-decoration: none;
+        font-family: "Sora", sans-serif !important;
+        font-size: .85rem;
+        font-weight: 500;
+        padding: .45rem .7rem;
+        border-radius: 9px;
+        transition: background .2s ease;
+    }
+
+        .mobile-login-link:hover {
+            background: rgba(255, 255, 255, .12);
         }
 
 
@@ -468,10 +506,6 @@
     ===================================================== */
 
     .mobile-nav-item {
-        /*
-           Divide igualmente o espaço entre os 6 itens.
-        */
-
         flex: 1 1 0;
         min-width: 0;
         display: flex;
@@ -491,9 +525,7 @@
     }
 
 
-        /* =====================================================
-       ÍCONE MOBILE
-    ===================================================== */
+        /* Ícone mobile */
 
         .mobile-nav-item i {
             font-family: "bootstrap-icons" !important;
@@ -503,9 +535,7 @@
         }
 
 
-        /* =====================================================
-       HOVER
-    ===================================================== */
+        /* Hover */
 
         .mobile-nav-item:hover {
             background: #F4F7FB;
@@ -517,9 +547,7 @@
             }
 
 
-        /* =====================================================
-       ITEM ATIVO
-    ===================================================== */
+        /* Item ativo */
 
         .mobile-nav-item.active {
             color: #173746 !important;
@@ -545,35 +573,18 @@
         .mobile-nav-item i {
             font-size: 1.05rem;
         }
-}
-/* =========================================================
-   LOGIN NA NAVBAR MOBILE — USUÁRIO DESLOGADO
-========================================================= */
-
-.mobile-login-link {
-    display: none;
-}
-
-
-@media (max-width: 991.98px) {
 
     .mobile-brand {
-        justify-content: space-between;
+        padding: 0 .75rem;
     }
 
-    .mobile-login-link {
-        display: block;
-        color: #FFFFFF !important;
-        text-decoration: none;
-        font-family: "Sora", sans-serif !important;
-        font-size: .85rem;
-        font-weight: 500;
-        padding: .45rem .7rem;
-        border-radius: 9px;
-        transition: background .2s ease;
+    .mobile-brand-link {
+        gap: 6px;
+        font-size: 1rem;
     }
 
-        .mobile-login-link:hover {
-            background: rgba(255, 255, 255, .12);
+        .mobile-brand-link img {
+            height: 32px;
+            max-width: 105px;
         }
 }
