@@ -57,8 +57,15 @@ namespace ReachSystem.Controllers
 
             return View(animais);
         }
+
         [HttpGet]
-        public async Task<IActionResult> ExportarExcel(string? pesquisar, string? especie, Sexo? sexo, Status? status, DateTime? dataInicio, DateTime? dataFim)
+        public async Task<IActionResult> ExportarExcel(
+            string? pesquisar,
+            string? especie,
+            Sexo? sexo,
+            Status? status,
+            DateTime? dataInicio,
+            DateTime? dataFim)
         {
             var filtro = new RelatorioAnimal
             {
@@ -75,8 +82,31 @@ namespace ReachSystem.Controllers
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Animais");
 
-            worksheet.Cell(1, 1).Value = "Relatório de Animais";
+            // TÍTULO
+            var titulo = worksheet.Range("A1:H1");
+            titulo.Merge();
+            titulo.Value = "ReachSystem | Relatório de Animais";
 
+            titulo.Style.Font.Bold = true;
+            titulo.Style.Font.FontSize = 16;
+            titulo.Style.Font.FontColor = XLColor.White;
+            titulo.Style.Fill.BackgroundColor = XLColor.FromHtml("#173746");
+            titulo.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            titulo.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(1).Height = 35;
+
+            // DATA DE GERAÇÃO
+            var dataGeracao = worksheet.Range("A2:H2");
+            dataGeracao.Merge();
+            dataGeracao.Value = $"Gerado em: {DateTime.Now:dd/MM/yyyy HH:mm}";
+
+            dataGeracao.Style.Font.FontSize = 10;
+            dataGeracao.Style.Font.Italic = true;
+            dataGeracao.Style.Font.FontColor = XLColor.FromHtml("#5B7180");
+            dataGeracao.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+            // CABEÇALHO
             worksheet.Cell(3, 1).Value = "Nome";
             worksheet.Cell(3, 2).Value = "Espécie";
             worksheet.Cell(3, 3).Value = "Raça";
@@ -86,6 +116,17 @@ namespace ReachSystem.Controllers
             worksheet.Cell(3, 7).Value = "Status";
             worksheet.Cell(3, 8).Value = "Data de Entrada";
 
+            var cabecalho = worksheet.Range("A3:H3");
+
+            cabecalho.Style.Font.Bold = true;
+            cabecalho.Style.Font.FontColor = XLColor.White;
+            cabecalho.Style.Fill.BackgroundColor = XLColor.FromHtml("#2C5D7C");
+            cabecalho.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            cabecalho.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(3).Height = 32;
+
+            // DADOS
             var linha = 4;
 
             foreach (var animal in animais)
@@ -97,14 +138,62 @@ namespace ReachSystem.Controllers
                 worksheet.Cell(linha, 5).Value = animal.Porte;
                 worksheet.Cell(linha, 6).Value = animal.SexoAnimal.ToString();
                 worksheet.Cell(linha, 7).Value = animal.StatusAnimal.ToString();
+
                 worksheet.Cell(linha, 8).Value = animal.DataDeEntrada;
                 worksheet.Cell(linha, 8).Style.DateFormat.Format = "dd/MM/yyyy";
+
+                // LINHAS ALTERNADAS
+                if (linha % 2 == 0)
+                {
+                    worksheet.Range(linha, 1, linha, 8)
+                        .Style.Fill.BackgroundColor = XLColor.FromHtml("#F4F7FB");
+                }
 
                 linha++;
             }
 
-            worksheet.Columns().AdjustToContents();
+            // FORMATAÇÃO DOS DADOS
+            if (linha > 4)
+            {
+                var dados = worksheet.Range(4, 1, linha - 1, 8);
 
+                dados.Style.Font.FontColor = XLColor.FromHtml("#173746");
+                dados.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                dados.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                dados.Style.Border.BottomBorderColor = XLColor.FromHtml("#E6EDF5");
+
+                // Centralizar idade e data
+                worksheet.Range(4, 4, linha - 1, 4)
+                    .Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Range(4, 8, linha - 1, 8)
+                    .Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            }
+
+            // FILTRO AUTOMÁTICO
+            worksheet.Range(3, 1, Math.Max(3, linha - 1), 8).SetAutoFilter();
+
+            // CONGELAR TÍTULO E CABEÇALHO
+            worksheet.SheetView.FreezeRows(3);
+
+            // AJUSTAR LARGURA DAS COLUNAS
+            worksheet.Columns(1, 8).AdjustToContents();
+
+            // LIMITAR E DEFINIR LARGURAS
+            worksheet.Column(1).Width = 30; // Nome
+            worksheet.Column(2).Width = 25; // Espécie
+            worksheet.Column(3).Width = 25; // Raça
+            worksheet.Column(4).Width = 13; // Idade
+            worksheet.Column(5).Width = 16; // Porte
+            worksheet.Column(6).Width = 16; // Sexo
+            worksheet.Column(7).Width = 20; // Status
+            worksheet.Column(8).Width = 23; // Data de Entrada
+
+            // ALINHAMENTO VERTICAL
+            worksheet.Rows().Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            // GERAR ARQUIVO
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
 
@@ -115,6 +204,7 @@ namespace ReachSystem.Controllers
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "Relatorio_Animais.xlsx");
         }
+
         [HttpGet]
         public async Task<IActionResult> ExportarPdf(
     string? pesquisar,
@@ -290,11 +380,12 @@ namespace ReachSystem.Controllers
 
             return View(eventos);
         }
+
         [HttpGet]
         public async Task<IActionResult> ExportarExcelEventos(
-    string? pesquisar,
-    DateTime? dataInicio,
-    DateTime? dataFim)
+            string? pesquisar,
+            DateTime? dataInicio,
+            DateTime? dataFim)
         {
             var filtro = new RelatorioEvento
             {
@@ -308,13 +399,47 @@ namespace ReachSystem.Controllers
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Eventos");
 
-            worksheet.Cell(1, 1).Value = "Relatório de Eventos";
+            // TÍTULO
+            var titulo = worksheet.Range("A1:D1");
+            titulo.Merge();
+            titulo.Value = "ReachSystem | Relatório de Eventos";
 
+            titulo.Style.Font.Bold = true;
+            titulo.Style.Font.FontSize = 16;
+            titulo.Style.Font.FontColor = XLColor.White;
+            titulo.Style.Fill.BackgroundColor = XLColor.FromHtml("#173746");
+            titulo.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            titulo.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(1).Height = 35;
+
+            // DATA DE GERAÇÃO
+            var dataGeracao = worksheet.Range("A2:D2");
+            dataGeracao.Merge();
+            dataGeracao.Value = $"Gerado em: {DateTime.Now:dd/MM/yyyy HH:mm}";
+
+            dataGeracao.Style.Font.FontSize = 10;
+            dataGeracao.Style.Font.Italic = true;
+            dataGeracao.Style.Font.FontColor = XLColor.FromHtml("#5B7180");
+            dataGeracao.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+            // CABEÇALHO
             worksheet.Cell(3, 1).Value = "Nome";
             worksheet.Cell(3, 2).Value = "Data";
             worksheet.Cell(3, 3).Value = "Local";
             worksheet.Cell(3, 4).Value = "Descrição";
 
+            var cabecalho = worksheet.Range("A3:D3");
+
+            cabecalho.Style.Font.Bold = true;
+            cabecalho.Style.Font.FontColor = XLColor.White;
+            cabecalho.Style.Fill.BackgroundColor = XLColor.FromHtml("#2C5D7C");
+            cabecalho.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            cabecalho.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(3).Height = 32;
+
+            // DADOS
             var linha = 4;
 
             foreach (var evento in eventos)
@@ -327,11 +452,49 @@ namespace ReachSystem.Controllers
                 worksheet.Cell(linha, 3).Value = evento.Local;
                 worksheet.Cell(linha, 4).Value = evento.Descricao;
 
+                // LINHAS ALTERNADAS
+                if (linha % 2 == 0)
+                {
+                    worksheet.Range(linha, 1, linha, 4)
+                        .Style.Fill.BackgroundColor = XLColor.FromHtml("#F4F7FB");
+                }
+
                 linha++;
             }
 
-            worksheet.Columns().AdjustToContents();
+            // FORMATAÇÃO DOS DADOS
+            if (linha > 4)
+            {
+                var dados = worksheet.Range(4, 1, linha - 1, 4);
 
+                dados.Style.Font.FontColor = XLColor.FromHtml("#173746");
+                dados.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                dados.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                dados.Style.Border.BottomBorderColor = XLColor.FromHtml("#E6EDF5");
+
+                worksheet.Range(4, 2, linha - 1, 2)
+                    .Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            }
+
+            // FILTRO AUTOMÁTICO
+            worksheet.Range(3, 1, Math.Max(3, linha - 1), 4).SetAutoFilter();
+
+            // CONGELAR TÍTULO E CABEÇALHO
+            worksheet.SheetView.FreezeRows(3);
+
+            // AJUSTAR LARGURA DAS COLUNAS
+            worksheet.Columns(1, 4).AdjustToContents();
+
+            // DEFINIR LARGURAS
+            worksheet.Column(1).Width = 30; // Nome
+            worksheet.Column(2).Width = 23; // Data
+            worksheet.Column(3).Width = 30; // Local
+            worksheet.Column(4).Width = 45; // Descrição
+
+            worksheet.Rows().Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            // GERAR ARQUIVO
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
 
@@ -342,6 +505,7 @@ namespace ReachSystem.Controllers
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "Relatorio_Eventos.xlsx");
         }
+
         [HttpGet]
         public async Task<IActionResult> ExportarPdfEventos(
     string? pesquisar,
@@ -489,13 +653,14 @@ namespace ReachSystem.Controllers
 
             return View(participacoes);
         }
+
         [HttpGet]
         public async Task<IActionResult> ExportarExcelParticipacoes(
-    string? pesquisar,
-    string? evento,
-    StatusParticipacao? status,
-    DateTime? dataInicio,
-    DateTime? dataFim)
+            string? pesquisar,
+            string? evento,
+            StatusParticipacao? status,
+            DateTime? dataInicio,
+            DateTime? dataFim)
         {
             var filtro = new RelatorioParticipacao
             {
@@ -512,8 +677,31 @@ namespace ReachSystem.Controllers
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Participações");
 
-            worksheet.Cell(1, 1).Value = "Relatório de Participações";
+            // TÍTULO
+            var titulo = worksheet.Range("A1:F1");
+            titulo.Merge();
+            titulo.Value = "ReachSystem | Relatório de Participações";
 
+            titulo.Style.Font.Bold = true;
+            titulo.Style.Font.FontSize = 16;
+            titulo.Style.Font.FontColor = XLColor.White;
+            titulo.Style.Fill.BackgroundColor = XLColor.FromHtml("#173746");
+            titulo.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            titulo.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(1).Height = 35;
+
+            // DATA DE GERAÇÃO
+            var dataGeracao = worksheet.Range("A2:F2");
+            dataGeracao.Merge();
+            dataGeracao.Value = $"Gerado em: {DateTime.Now:dd/MM/yyyy HH:mm}";
+
+            dataGeracao.Style.Font.FontSize = 10;
+            dataGeracao.Style.Font.Italic = true;
+            dataGeracao.Style.Font.FontColor = XLColor.FromHtml("#5B7180");
+            dataGeracao.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+            // CABEÇALHO
             worksheet.Cell(3, 1).Value = "Participante";
             worksheet.Cell(3, 2).Value = "E-mail";
             worksheet.Cell(3, 3).Value = "Evento";
@@ -521,6 +709,17 @@ namespace ReachSystem.Controllers
             worksheet.Cell(3, 5).Value = "Local";
             worksheet.Cell(3, 6).Value = "Status";
 
+            var cabecalho = worksheet.Range("A3:F3");
+
+            cabecalho.Style.Font.Bold = true;
+            cabecalho.Style.Font.FontColor = XLColor.White;
+            cabecalho.Style.Fill.BackgroundColor = XLColor.FromHtml("#2C5D7C");
+            cabecalho.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            cabecalho.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            worksheet.Row(3).Height = 32;
+
+            // DADOS
             var linha = 4;
 
             foreach (var participacao in participacoes)
@@ -535,11 +734,51 @@ namespace ReachSystem.Controllers
                 worksheet.Cell(linha, 5).Value = participacao.Evento.Local;
                 worksheet.Cell(linha, 6).Value = participacao.Status.ToString();
 
+                // LINHAS ALTERNADAS
+                if (linha % 2 == 0)
+                {
+                    worksheet.Range(linha, 1, linha, 6)
+                        .Style.Fill.BackgroundColor = XLColor.FromHtml("#F4F7FB");
+                }
+
                 linha++;
             }
 
-            worksheet.Columns().AdjustToContents();
+            // FORMATAÇÃO DOS DADOS
+            if (linha > 4)
+            {
+                var dados = worksheet.Range(4, 1, linha - 1, 6);
 
+                dados.Style.Font.FontColor = XLColor.FromHtml("#173746");
+                dados.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                dados.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                dados.Style.Border.BottomBorderColor = XLColor.FromHtml("#E6EDF5");
+
+                worksheet.Range(4, 4, linha - 1, 4)
+                    .Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            }
+
+            // FILTRO AUTOMÁTICO
+            worksheet.Range(3, 1, Math.Max(3, linha - 1), 6).SetAutoFilter();
+
+            // CONGELAR TÍTULO E CABEÇALHO
+            worksheet.SheetView.FreezeRows(3);
+
+            // AJUSTAR LARGURA DAS COLUNAS
+            worksheet.Columns(1, 6).AdjustToContents();
+
+            // DEFINIR LARGURAS
+            worksheet.Column(1).Width = 28; // Participante
+            worksheet.Column(2).Width = 35; // E-mail
+            worksheet.Column(3).Width = 30; // Evento
+            worksheet.Column(4).Width = 23; // Data
+            worksheet.Column(5).Width = 30; // Local
+            worksheet.Column(6).Width = 20; // Status
+
+            worksheet.Rows().Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            // GERAR ARQUIVO
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
 
@@ -550,6 +789,7 @@ namespace ReachSystem.Controllers
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "Relatorio_Participacoes.xlsx");
         }
+
         [HttpGet]
         public async Task<IActionResult> ExportarPdfParticipacoes(
     string? pesquisar,
