@@ -12,7 +12,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - ReachSystem</title>
+    <title>@ViewData["Title"] - Reach+ </title>
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -81,7 +81,7 @@
         <a asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
            asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
-            ReachSystem
+            Reach+
 
         </a>
 
@@ -118,7 +118,7 @@
                    asp-controller="@(User.Identity?.IsAuthenticated == true ? "Dashboard" : "Account")"
                    asp-action="@(User.Identity?.IsAuthenticated == true ? "Index" : "Login")">
 
-                    ReachSystem
+                    Reach+
 
                 </a>
 
@@ -192,6 +192,19 @@
 
                             </li>
 
+                            <!-- RELATÓRIOS -->
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Relatorio"
+                                   asp-action="Index">
+
+                                    Relatórios
+
+                                </a>
+
+                            </li>
 
                             <!-- FICHA DE SAÚDE -->
 
